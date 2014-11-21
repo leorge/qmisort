@@ -62,19 +62,19 @@ static void sort(void *base, size_t nmemb, int depth) {
 	copy(pivot, hole);
 	copy(hole, tail);	// pivot <-- hole <-- tail
 	hole = tail;
-	char *lo , *hi = tail - length, *lo_tail = NULL, *hi_head = NULL;
-	int chk;
+	char *lo , *hi = tail - length, *hi_head = NULL;
 	for (lo = head; lo < hole; lo += length) {
-		if ((chk = comp(lo, pivot)) > 0) {	// An element greater than the pivot is found.
+		if (comp(lo, pivot) >= 0) {	// An element greater than the pivot is found.
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
 #endif
 			copy(hole, lo);
 			hole = lo;
 			for (; hi > hole; hi -= length) {
+				int chk;
 				if ((chk = comp(hi, pivot)) < 0) {
 #ifdef	DEBUG
-						if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
+					if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
 #endif
 					copy(hole, hi);
 					hole = hi;
@@ -83,10 +83,7 @@ static void sort(void *base, size_t nmemb, int depth) {
 				else if (chk > 0) hi_head = NULL;
 				else if (hi_head == NULL) hi_head = hi;	// first equivalent element
 			}
-			lo_tail = NULL;	// reset
 		}
-		else if (chk < 0) lo_tail = NULL;	// reset
-		else if (lo_tail == NULL) lo_tail = lo;
 	}
 #ifdef	DEBUG
 	if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s --> %s [%ld]\n",
@@ -96,15 +93,11 @@ static void sort(void *base, size_t nmemb, int depth) {
 #ifdef DEBUG
 	dump_array("sort() partitioned", base, nmemb, length);
 #endif
-	if (lo_tail == NULL) lo_tail = hole;	// not conitured
-#ifdef DEBUG
-	else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip lower %ld elements\n", (hole - lo_tail) / length);
-#endif
 	if (hi_head == NULL) hi_head = hole;
 #ifdef DEBUG
 	else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", (hi_head - hole) / length);
 #endif
-	size_t	anterior = (lo_tail - head) / length;	// number of element in anterior partition
+	size_t	anterior = (hole - head) / length;	// number of element in anterior partition
 	size_t	posterior = (tail - hi_head) / length;
 #ifdef DEBUG
 	dump_rate(anterior, posterior);

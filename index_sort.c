@@ -70,19 +70,19 @@ static void sort(void *base[], size_t nmemb) {
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- tail = %s\n", dump_data(*hole), dump_data(*tail));
 #endif
 		void	*pivot = *hole; *hole = *tail;
-		void	**lo, **hi = hole = tail, **lo_tail = NULL, **hi_head = NULL;
-		int chk;
+		void	**lo, **hi = hole = tail, **hi_head = NULL;
 		for (hi--, lo = base; lo < hole; lo++) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "start : lo=%p\thole=%p\thi=%p\n", lo, hole, hi);
 #endif
-			if ((chk = comp(*lo, pivot)) > 0) {	// An element greater than the pivot is found.
+			if (comp(*lo, pivot) >= 0) {	// An element greater than the pivot is found.
 #ifdef	DEBUG
 				if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(*lo), dump_data(*hole));
 #endif
 				*hole = *lo;	// copy address of bigger element
 				hole = lo;		// change position to store
 				for (; hi > hole; hi--) {
+					int chk;
 					if ((chk = comp(*hi, pivot)) < 0) {
 #ifdef	DEBUG
 						if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(*hole), dump_data(*hi));
@@ -94,10 +94,7 @@ static void sort(void *base[], size_t nmemb) {
 					else if (chk > 0) hi_head = NULL;
 					else if (hi_head == NULL) hi_head = hi;
 				}
-				lo_tail = NULL;
 			}
-			else if (chk < 0) lo_tail = NULL;
-			else if (lo_tail == NULL) lo_tail = lo;
 		}
 #ifdef	DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%ld]\n",
@@ -107,15 +104,11 @@ static void sort(void *base[], size_t nmemb) {
 #ifdef DEBUG
 		dump_pointer("sort() partitioned", base, nmemb);
 #endif
-		if (lo_tail == NULL) lo_tail = hole;	// not conitured
-#ifdef DEBUG
-		else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip lower %ld elements\n", hole - lo_tail);
-#endif
 		if (hi_head == NULL) hi_head = hole;
 #ifdef DEBUG
 		else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", hi_head - hole);
 #endif
-		size_t	anterior = lo_tail - base;	// number of element in anterior partition
+		size_t	anterior = hole - base;	// number of element in anterior partition
 		size_t	posterior = tail - hi_head;
 #ifdef DEBUG
 		dump_rate(anterior, posterior);
