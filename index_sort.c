@@ -75,7 +75,7 @@ static void sort(void *base[], size_t nmemb) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "start : lo=%p\thole=%p\thi=%p\n", lo, hole, hi);
 #endif
-			if (comp(*lo, pivot) >= 0) {	// An element greater than the pivot is found.
+			if (comp(*lo, pivot) >= 0) {
 #ifdef	DEBUG
 				if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(*lo), dump_data(*hole));
 #endif

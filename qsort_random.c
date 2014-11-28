@@ -48,7 +48,7 @@ static void sort(void *base, size_t nmemb, int depth) {
 	hole = tail;
 	char *lo, *hi = tail - length, *hi_head = NULL;
 	for (lo = head; lo < hole; lo += length) {
-		if (comp(lo, pivot) >= 0) {	// An element greater than the pivot is found.
+		if (comp(lo, pivot) >= 0) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
 #endif
