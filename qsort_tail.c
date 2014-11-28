@@ -36,14 +36,14 @@ static void sort(void *base, size_t nmemb) {
 #endif
 	char *lo, *hi = hole - length;
 	for (lo = head; lo < hole; lo += length) {
-		if (comp(lo, pivot) > 0) {	// An element greater than the pivot is found.
+		if (comp(lo, pivot) >= 0) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
 #endif
 			copy(hole, lo);
 			hole = lo;
 			for (; hi > hole; hi -= length) {
-				if (comp(hi, pivot) < 0) {
+				if (comp(hi, pivot) < 0) {	// asymmetric comparison
 #ifdef	DEBUG
 					if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
 #endif
