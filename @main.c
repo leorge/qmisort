@@ -191,8 +191,8 @@ int main(int argc, char *argv[])
 				"Quick sort with a hole. Pivot is a Random element."},
 			{'s', TRADITIONAL, "qsort_trad()", qsort_trad, FALSE,
 				"Traditional quick sort with swapping. Pivot is Selected from 3 elements."},
-				{'t', HOLE_TAIL, "qsort_tail()", qsort_tail, FALSE,
-					"Quick sort with a hole. Pivot is a Tail element."},
+			{'t', HOLE_TAIL, "qsort_tail()", qsort_tail, FALSE,
+				"Quick sort with a hole. Pivot is a Tail element."},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
 				"dUmmy sort do nothing."},
 			{'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
@@ -253,7 +253,9 @@ int main(int argc, char *argv[])
 				"\t-N : Number of members (default is 31).\n"
 				"\t-p : Print out the last result.\n"
 				"\t-R : Repeat count.\n"
+#ifndef	DEBUG
 				"\t-T : UncerTainTy percenT to pass.\n"
+#endif
 				"\t-W : Number of elements to select a pivot for -v option.\n"
 				"\t-Y : CYclic work buffer length.\n"
 				"\t-Z : siZe of an array element.\n"
