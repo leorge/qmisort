@@ -169,6 +169,10 @@ int main(int argc, char *argv[])
 				"MerGe sort.(except indexing time)"},
 			{'h', SWAP_HEAD, "qsort_head()", qsort_head, FALSE,
 				"Traditional quick sort with swapping. Pivot is a Head element."},
+#ifdef	HEAP
+			{'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
+				"Heap sort."},
+#endif
 			{'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
 			"Insertion sort."},
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
@@ -179,10 +183,6 @@ int main(int argc, char *argv[])
 			"Merge sort.(double buffer)"},
 			{'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
 				"Merge sort.(double index)"},
-#ifdef	HEAP
-			{'p', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
-				"heaP sort."},
-#endif
 			{'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
 				"Quick and merge sort.(index sort)"},
 			{'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
