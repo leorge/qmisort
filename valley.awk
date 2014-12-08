@@ -4,7 +4,12 @@
 #	n-1, n-3, ..., 4, 2, 0, 1, 3, ..., n-4, n-2
 #
 BEGIN {
-	num = ARGC > 1 ? (ARGV[1]) : 8;
+	if (ARGC <= 1) {
+		print "valley data : n-1, n-3, ..., 3, 1, 0, 2, 4, ..., n-4, n-2 or";
+		print "n-1, n-3, ..., 4, 2, 0, 1, 3, ..., n-4, n-2";
+		exit;
+	}
+	else num = ARGV[1];
 	fmt = sprintf("%d", num);
 	fmt = sprintf("%%%dd\n", length(fmt));
 	for (i = num; --i >= 0;) printf(fmt, i--);

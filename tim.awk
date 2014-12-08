@@ -1,11 +1,13 @@
 #!/usr/bin/awk -f
 #
-#	tim sort killer if N=64*x ?
-#
-#	n-2, n-1, n-4, n-3, ..... , 2, 3, 0, 1
+#	tim sort run killer if N=64*x ?
 #
 BEGIN {
-	num = ARGC > 1 ? (ARGV[1]) : 8;
+	if (ARGC <= 1) {
+		print "nearly reversed : n-2, n-1, n-4, n-3, ..... , 2, 3, 0, 1"
+		exit;
+	}
+	else num = ARGV[1];
 	fmt = sprintf("%d", num -1);
 	fmt = sprintf("%%%dd\n", length(fmt));
 	amp = 1;

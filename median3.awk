@@ -1,11 +1,10 @@
 #!/usr/bin/awk -f
-#
-#	median-3-killer
-#
-#	n-1, 0, 1, 2, ..., n-2
-#
 BEGIN {
-	num = ARGC > 1 ? (ARGV[1]) : 8;
+	if (ARGC <= 1) {
+		print "median-3-killer : n-1, 0, 1, 2, ..., n-2"
+		exit;
+	}
+	else num = ARGV[1];
 	fmt = sprintf("%d", num -1);
 	fmt = sprintf("%%%dd\n", length(fmt));
 	printf(fmt, num - 1);

@@ -1,9 +1,10 @@
 #!/usr/bin/awk -f
-#
-#	n, 1, n, n, ..., n
-#
 BEGIN {
-	num = ARGC > 1 ? (ARGV[1]) : 8;
+	if (ARGC <= 1) {
+		print "first and last is big : n, 1, 1, 1, ..., n"
+		exit;
+	}
+	else num = ARGV[1];
 	fmt = sprintf("%d", num);
 	fmt = sprintf("%%%dd\n", length(fmt));
 	printf(fmt, num);
