@@ -12,7 +12,7 @@
 bool	ispointer;
 
 /* index sort	*/
-void insert_isort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *)) {
+void insert_psort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *)) {
 	if (nmemb <= 1) return;
 #ifdef DEBUG
 	qsort_called++;
@@ -39,12 +39,8 @@ void insert_isort(void **idxtbl, size_t nmemb, int (*compare)(const void *, cons
 			else break;	// found an element equevalent to the pivot.
 		};
 		if (ck > 0) pos++;
-//		for (lo = (hi = i) - 1; hi > pos;) base[hi--] = base[lo--];	// This statement is equivalent to the next line
+//		for (lo = (hi = i) - 1; hi > pos;) idxtbl[hi--] = idxtbl[lo--];	// This statement is equivalent to the next line
 		memmove(&idxtbl[pos + 1], &idxtbl[pos], (i - pos)*sizeof(void *));	// instead of memcpy(3).
-#ifdef	DEBUG
-//		qsort_moved += i - pos;
-		qsort_moved++;
-#endif
 		idxtbl[pos] = pivot;
 	}
 }

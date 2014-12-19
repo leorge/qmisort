@@ -62,8 +62,8 @@ static void sort(void *base, size_t nmemb, int depth) {
 	copy(pivot, hole);
 	copy(hole, tail);	// pivot <-- hole <-- tail
 	hole = tail;
-	char *lo , *hi = tail - length, *hi_head = NULL;
-	for (lo = head; lo < hole; lo += length) {
+	char *lo = head, *hi = tail - length, *hi_head = NULL;
+	for (; lo < hole; lo += length) {
 		if (comp(lo, pivot) >= 0) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));

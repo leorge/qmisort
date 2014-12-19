@@ -34,8 +34,8 @@ static void sort(void *base, size_t nmemb) {
 #ifdef	DEBUG
 	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [tail]\n", dump_data(pivot));
 #endif
-	char *lo, *hi = hole - length;
-	for (lo = head; lo < hole; lo += length) {
+	char *lo = head, *hi = hole - length;
+	for (; lo < hole; lo += length) {
 		if (comp(lo, pivot) >= 0) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
