@@ -52,7 +52,7 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
 	char	tbuf[size];		// Temporary buffer
 #ifdef DEBUG
 	static char *name = "unindex()";
-	dump_pointer(name, idxtbl, nmemb);
+//	dump_pointer(name, idxtbl, nmemb);
 #endif
 	for (adrs = array1d, ptr = idxtbl, i = 0; i < nmemb; adrs += size, ptr++, i++) {   	// cyclic permutation
 #ifdef DEBUG
