@@ -1,7 +1,7 @@
 #!/usr/bin/awk -f
 BEGIN {
 	if (ARGC <= 1) {
-		print "first and last is big : n, 1, 1, 1, ..., n"
+		print "first and last is big : n, 1, ..., 1, n"
 		exit;
 	}
 	else num = ARGV[1];
