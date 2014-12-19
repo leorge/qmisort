@@ -72,6 +72,7 @@ void	index_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 void	insert_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	merge_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	qsort_head		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void	qsort_head1		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	qsort_log2		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	qsort_middle	(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	qsort_random	(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -79,11 +80,12 @@ void	qsort_swap3		(void *base, size_t nmemb, size_t size, int (*compare)(const v
 void	qsort_tail		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	qsort_trad		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	qsort_various	(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void	tree_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // index sorting
 void	imerge_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	pointer_sort	(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void	insert_isort	(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void	insert_psort	(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void	iqsort			(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void	merge_pointer	(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void	mi_isort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));

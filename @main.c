@@ -74,6 +74,7 @@ static int cmpstring(const void *p1, const void *p2)	// Function to compare
 typedef enum {
 	DUMMY,
 	SWAP_HEAD,
+	SWAP_HEAD1,
 	SWAP_MIDDLE,
 	TRADITIONAL,
 	SWAP_3,
@@ -81,13 +82,13 @@ typedef enum {
 	HOLE_RANDOM,
 	HOLE_VARIOUS,
 	HOLE_LOG2,
-#ifdef	HEAP
 	HEAP_SORT,
-#endif
 	MERGE_ARRAY,
 	MERGE_INDEX,
 	MERGE_POINTER,
 	INSERT_SORT,
+	INSERT_PSORT,
+	TREE_SORT,
 	MERGE_INSERT_INDEX,
 	MERGE_INSERT_POINTER,
  	ARRAY_SORT,
@@ -157,6 +158,8 @@ int main(int argc, char *argv[])
 	extern	char *optarg;
     INFO *info, test[] = {	// alphabetic order in symbol names of enum for each block.
     		// simple in-place sort.
+			{'1', SWAP_HEAD1, "qsort_head1()", qsort_head1, FALSE,
+				"Traditional quick sort with swapping. Pivot is a Head element. Single loop."},
 			{'2', HOLE_LOG2, "qsort_log2()", qsort_log2, FALSE,
 				"Quick sort with a hole. Pivot is middle of log2(N) elements."},
 			{'3', SWAP_3, "qsort_swap3()", qsort_swap3, FALSE,
@@ -168,15 +171,21 @@ int main(int argc, char *argv[])
 			{'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
 				"MerGe sort.(except indexing time)"},
 			{'h', SWAP_HEAD, "qsort_head()", qsort_head, FALSE,
-				"Traditional quick sort with swapping. Pivot is a Head element."},
+				"Traditional quick sort with swapping. Pivot is a Head element. Nested loop."},
 #ifdef	HEAP
 			{'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
 				"Heap sort."},
 #endif
 			{'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
-			"Insertion sort."},
+			"Conventional Insertion sort."},
+			{'I', INSERT_PSORT, "insert_psort(*)", insert_psort, TRUE,
+			"Conventional Insertion pointer sorting."},
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
 				"Merge and insertion sort.(index sort)"},
+#ifdef	TREE
+			{'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
+			"Insertion sort with median node tree."},
+#endif
 			{'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
 				"Merge and insertion sort.(except indexing time)"},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
@@ -520,6 +529,9 @@ QSORT:
 #endif
 REDO:
 			fprintf(OUT, "%s", info->name);
+#ifdef	DEBUG
+			if (trace_level >= TRACE_DUMP) fprintf(OUT, "\n");
+#endif
 			begin_timer(repeat_count);
 			for (int i = 0; i < repeat_count; i++) {
 				qsort_comp_str = qsort_called = qsort_moved = 0;	// reset all of counters
