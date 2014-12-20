@@ -2,8 +2,9 @@
 #
 # Get distribution of split ratio.
 #
-# usage : Debug/leosort -V 2 -N 999 -options datafile | $0 -v OFS="\t"
+# usage : Debug/leosort -V 2 -N 999 -options datafile | $0
 #
+BEGIN {log2 = log(2); fmt = "%02d"; OFS="\t"}
 function show(i) {	# i is a local variable. Others are global variables.
 	buffer = nmemb;
 	for (i = 0; i <= 10;) buffer = buffer OFS cnt[sprintf(fmt,i++)];
@@ -29,7 +30,7 @@ function dump() {
 	show();	# Flush
 	delete count;
 }
-BEGIN {log2 = log(2); fmt = "%02d"; OFS="\t"}
+
 /^qsort\(3\) nmemb = / {
 	for (i = "0.0"; i <= 1; i += 0.1) line_header = line_header OFS i;
 }
