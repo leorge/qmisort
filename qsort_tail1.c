@@ -3,7 +3,7 @@
  *
  *	Quicksort as written in wikipedia, pivot is a last element. Single loop.
  *
- *	Do the following command before GUI login after reboot.
+ *	Press Ctrl + Alt + F1 and type the following command before GUI login after reboot.
  *
  *		for N in `seq 1000 1000 10000`; do
  *    	src/random.awk $N | Release/Sort -N $N -h1; done |
