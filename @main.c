@@ -158,12 +158,12 @@ int main(int argc, char *argv[])
 	extern	char *optarg;
     INFO *info, test[] = {	// alphabetic order in symbol names of enum for each block.
     		// simple in-place sort.
-			{'1', SWAP_HEAD1, "qsort_head1()", qsort_head1, FALSE,
-				"Traditional quick sort with swapping. Pivot is a Head element. Single loop."},
+			{'1', SWAP_HEAD1, "qsort_tail1()", qsort_tail1, FALSE,
+				"Traditional quick sort with swapping. Pivot is a last element. Single loop."},
 			{'2', HOLE_LOG2, "qsort_log2()", qsort_log2, FALSE,
-				"Quick sort with a hole. Pivot is middle of log2(N) elements."},
+				"Quick sort with a hole. Pivot is median of log2(N) elements."},
 			{'3', SWAP_3, "qsort_swap3()", qsort_swap3, FALSE,
-				"Traditional quick sort with swapping. Pivot is middle of sorted 3 elements."},
+				"Traditional quick sort with swapping. Pivot is median of sorted 3 elements."},
 			{'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
 				"Quick and merge sort.(array sort)"},
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
@@ -199,13 +199,13 @@ int main(int argc, char *argv[])
 			{'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
 				"Quick sort with a hole. Pivot is a Random element."},
 			{'s', TRADITIONAL, "qsort_trad()", qsort_trad, FALSE,
-				"Traditional quick sort with swapping. Pivot is Selected from 3 elements."},
+				"Traditional quick sort with swapping. Pivot is median of 3 elements."},
 			{'t', HOLE_TAIL, "qsort_tail()", qsort_tail, FALSE,
 				"Quick sort with a hole. Pivot is a Tail element."},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
 				"dUmmy sort do nothing."},
 			{'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
-				"Quick sort with a hole. Pivot is middle of Various elements."},
+				"Quick sort with a hole. Pivot is median of Various elements."},
     };
     // set default value to global variables.
     log2_boundary = 8;
