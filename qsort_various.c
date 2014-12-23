@@ -109,14 +109,14 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
 }
 
-void qsort_various(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void *))
+void qsort_various(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char *buff = calloc(pivot_number, sizeof(void *));
 		if (buff != NULL) {
 #ifdef DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT,
-					"pivot_number = %d\tboundary = %d\n" , pivot_number, log2_boundary);
+					"pivot_number = %d\tboundary = %ld\n" , pivot_number, log2_boundary);
 #endif
 			char a[size]; pivot = a; *a = '\0';
 			length = size; comp = compar;

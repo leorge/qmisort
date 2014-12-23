@@ -121,7 +121,7 @@ static void sort(void *base[], size_t nmemb) {
 #endif
 }
 
-void pointer_sort(void **idxtbl, size_t nmemb, int(*compare)(const void *, const void *))
+void pointer_sort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
 {
 	if (nmemb <= 1) return;
 	if (idxtbl != NULL) {
@@ -142,7 +142,7 @@ void pointer_sort(void **idxtbl, size_t nmemb, int(*compare)(const void *, const
 	}
 }
 
-void index_sort(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void *))
+void index_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
 {
 	if (nmemb <= 1) return;
 	void **idxtbl = make_index(base, nmemb, size);

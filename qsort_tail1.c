@@ -73,7 +73,7 @@ static void sort(char *head, char *tail) {
 #endif
 }
 
-void qsort_tail1(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void *))
+void qsort_tail1(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; swapbuf = a; *a = '\0';

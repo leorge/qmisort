@@ -66,7 +66,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_middle(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void *))
+void qsort_middle(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; swapbuf = a; *a = '\0';
