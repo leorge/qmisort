@@ -32,10 +32,10 @@
 
 /****	Public	****/
 Trace	trace_level = TRACE_NONE;	// to debug
-int		log2_boundary;				//	nmemb to alternate to merge sort.
+size_t	log2_boundary;				//	nmemb to alternate to merge sort.
 long	qsort_called, qsort_comp_str, qsort_moved;	// counters
 int		pivot_number;
-int		random_depth;
+size_t	random_depth;
 double	random_number;
 
 void	(*small_array)();
@@ -106,7 +106,7 @@ typedef struct {
 } INFO;
 
 // Estimate time
-static int elapsed_time(const char *comment, int skip)
+static long elapsed_time(const char *comment, int skip)
 {
 	int	percent = 0;	// return value
 	int datacount = end_timer(skip);
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 				"MerGe sort.(except indexing time)"},
 			{'h', SWAP_HEAD, "qsort_head()", qsort_head, FALSE,
 				"Traditional quick sort with swapping. Pivot is a Head element. Nested loop."},
-#ifdef	HEAP
+#ifdef	DEBUG
 			{'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
 				"Heap sort."},
 #endif
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 			"Conventional Insertion pointer sorting."},
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
 				"Merge and insertion sort.(index sort)"},
-#ifdef	TREE
+#ifdef	DEBUG
 			{'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
 			"Insertion sort with median node tree."},
 #endif
