@@ -175,11 +175,11 @@ int main(int argc, char *argv[])
 #ifdef	DEBUG
 			{'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
 				"Heap sort."},
-#endif
 			{'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
 			"Conventional Insertion sort."},
 			{'I', INSERT_PSORT, "insert_psort(*)", insert_psort, TRUE,
 			"Conventional Insertion pointer sorting."},
+#endif
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
 				"Merge and insertion sort.(index sort)"},
 #ifdef	DEBUG
