@@ -522,6 +522,10 @@ QSORT:
     srand((unsigned)time(NULL));
     set_random();
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
+#define	ENOUGH	4000000L
+    	long	*cache = calloc(sizeof(long), ENOUGH), *clear = cache;	// really enough?
+    	for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
+    	free(cache);
     	if (index & idx) {
 			index &= ~idx;	// clear bit
 #ifdef DEBUG
