@@ -276,15 +276,15 @@ int main(int argc, char *argv[])
 				"\t    3 : Built-in function qsort(3).\n"
 				"\t    j : Merge and insertion sort.\n"
 				"\t    M : Merge sort.(default)\n"
+#ifdef DEBUG
 				"\t    a : Merge sort for -A option.(not index sort)\n"
-#ifdef	LOG2_ALGORITHM
+#ifdef LOG2_ALGORITHM
 			"\nLog2 option : to search a highest \"1\" bit in nmemb.\n"
 				"\t-L a : Assembly.\n"
 				"\t-L b : Binary search.\n"
 				"\t-L r : Right shift count.\n"
 				"\t(default) : Built-in function log2(3).\n"
 #endif
-#ifdef	DEBUG
 			"\nTrace option :\n"
 				"\t-V 1 : Show Count.\n"
 				"\t-V 2 : Trace action.\n"
