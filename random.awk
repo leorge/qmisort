@@ -12,7 +12,7 @@ BEGIN {
 	srand()
 	num = ARGC > 1 ? (ARGV[1] + 0) : 7
 	fmt = sprintf("%d", num - 1)
-	fmt = sprintf("%%%dd\n", length(fmt))
+	fmt = sprintf("%%0%dd\n", length(fmt))
 	for (i = 0; i < num ; i++)
 		printf(fmt, num * rand())
 }
