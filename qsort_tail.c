@@ -27,14 +27,14 @@ static void sort(void *base, size_t nmemb) {
 	qsort_called++;
 	dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-#define	head	((char *)base)
-	char *tail = head + length * (nmemb - 1);	// point a last element
-	char *hole = tail;
+#define	first	((char *)base)
+	char *last = first + length * (nmemb - 1);	// point a last element
+	char *hole = last;
 	copy(pivot, hole);
 #ifdef	DEBUG
 	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [tail]\n", dump_data(pivot));
 #endif
-	char *lo = head, *hi = hole - length;
+	char *lo = first, *hi = hole - length;
 	for (; lo < hole; lo += length) {
 		if (comp(lo, pivot) >= 0) {
 #ifdef	DEBUG
@@ -55,16 +55,16 @@ static void sort(void *base, size_t nmemb) {
 	}
 #ifdef	DEBUG
 	if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%ld]\n",
-			dump_data(pivot), dump_data(hole), (hole - head) / length);
+			dump_data(pivot), dump_data(hole), (hole - first) / length);
 #endif
 	copy(hole, pivot);	// restore
-	size_t	anterior = (hole - head) / length;	// number of element in anterior partition
-	size_t	posterior = (tail - hole) / length;
+	size_t	anterior = (hole - first) / length;	// number of element in anterior partition
+	size_t	posterior = (last - hole) / length;
 #ifdef DEBUG
 	dump_array("sort() partitioned", base, nmemb, length);
 	dump_rate(anterior, posterior);
 #endif
-	sort(head, anterior);
+	sort(first, anterior);
 	sort(hole + length, posterior);
 #ifdef DEBUG
 	dump_array("sort() done.", base, nmemb, length);
