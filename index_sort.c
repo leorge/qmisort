@@ -65,12 +65,12 @@ static void sort(void *base[], size_t nmemb) {
 			fprintf(OUT, "\n");
 		}
 #endif
-		void	**tail = &base[nmemb - 1];
+		void	**last = &base[nmemb - 1];
 #ifdef	DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- tail = %s\n", dump_data(*hole), dump_data(*tail));
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- last = %s\n", dump_data(*hole), dump_data(*last));
 #endif
-		void	*pivot = *hole; *hole = *tail;
-		void	**lo, **hi = hole = tail, **eq = NULL;
+		void	*pivot = *hole; *hole = *last;
+		void	**lo, **hi = hole = last, **eq = NULL;
 		for (hi--, lo = base; lo < hole; lo++) {
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "start : lo=%p\thole=%p\thi=%p\n", lo, hole, hi);
@@ -109,7 +109,7 @@ static void sort(void *base[], size_t nmemb) {
 		else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", eq - hole);
 #endif
 		size_t	n_lo = hole - base;	// number of element in lower partition
-		size_t	n_hi = tail - eq;
+		size_t	n_hi = last - eq;
 #ifdef DEBUG
 		dump_rate(n_lo, n_hi);
 #endif

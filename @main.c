@@ -76,7 +76,7 @@ typedef enum {
 	SWAP_FIRST,
 	SWAP_MIDDLE,
 	SWAP_MED3,
-	HOLE_TAIL,
+	HOLE_LAST,
 	HOLE_RANDOM,
 	HOLE_VARIOUS,
 	HOLE_LOG2,
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 #endif
 			{'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
 				"Merge and insertion sort : pointer sorting"},
-			{'l', HOLE_TAIL, "qsort_tail()", qsort_last, FALSE,
+			{'l', HOLE_LAST, "qsort_last()", qsort_last, FALSE,
 				"Quick sort : pivot is a Last element with a hole."},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
 			"Merge sort : double array"},

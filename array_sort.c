@@ -63,9 +63,9 @@ static void sort(void *base, size_t nmemb) {
 #endif
 		char *last = first + length * (nmemb - 1);
 #ifdef	DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- tail = %s\n", dump_data(hole), dump_data(last));
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
 #endif
-		copy(pivot, hole); copy(hole, last);	// pivot <-- hole <-- tail
+		copy(pivot, hole); copy(hole, last);	// pivot <-- hole <-- last
 		char	*lo = first,  *hi = (hole = last) - length, *eq = NULL;
 		for (; lo < hole; lo += length) {
 			if (comp(lo, pivot) >= 0) {

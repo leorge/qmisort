@@ -1,5 +1,5 @@
 /*
- * qsort_tail.c
+ * qsort_last.c
  *
  *	Quick sort - Use a last element as a hole.
  *
@@ -32,7 +32,7 @@ static void sort(void *base, size_t nmemb) {
 	char *hole = last;
 	copy(pivot, hole);
 #ifdef	DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [tail]\n", dump_data(pivot));
+	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [last]\n", dump_data(pivot));
 #endif
 	char *lo = first, *hi = hole - length;
 	for (; lo < hole; lo += length) {
@@ -78,7 +78,7 @@ void qsort_last(void *base, size_t nmemb, size_t size, int (*compar)(const void 
 		length = size; comp = compar;
 		sort(base, nmemb);
 #ifdef	DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_tail() done.\n");
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_last() done.\n");
 #endif
 	}
 }

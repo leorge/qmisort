@@ -65,7 +65,7 @@ void heap_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *
 	comp = compar;
 	char	a[length = size]; key = a;
 	first = (char *)base;
-	last = first + (nmemb - 1) * size;	// next element of the tail
+	last = first + (nmemb - 1) * size;	// next element of the last element
 	size_t node = (nmemb - 1) >> 1;		// lowest parent node
 	do {	// build up a heap
 		copy(key, first + node * size);
