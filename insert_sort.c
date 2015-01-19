@@ -51,7 +51,7 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void
 #ifdef DEBUG
 	if (trace_level >= TRACE_DUMP) dump_array("insert_sort", base, nmemb, size);
 #endif
-#define	head	((char *)base)
+#define	first	((char *)base)
 	char pivot[size];
 	size_t	i;
 	int		ck = 0;
@@ -66,7 +66,7 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void
 		}
 #endif
 		while (lo <= hi) {
-			ck = compar(pivot, head + (pos = lo + ((hi - lo) >> 1)) * size);
+			ck = compar(pivot, first + (pos = lo + ((hi - lo) >> 1)) * size);
 			if (ck == 0) break;				// found an equal element.
 			else if (ck > 0) lo = pos + 1;
 			else if (pos > 0) hi = pos - 1;		// ck < 0

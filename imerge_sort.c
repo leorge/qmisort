@@ -21,7 +21,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 	sort(&dst[anterior], &src[anterior], ! revert, posterior);
 	void **store = revert ? src : dst;
 #ifdef DEBUG
-	void **head = store;
+	void **first = store;
 #endif
 	void **left = revert ? dst : src;
 	void **right = &left[anterior];
@@ -54,7 +54,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 		}
 	}
 #ifdef DEBUG
-	if (trace_level >= TRACE_DUMP) dump_pointer("sort() done.", head, nmemb);
+	if (trace_level >= TRACE_DUMP) dump_pointer("sort() done.", first, nmemb);
 #endif
 }
 

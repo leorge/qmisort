@@ -17,7 +17,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #ifdef DEBUG
 	qsort_called++;
 	if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, src, nmemb);
-	void **head = store;
+	void **first = store;
 #endif
 	if (nmemb <= MAX_SIZE) {	/* Insertion sort */
 #ifdef DEBUG
@@ -99,7 +99,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 		}
 	}
 #ifdef DEBUG
-	if (trace_level >= TRACE_DUMP) dump_pointer("sort() done.", head, nmemb);
+	if (trace_level >= TRACE_DUMP) dump_pointer("sort() done.", first, nmemb);
 #endif
 }
 
