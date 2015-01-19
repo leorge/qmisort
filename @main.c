@@ -157,49 +157,49 @@ int main(int argc, char *argv[])
     INFO *info, test[] = {	// alphabetic order in symbol names of enum for each block.
     		// simple in-place sort.
 			{'2', HOLE_LOG2, "qsort_log2()", qsort_log2, FALSE,
-				"Pivot is median of log2(N) elements with a hole."},
+				"Quick sort : pivot is median of log2(N) with a hole."},
 			{'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
-				"Pivot is median of 3 elements with swaps. Nested loop."},
+				"Quick sort : pivot is median of 3 elements with swaps. Nested loop."},
 			{'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
-				"Quick and merge sort.(array sort)"},
+				"Quick and merge sort : Array sorting"},
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
-				"Pivot is a miDDle element with swaps in K&R style. Single loop"},
+				"Quick sort : pivot is a miDDle element with swaps in K&R style. Single loop"},
 			{'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
-				"Pivot is a First element with swaps. Nested loop."},
+				"Quick sort : pivot is a First element with swaps. Nested loop."},
 			{'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
-				"MerGe sort.(except indexing time)"},
+				"merGe sort : pointer sorting (index sorting except indexing time)"},
 #ifdef	DEBUG
 			{'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
-				"Heap sort."},
+				"Heap sort"},
 			{'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
-			"Conventional Insertion sort."},
+			"Insertion sort : array sorting"},
 			{'I', INSERT_PSORT, "insert_psort(*)", insert_psort, TRUE,
-			"Conventional Insertion pointer sorting."},
+			"Insertion sort : pointer sorting"},
 #endif
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
-				"Merge and insertion sort.(index sort)"},
+				"Merge and insertion sort : index sorting"},
 #ifdef	DEBUG
 			{'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
-			"Insertion sort with median node tree."},
+			"Tree sort : median node tree"},
 #endif
 			{'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
-				"Merge and insertion sort.(except indexing time)"},
+				"Merge and insertion sort : pointer sorting"},
 			{'l', HOLE_TAIL, "qsort_tail()", qsort_last, FALSE,
-				"Quick sort with a hole. Pivot is a Last element."},
+				"Quick sort : pivot is a Last element with a hole."},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
-			"Merge sort.(double buffer)"},
+			"Merge sort : double array"},
 			{'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
-				"Merge sort.(double index)"},
+				"Merge sort : double index"},
 			{'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
-				"Quick and merge sort.(index sort)"},
+				"Quick and merge sort : index sorting"},
 			{'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-				"Quick and merge sort.(except indexing time)"},
+				"Quick and merge sort : pointer sorting"},
 			{'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
-				"Quick sort with a hole. Pivot is a Random element."},
+				"Quick sort : pivot is a Random element with a hole."},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
-				"dUmmy sort do nothing."},
+				"dUmmy sort : do nothing."},
 			{'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
-				"Quick sort with a hole. Pivot is median of Various elements."},
+				"Quick sort : Pivot is median of Various elements with a hole."},
     };
     // set default value to global variables.
     log2_boundary = 8;
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
 				"\t-V 2 : Trace action.\n"
 				"\t-V 3 : Trace data copy.\n"
 				"\t-V 4 : Trace comparison.\n"
-				"\t-V 5 : Trace to debug.\n"
+				"\t-V 5 : Others to debug."
 #endif
 	        );
 			return EXIT_SUCCESS;
