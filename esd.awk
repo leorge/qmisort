@@ -2,7 +2,7 @@
 #
 #	Calculate Estimated Standard Deviation.
 #
-#		s=sqrt(sum((Xi-mean)^2)/n-1)
+#		s=sqrt(sum((Xi-mean)^2)/(n-1))
 #
 #	Usage : $0 val1 val2 ...
 #
