@@ -9,16 +9,16 @@
 
 #include	"sort.h"
 
-void dump_array(const char *msg, const void *head, size_t nmemb, size_t size)
+void dump_array(const char *msg, const void *base, size_t nmemb, size_t size)
 {
 	if (trace_level < TRACE_DUMP) return;
 	size_t	i;
-	const char	*p = head;
+	const char	*p = base;
 	fprintf(OUT, "%s nmemb = %ld :", msg, nmemb);
 	if (nmemb > 16) {
 		for (i = 0; i++ < 8; p += size) fprintf(OUT, " %s", dump_data(p));
 		fprintf(OUT, " ...");
-		p = head;
+		p = base;
 		p += size * (i = nmemb - 8);
 		for (; i++ < nmemb; p += size) fprintf(OUT, " %s", dump_data(p));
 	}
@@ -26,18 +26,18 @@ void dump_array(const char *msg, const void *head, size_t nmemb, size_t size)
 	fprintf(OUT, "\n");
 }
 
-void dump_pointer(char *msg, void *head[], size_t nmemb) {
+void dump_pointer(char *msg, void *base[], size_t nmemb) {
 	if (trace_level < TRACE_DUMP) return;
 	size_t	i;
 	fprintf(OUT, "%s nmemb = %ld :", msg, nmemb);
 	if (nmemb > 16) {
-		for (i = 0; i < 8;) fprintf(OUT, " %s", dump_data((char *)head[i++]));
+		for (i = 0; i < 8;) fprintf(OUT, " %s", dump_data((char *)base[i++]));
 		fprintf(OUT, " ...");
-		for (i = nmemb - 8; i < nmemb;) fprintf(OUT, " %s", dump_data((char *)head[i++]));
+		for (i = nmemb - 8; i < nmemb;) fprintf(OUT, " %s", dump_data((char *)base[i++]));
 	}
-	else for (i = 0; i < nmemb;) fprintf(OUT, " %s", dump_data((char *)head[i++]));
+	else for (i = 0; i < nmemb;) fprintf(OUT, " %s", dump_data((char *)base[i++]));
 	fprintf(OUT, "\n");
-//	if (nmemb > 16) dump_pointer(msg, &head[8], nmemb - 16);	// dump whole data
+//	if (nmemb > 16) dump_pointer(msg, &base[8], nmemb - 16);	// dump whole data
 }
 
 char *dump_index(char *buf, INSERT_INDEX index, int length) {
