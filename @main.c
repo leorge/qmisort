@@ -184,6 +184,8 @@ int main(int argc, char *argv[])
 #endif
 			{'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
 				"Merge and insertion sort.(except indexing time)"},
+			{'l', HOLE_TAIL, "qsort_tail()", qsort_last, FALSE,
+				"Quick sort with a hole. Pivot is a Last element."},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
 			"Merge sort.(double buffer)"},
 			{'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
@@ -194,8 +196,6 @@ int main(int argc, char *argv[])
 				"Quick and merge sort.(except indexing time)"},
 			{'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
 				"Quick sort with a hole. Pivot is a Random element."},
-			{'t', HOLE_TAIL, "qsort_tail()", qsort_tail, FALSE,
-				"Quick sort with a hole. Pivot is a Tail element."},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
 				"dUmmy sort do nothing."},
 			{'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,

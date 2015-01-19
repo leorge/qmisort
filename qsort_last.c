@@ -1,7 +1,7 @@
 /*
  * qsort_tail.c
  *
- *	Quick sort - Use a tail element as a hole.
+ *	Quick sort - Use a last element as a hole.
  *
  *  Created on: 2013/01/01
  *      Author: leo
@@ -71,7 +71,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_tail(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void qsort_last(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; pivot = a; *a = '\0';
