@@ -1,7 +1,7 @@
 /*
  * qsort_middle.c
  *
- *	traditional quick sort using swap, pivot is a middle element.
+ *	K&R style Quicksort. pivot is a middle element.
  *
  *  Created on: 2013/02/09
  *      Author: leo
@@ -23,46 +23,47 @@ static void copy(void *dst, const void *src)
 	memcpy(dst, src, length); /* restore an elements  */
 }
 
+static void swap(void *p1, void *p2)
+{
+	if (p1 == p2) return;
+#ifdef DEBUG
+	qsort_moved += 3;
+	if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(%s, %s)\n", dump_data(p1), dump_data(p2));
+#endif
+	memcpy(swapbuf, p1, length);
+	memcpy(p1, p2, length);
+	memcpy(p2, swapbuf, length);
+}
+
 static void sort(void *base, size_t nmemb) {
-	if (nmemb <= 1) return;
+	if (nmemb <= 1) return;	// 0 or 1
 #ifdef DEBUG
 	qsort_called++;
 	dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-#define	head	((char *)base)
-	copy(pivot, head + length * (nmemb >> 1));	// middle element
-#ifdef DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [%ld]\n", dump_data(pivot), nmemb >> 1);
-#endif
-	char	*tail = head + (nmemb - 1) * length;
-	char	*lo = head;
-	char	*hi = tail;
-	while (TRUE) {
-		while(comp(lo, pivot) < 0) lo += length;
-		while(comp(pivot, hi) < 0) hi -= length;
-#ifdef	DEBUG
-		if (trace_level >= TRACE_DEBUG)
-			fprintf(OUT, "lo = %s at %p\thi = %s at %p\n", dump_data(lo), lo, dump_data(hi), hi);
-#endif
-		if (lo >= hi) break;
-#ifdef	DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(lo), dump_data(hi));
-#endif
-		copy(swapbuf, lo);
-		copy(lo, hi);
-		copy(hi, swapbuf);
-		lo += length; hi -= length;
+#define	first	((char *)base)
+	char *last = first + (nmemb - 1) * length;
+	char *store = first;
+	swap(first, first + (nmemb >> 1) * length);	// middle element
+	for (char *p = first + length; p <= last; p += length) {
+		if (comp(p, first) < 0) swap(p, store += length);
 	}
-	size_t	anterior = (lo - head) / length;
-	size_t	posterior = (tail - lo) / length + 1;
 #ifdef	DEBUG
-	dump_array("sort() partitioned.", head, nmemb, length);
+	if (trace_level >= TRACE_DUMP && first != store)
+		fprintf(OUT, "restore pivot %s to %s at [%ld]\n",
+			dump_data(first), dump_data(store), (store - first) / length);
+#endif
+	swap(first, store);
+	size_t	anterior = (store - first) / length;	// number of element in anterior partition
+	size_t	posterior = (last - store) / length;
+#ifdef DEBUG
+	dump_array("sort() partitioned", first, nmemb, length);
 	dump_rate(anterior, posterior);
 #endif
-	sort(head, anterior);
-	sort(lo, posterior);
+	sort(first, anterior);
+	sort(store + length, posterior);
 #ifdef DEBUG
-	dump_array("sort() done.", head, nmemb, length);
+	dump_array("sort() done.", first, nmemb, length);
 #endif
 }
 
