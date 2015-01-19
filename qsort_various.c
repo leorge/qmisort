@@ -30,8 +30,8 @@ static void sort(void *base, size_t nmemb, int depth) {
 	qsort_called++;
 	dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-#define	head	((char *)base)
-	char	*hole, *tail = head + length * (nmemb - 1);	// point a last element
+#define	first	((char *)base)
+	char	*hole, *last = first + length * (nmemb - 1);	// point a last element
 	if (depth > 0) {
 		depth--;
 		size_t	distance = (size_t)(nmemb / pivot_number);		// distance of elements
@@ -42,7 +42,7 @@ static void sort(void *base, size_t nmemb, int depth) {
 		hole = base + (size_t)(random_number * nmemb / pivot_number) * length;	// 1st pick up point
 		for (int idx = 0; idx < pivot_number; hole += distance) {
 #ifdef	DEBUG
-			if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array[%ld] at %p = %s\n", (hole - head) / length, hole, dump_data(hole));
+			if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array[%ld] at %p = %s\n", (hole - first) / length, hole, dump_data(hole));
 #endif
 			index[idx++] = hole;
 		}
@@ -55,14 +55,14 @@ static void sort(void *base, size_t nmemb, int depth) {
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
 #endif
 	}
-	else hole = head + length * (nmemb >> 1);	// middle element
+	else hole = first + length * (nmemb >> 1);	// middle element
 #ifdef	DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- tail = %s\n", dump_data(hole), dump_data(tail));
+	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- tail = %s\n", dump_data(hole), dump_data(last));
 #endif
 	copy(pivot, hole);
-	copy(hole, tail);	// pivot <-- hole <-- tail
-	hole = tail;
-	char *lo = head, *hi = tail - length, *hi_head = NULL;
+	copy(hole, last);	// pivot <-- hole <-- tail
+	hole = last;
+	char *lo = first, *hi = last - length, *eq = NULL;
 	for (; lo < hole; lo += length) {
 		if (comp(lo, pivot) >= 0) {
 #ifdef	DEBUG
@@ -78,32 +78,32 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
 					copy(hole, hi);
 					hole = hi;
-					hi_head = NULL;	// not equivalent then reset
+					eq = NULL;	// not equivalent then reset
 				}
-				else if (chk > 0) hi_head = NULL;
-				else if (hi_head == NULL) hi_head = hi;	// first equivalent element
+				else if (chk > 0) eq = NULL;
+				else if (eq == NULL) eq = hi;	// first equivalent element
 			}
 		}
 	}
 #ifdef	DEBUG
 	if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s --> %s [%ld]\n",
-			dump_data(pivot), dump_data(hole), (hole - head) / length);
+			dump_data(pivot), dump_data(hole), (hole - first) / length);
 #endif
 	copy(hole, pivot);	// restore
 #ifdef DEBUG
 	dump_array("sort() partitioned", base, nmemb, length);
 #endif
-	if (hi_head == NULL) hi_head = hole;
+	if (eq == NULL) eq = hole;
 #ifdef DEBUG
-	else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", (hi_head - hole) / length);
+	else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", (eq - hole) / length);
 #endif
-	size_t	anterior = (hole - head) / length;	// number of element in anterior partition
-	size_t	posterior = (tail - hi_head) / length;
+	size_t	anterior = (hole - first) / length;	// number of element in anterior partition
+	size_t	posterior = (last - eq) / length;
 #ifdef DEBUG
 	dump_rate(anterior, posterior);
 #endif
-	sort(head, anterior, depth);
-	sort(hi_head + length, posterior, depth);
+	sort(first, anterior, depth);
+	sort(eq + length, posterior, depth);
 #ifdef DEBUG
 	dump_array("sort() done.", base, nmemb, length);
 #endif
