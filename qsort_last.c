@@ -58,14 +58,14 @@ static void sort(void *base, size_t nmemb) {
 			dump_data(pivot), dump_data(hole), (hole - first) / length);
 #endif
 	copy(hole, pivot);	// restore
-	size_t	anterior = (hole - first) / length;	// number of element in anterior partition
-	size_t	posterior = (last - hole) / length;
+	size_t	n_lo = (hole - first) / length;	// number of element in lower partition
+	size_t	n_hi = (last - hole) / length;
 #ifdef DEBUG
 	dump_array("sort() partitioned", base, nmemb, length);
-	dump_rate(anterior, posterior);
+	dump_rate(n_lo, n_hi);
 #endif
-	sort(first, anterior);
-	sort(hole + length, posterior);
+	sort(first, n_lo);
+	sort(hole + length, n_hi);
 #ifdef DEBUG
 	dump_array("sort() done.", base, nmemb, length);
 #endif

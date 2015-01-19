@@ -108,13 +108,13 @@ static void sort(void *base[], size_t nmemb) {
 #ifdef DEBUG
 		else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", eq - hole);
 #endif
-		size_t	anterior = hole - base;	// number of element in anterior partition
-		size_t	posterior = tail - eq;
+		size_t	n_lo = hole - base;	// number of element in lower partition
+		size_t	n_hi = tail - eq;
 #ifdef DEBUG
-		dump_rate(anterior, posterior);
+		dump_rate(n_lo, n_hi);
 #endif
-		sort(base, anterior);
-		sort(eq + 1, posterior);
+		sort(base, n_lo);
+		sort(eq + 1, n_hi);
 	}
 #ifdef DEBUG
 	dump_pointer("sort() done.", base, nmemb);

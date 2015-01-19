@@ -55,13 +55,13 @@ static void sort(void *base, size_t nmemb) {
 #ifdef	DEBUG
 	dump_array("sort() partitioned.", base, nmemb, length);
 #endif
-	size_t	anterior = (hi - first) / length;	// number of elements in anterior partition
-	size_t	posterior = (last - hi) / length;
+	size_t	n_lo = (hi - first) / length;	// number of elements in lower partition
+	size_t	n_hi = (last - hi) / length;
 #ifdef	DEBUG
-	dump_rate(anterior, posterior);
+	dump_rate(n_lo, n_hi);
 #endif
-	sort(first, anterior);
-	sort(hi + length, posterior);
+	sort(first, n_lo);
+	sort(hi + length, n_hi);
 #ifdef DEBUG
 	dump_array("sort() done.", base, nmemb, length);
 #endif

@@ -15,40 +15,40 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 	qsort_called++;
 	if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, src, nmemb);
 #endif
-	size_t anterior = nmemb >> 1;	// = nmemb / 2
-	size_t posterior = nmemb - anterior;
-	sort(dst, src, ! revert, anterior);
-	sort(&dst[anterior], &src[anterior], ! revert, posterior);
+	size_t n_lo = nmemb >> 1;	// = nmemb / 2
+	size_t n_hi = nmemb - n_lo;
+	sort(dst, src, ! revert, n_lo);
+	sort(&dst[n_lo], &src[n_lo], ! revert, n_hi);
 	void **store = revert ? src : dst;
 #ifdef DEBUG
 	void **first = store;
 #endif
 	void **left = revert ? dst : src;
-	void **right = &left[anterior];
+	void **right = &left[n_lo];
 #ifdef DEBUG
 	if (trace_level >= TRACE_DUMP) {
-		dump_pointer("left", left, anterior);
-		dump_pointer("right", right, nmemb - anterior);
+		dump_pointer("left", left, n_lo);
+		dump_pointer("right", right, nmemb - n_lo);
 	}
 #endif
 	while (TRUE) {
 		if (comp(*left, *right) < 0) {
 			*store++ = *left++;		// add one
-			if (--anterior <= 0) {	// empty?
+			if (--n_lo <= 0) {	// empty?
 #ifdef DEBUG
-				if (trace_level >= TRACE_DUMP) dump_pointer("append right", right, posterior);
+				if (trace_level >= TRACE_DUMP) dump_pointer("append right", right, n_hi);
 #endif
-				memcpy(store, right, posterior * sizeof(void *));	// append remained data
+				memcpy(store, right, n_hi * sizeof(void *));	// append remained data
 				break;
 			}
 		}
 		else {
 			*store++ = *right++;
-			if (--posterior <= 0) {
+			if (--n_hi <= 0) {
 #ifdef DEBUG
-				if (trace_level >= TRACE_DUMP) dump_pointer("append left", left, anterior);
+				if (trace_level >= TRACE_DUMP) dump_pointer("append left", left, n_lo);
 #endif
-				memcpy(store, left, anterior * sizeof(void *));
+				memcpy(store, left, n_lo * sizeof(void *));
 				break;
 			}
 		}

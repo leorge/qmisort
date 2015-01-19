@@ -55,10 +55,10 @@ char *dump_index(char *buf, INSERT_INDEX index, int length) {
 	return	buf;
 }
 
-void	dump_rate(size_t anterior, size_t posterior) {
+void	dump_rate(size_t n_lo, size_t n_hi) {
 	if (trace_level >= TRACE_DUMP)
-		fprintf(OUT, "sub partition ( %ld , %ld ) rate = %.3f\tdiff = %ld\n", anterior, posterior
-			, (double)anterior / (anterior + posterior)
-			, (anterior > posterior)? (anterior - posterior): (posterior - anterior));
+		fprintf(OUT, "sub partition ( %ld , %ld ) rate = %.3f\tdiff = %ld\n", n_lo, n_hi
+			, (double)n_lo / (n_lo + n_hi)
+			, (n_lo > n_hi)? (n_lo - n_hi): (n_hi - n_lo));
 }
 #endif
