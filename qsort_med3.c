@@ -13,17 +13,7 @@ static int 	(*comp)(const void *, const void *);
 static size_t	length;
 static char	*tmpbuf;	// temporary buffer
 
-/* wapper of memcpy() */
-static void copy(void *dst, const void *src)
-{
-	if (dst == src) return;
-#ifdef DEBUG
-	qsort_moved++;
-	if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %p, src = %p : %s)\n", dst, src, dump_data(src));
-#endif
-	memcpy(dst, src, length); /* restore an elements  */
-}
-
+/* exchange 2 elements */
 static void swap(void *p1, void *p2)
 {
 	if (p1 == p2) return;

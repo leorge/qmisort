@@ -13,16 +13,7 @@ static size_t	length;
 static char	*swapbuf;
 static char	*pivot;
 
-/* wapper of memcpy() */
-static void copy(void *dst, const void *src)
-{
-#ifdef DEBUG
-	qsort_moved++;
-	if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %p, src = %p : %s)\n", dst, src, dump_data(src));
-#endif
-	memcpy(dst, src, length); /* restore an elements  */
-}
-
+/* exchange 2 elements */
 static void swap(void *p1, void *p2)
 {
 	if (p1 == p2) return;
