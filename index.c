@@ -36,7 +36,7 @@ void **make_index(void *array1d, size_t nmemb, size_t size)
 		}
 #ifdef DEBUG
 		char	msg[30];
-		if (trace_level >= TRACE_DUMP) sprintf(msg, "make_index() at %p", rtn);
+		if (trace_level >= TRACE_DUMP) sprintf(msg, "make_index(%p) at %p", array1d, rtn);
 		dump_pointer(msg, rtn, nmemb);
 #endif
 	}

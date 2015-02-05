@@ -89,9 +89,12 @@ typedef enum {
 	TREE_SORT,
 	MERGE_INSERT_INDEX,
 	MERGE_INSERT_POINTER,
+	MERGE_INSERT_BINARY,
  	ARRAY_SORT,
 	INDEX_SORT,
 	POINTER_SORT,
+	STABLE_ARRAY,
+	STABLE_POINTER,
 } TEST_TYPE;
 
 typedef struct {
@@ -161,7 +164,7 @@ int main(int argc, char *argv[])
 			{'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
 				"Quick sort : pivot is median of 3 elements with swaps. Nested loop."},
 			{'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
-				"Quick and merge sort : Array sorting"},
+				"QM or QMI sort : Hybrid Array sorting"},
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
 				"Quick sort : pivot is a miDDle element with swaps in K&R style. Single loop"},
 			{'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
@@ -175,27 +178,31 @@ int main(int argc, char *argv[])
 			"Insertion sort : array sorting"},
 			{'I', INSERT_PSORT, "insert_psort(*)", insert_psort, TRUE,
 			"Insertion sort : pointer sorting"},
+			{'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
+			"Insertion tree sort : median node tree"},
 #endif
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
 				"Merge and insertion sort : index sorting"},
-#ifdef	DEBUG
-			{'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
-			"Tree sort : median node tree"},
-#endif
-			{'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
+			{'k', MERGE_INSERT_BINARY, "mi_psort(*)", mi_psort, TRUE,
 				"Merge and insertion sort : pointer sorting"},
+			{'K', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
+				"Merge and insertion sort : pointer sorting with binary search"},
 			{'l', HOLE_LAST, "qsort_last()", qsort_last, FALSE,
 				"Quick sort : pivot is a Last element with a hole."},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
-			"Merge sort : double array"},
+				"Merge sort : double array"},
 			{'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
 				"Merge sort : double index"},
 			{'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
-				"Quick and merge sort : index sorting"},
+				"QM or QMI sort : Hybrid index sorting"},
 			{'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-				"Quick and merge sort : pointer sorting"},
+				"QM or QMI sort : Hybrid pointer sorting"},
 			{'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
 				"Quick sort : pivot is a Random element with a hole."},
+			{'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
+				"Stable QM or QMI sort : Hybrid array sorting"},
+			{'S', STABLE_POINTER, "stable_pointer()", stable_pointer, TRUE,
+				"Stable QM or QMI sort : Hybrid pointer sorting"},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
 				"dUmmy sort : do nothing."},
 			{'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
@@ -205,8 +212,8 @@ int main(int argc, char *argv[])
     log2_boundary = 8;
     pivot_number = 3;
     random_depth = 5;
-    small_array = imerge_sort;
-    small_index = merge_pointer;
+    small_array = mi_isort;
+    small_index = mi_psort;
     pivot_sort = small_index;
     func_log2 = log2G;		// default is built-in log2()
     ispointer = FALSE;		// index_sort.c
@@ -224,7 +231,7 @@ int main(int argc, char *argv[])
     char	*fin = NULL;			// file name to input
     typedef	long INDEX;
     INDEX	index = 0, idx;
-    bool	print_out = FALSE, zzz = FALSE;	// don't sleep
+    bool	print_out = FALSE;
 	int		opt, repeat_count, buffer_length = 1;
     size_t	nmemb = 31, size = 0;
     int		limit = 2;		// boundary precent to pass
@@ -268,8 +275,9 @@ int main(int argc, char *argv[])
 				"\t-P : Algorithm of Pointer sort to find a Pivot.\n"
 				"\n\tfunc : function for algorithm option\n"
 				"\t    3 : Built-in function qsort(3).\n"
-				"\t    j : Merge and insertion sort.\n"
-				"\t    M : Merge sort.(default)\n"
+				"\t    b : Merge and insertion sort binary search.\n"
+				"\t    j : Merge and insertion sort serial search.(default)\n"
+				"\t    M : Merge sort.\n"
 #ifdef DEBUG
 				"\t    a : Merge sort for -A option.(not index sort)\n"
 #ifdef LOG2_ALGORITHM
@@ -304,9 +312,6 @@ int main(int argc, char *argv[])
 		case 'R':
 			repeat_count = strtoul(optarg, NULL, 0);	// Check a definition of size_t
 			break;
-		case 'S':
-			zzz = TRUE;
-			break;
 		case 'T':
 			limit = atoi(optarg);
 			break;
@@ -322,13 +327,16 @@ int main(int argc, char *argv[])
 		case 'Z':
 			size = (size_t)strtoul(optarg, NULL, 0);
 			break;
-		case 'A':	// select a sorting function when nmemb <= small_boundary.
+		case 'A':	// Algorithm when nmemb is small for Array sort
 			switch(*optarg) {
 			case '3':
 				small_array = qsort;
 				break;
 			case 'a':
 				small_array = merge_sort;
+				break;
+			case 'b':
+				small_array = mi_ibin;
 				break;
 			case 'j':
 				small_array = mi_isort;
@@ -342,10 +350,13 @@ int main(int argc, char *argv[])
 				break;
 			}
 			break;
-		case 'P':	// select an index sort function when nmemb > small_boundary.
+		case 'P':	// Algorithm when nmemb is small for indeX sort.
 			switch(*optarg) {
 			case '3':
 				pivot_sort = iqsort;
+				break;
+			case 'b':
+				pivot_sort = mi_pbin;
 				break;
 			case 'j':
 				pivot_sort = mi_psort;
@@ -359,10 +370,13 @@ int main(int argc, char *argv[])
 				break;
 			}
 			break;
-		case 'X':	// select an index sort function when nmemb > small_boundary.
+		case 'X':	// Algorithm of Pointer sort to find a Pivot.
 			switch(*optarg) {
 			case '3':
 				small_index = iqsort;
+				break;
+			case 'b':
+				small_index = mi_pbin;
 				break;
 			case 'j':
 				small_index = mi_psort;
@@ -444,7 +458,6 @@ int main(int argc, char *argv[])
         perror(NULL);
 		return EXIT_FAILURE;
     }
-    memsize = nmemb * size;
 
     // read data
     i = 0;
@@ -504,7 +517,6 @@ QSORT:
     		start_timer();
         	qsort(workbuff, nmemb, size, cmpstring);
         	stop_timer();
-        	if (zzz) sleep(1);
         }
 		if (elapsed_time(description, skip) > limit) goto QSORT;
     }
@@ -550,7 +562,6 @@ REDO:
 					(*info->sort_function)(workbuff, nmemb, size, cmpstring);
 					stop_timer();
 				}
-	        	if (zzz) sleep(1);
 			}
 			if (elapsed_time(info->description, skip) > limit) goto REDO;
 			if (check_result(info->name, workbuff)) {	// error

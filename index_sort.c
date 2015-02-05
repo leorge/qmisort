@@ -11,11 +11,11 @@
 
 static int		(*comp)(const void *, const void *);
 static void	*index[MAX_BIT];	// address of picked up elements
-static size_t	length;
 static size_t	private_boundary;
 #ifdef	DEBUG
 static	size_t	comp_idx_count, search_pivot;
 #endif
+bool	ispointer;
 
 static int	comp_idx(const void *p1, const void *p2) {
 #ifdef DEBUG
@@ -128,6 +128,7 @@ void pointer_sort(void **idxtbl, size_t nmemb, int (*compare)(const void *, cons
 		comp = compare;
 		set_random();
 		private_boundary = pow(2, 2 * log2(nmemb) / 3);	// 2 ^ ( 2/3 * log2(N))
+		if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,"private_boundary = %ld\n", private_boundary);
 		search_pivot = comp_idx_count = 0;
@@ -147,8 +148,50 @@ void index_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void 
 	if (nmemb <= 1) return;
 	void **idxtbl = make_index(base, nmemb, size);
 	if (idxtbl != NULL) {
-		length = size;
 		pointer_sort(idxtbl, nmemb, compar);
+		unindex(base, idxtbl, nmemb, size);
+		free(idxtbl);
+	}
+}
+
+/***	Stable sort for continuous array	***/
+static int acomp(const void *p1, const void *p2) {
+	return	p1 - p2;
+}
+
+static void address_sort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
+{
+#ifdef DEBUG
+	if (trace_level >= TRACE_DUMP) {
+		fprintf(OUT, "address_sort() start. nmemb = %ld\n", nmemb);
+		for (int i = 0; i < nmemb; i++) fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
+	}
+#endif
+	comp = acomp;	// replace function to compare
+	void	**p = idxtbl;
+	void	**from = p++;
+	for (int i = 1; i < nmemb; i++, p++) {
+		if (compare(*p, *from)) {
+			sort(from, p - from);
+			from = p;
+		}
+	}
+	sort(from, p - from);
+#ifdef DEBUG
+	if (trace_level >= TRACE_DUMP) {
+		fprintf(OUT, "address_sort() done.\n");
+		for (int i = 0; i < nmemb; i++) fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
+	}
+#endif
+}
+
+void stable_array(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+{
+	if (nmemb <= 1) return;
+	void **idxtbl = make_index(base, nmemb, size);
+	if (idxtbl != NULL) {
+		pointer_sort(idxtbl, nmemb, compar);
+		address_sort(idxtbl, nmemb, compar);	// inserst this statement for index_sort()
 		unindex(base, idxtbl, nmemb, size);
 		free(idxtbl);
 	}

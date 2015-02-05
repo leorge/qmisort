@@ -121,6 +121,7 @@ void array_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void 
 		length = size; comp = compar;
 		set_random();
 		private_boundary = pow(2, 2 * log2(nmemb) / 3);	// 2 ^ ( 2/3 * log2(N))
+		if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
 #ifdef DEBUG
 		search_pivot = 0;
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "private_boundary = %ld\n", private_boundary);
@@ -129,5 +130,77 @@ void array_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void 
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "search_pivot = %ld\n", search_pivot);
 #endif
+	}
+}
+
+/* Stable sort for pointer array */
+
+typedef	struct {
+	size_t	index;		// index in a void **idxtbl
+	void	*address;	// addres of element
+} POINTER_INDEX;
+
+static int		(*comp_p)(const void *, const void *);
+
+static int acomp(const void *p1, const void *p2) {
+	return	comp_p(((const POINTER_INDEX *)p1)->address, ((const POINTER_INDEX *)p2)->address);
+}
+
+static int icomp(const void *p1, const void *p2) {
+	return	((POINTER_INDEX *)p1)->index -  ((POINTER_INDEX *)p2)->index;
+}
+
+void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
+{	// like index_sort()
+	if (nmemb <= 1) return;
+	void *tbl = calloc(nmemb, sizeof(POINTER_INDEX));
+	if (tbl != NULL) {
+		/*	store idxtbl to POINTER_INDEX[]	*/
+		void	**p = idxtbl;
+		POINTER_INDEX	*t = (POINTER_INDEX *)tbl;
+		for (size_t i = 0; i < nmemb; t++) {
+#ifdef DEBUG
+			if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld].address = %p %s\n", i, *p, (char *)*p);
+#endif
+			t->index = i++;
+			t->address = *p++;	// may be gotten by malloc()
+		}
+		/*	sort	*/
+		char a[sizeof(POINTER_INDEX)]; pivot = a; *a = '\0';
+		comp = acomp;		// sort() calls comp()
+		comp_p = compare;	// comp() calls compare()
+		length = sizeof(POINTER_INDEX);
+		set_random();
+		private_boundary = pow(2, 2 * log2(nmemb) / 3);	// 2 ^ ( 2/3 * log2(N))
+//		if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
+		sort(tbl, nmemb);	// sort array
+		/*	sort to be stable and reoder idxtbl	*/
+		comp = icomp;
+		t = (POINTER_INDEX *)tbl;
+#ifdef DEBUG
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[0] = %ld, %p %s\n", t->index, t->address, (char *)(t->address));
+#endif
+		POINTER_INDEX	*from = t++;
+		for (size_t i = 1; i < nmemb; i++, t++) {
+#ifdef DEBUG
+			if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld] = %ld, %p %s\n", i, t->index, t->address, (char *)(t->address));
+#endif
+			if (compare(t->address, from->address)) {
+				sort(from, t - from);
+				from = t;
+			}
+		}
+		sort(from, t - from);
+		/* reorder idxtbl	*/
+		p = idxtbl;
+		t = (POINTER_INDEX *)tbl;
+		for (size_t i = 0; i < nmemb; i++) {
+#ifdef DEBUG
+			if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld] = %ld, %p %s\n", i, t->index, t->address, (char *)(t->address));
+#endif
+			*p++ = t++->address;
+		}
+		/* done	*/
+		free(tbl);
 	}
 }

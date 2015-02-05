@@ -46,7 +46,7 @@ static void sort(void *dst, void *src, bool revert,  size_t nmemb) {
 	}
 #endif
 	while (TRUE) {
-		if (comp(left, right) < 0) {
+		if (comp(left, right) <= 0) {
 			copy(store, left, 1); store += length; left += length;		// add one
 			if (--n_lo <= 0) {	// empty?
 #ifdef DEBUG
