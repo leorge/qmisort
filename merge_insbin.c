@@ -23,9 +23,8 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #ifdef DEBUG
 		char	dumpbuf[MAX_SIZE + 1];
 #endif
-		void **load = revert ? dst : src;	// source
 		for (size_t idx = 1; idx < nmemb; idx++) {
-			register void *pivot = load[idx];
+			register void *pivot = store[idx];
 			// binary-search
 			int		ck;
 			size_t pos = 0;
