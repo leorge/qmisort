@@ -1,9 +1,9 @@
 /*
- * merge_insert.c
+ * mergg_insbin.c
  *
- *	hybrid of merge sort and conventional insertion sort. Stable
+ *	hybrid of merge sort and nibble insertion sort with binray search. Not stable
  *
- *  Created on: 2015/02/04
+ *  Created on: 2013/03/24
  *      Author: leo
  */
 
@@ -16,24 +16,34 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 	void **store = revert ? src : dst;	// destination
 #ifdef DEBUG
 	qsort_called++;
-	if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, revert ? dst : src, nmemb);
+	if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, src, nmemb);
 	void **first = store;
 #endif
 	if (nmemb <= MAX_SIZE) {	/* Insertion sort */
-		void **load = revert ? dst : src;	// source
-		*store = *load;		// copy first index
-		for (size_t idx = 1; idx < nmemb; idx++) {
-			void *pivot = load[idx];
 #ifdef DEBUG
-			if (trace_level >= TRACE_DUMP) fprintf(OUT, "insert %s\n", dump_data(pivot));
+		char	dumpbuf[MAX_SIZE + 1];
 #endif
-			// sequential search to be stable
-			void **p = &store[idx], **q = p;
-			do {
-				if (comp(*--p, pivot) <= 0) break;
-				*q-- = *p;	// slide an element
-			} while (p != store);
-			*q = pivot;	// from load[] to store[]
+		void **load = revert ? dst : src;	// source
+		for (size_t idx = 1; idx < nmemb; idx++) {
+			register void *pivot = load[idx];
+			// binary-search
+			int		ck;
+			size_t pos = 0;
+			size_t lo = 0, hi = idx - 1;
+			while (lo <= hi)
+			{	// binary search
+				ck = comp(pivot, store[pos = (lo + hi) >> 1]);
+				if (ck == 0) break;	// found an equal element.
+				else if (ck > 0) lo = pos + 1;
+				else if (pos == 0) break;
+				else hi = pos - 1;		// ck < 0
+			};
+			if (ck > 0) pos++;
+			// store an index
+			void **p = &store[hi = idx], **q = p;
+			while (hi-- != pos)
+				*p-- = *--q;
+			*p = pivot;	// from load[] to store[]
 #ifdef DEBUG
 			if (trace_level >= TRACE_DUMP) dump_pointer("sorted ", store, idx + 1);
 #endif
@@ -86,12 +96,12 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
 }
 
-// pointer sort
-void mi_psort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+// pointer sorting
+void mi_pbin(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
 	if (nmemb > 1) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"mi_isort(base=%p, nmemb=%ld, compar) start.\n", base, nmemb);
+				"mi_pbin(base=%p, nmemb=%ld, compar) start.\n", base, nmemb);
 #endif
 		void **idxtbl = calloc(nmemb, sizeof(void *));	// double buffer
 		if (idxtbl == NULL) perror(NULL);
@@ -102,26 +112,26 @@ void mi_psort(void **base, size_t nmemb, int (*compare)(const void *, const void
 			free(idxtbl);
 		}
 #ifdef DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "mi_isort() done.\n");
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "mi_pbin() done.\n");
 #endif
 	}
 }
 
-// index sort
-void mi_isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+// index sorting
+void mi_ibin(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 	if (nmemb > 1) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"mi_sort(base=%p, nmemb=%ld, size=%ld, compar) start.\n", base, size, nmemb);
+				"mi_ibin(base=%p, nmemb=%ld, size=%ld, compar) start.\n", base, size, nmemb);
 #endif
 		void **idxtbl = make_index(base, nmemb, size);
 		if (idxtbl != NULL) {
-			mi_psort(idxtbl, nmemb, compar);
+			mi_pbin(idxtbl, nmemb, compare);
 			unindex(base, idxtbl, nmemb, size);
 			free(idxtbl);
 		}
 #ifdef DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "mi_sort() done.\n");
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "mi_ibin() done.\n");
 #endif
 	}
 }

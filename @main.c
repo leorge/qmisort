@@ -89,7 +89,9 @@ typedef enum {
 	TREE_SORT,
 	MERGE_INSERT_INDEX,
 	MERGE_INSERT_POINTER,
+	MERGE_NIBBLE,
 	MERGE_INSERT_BINARY,
+	MERGE_NIBBLE_BINARY,
  	ARRAY_SORT,
 	INDEX_SORT,
 	POINTER_SORT,
@@ -153,6 +155,7 @@ void dummy_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void 
 
 /*****************************************************************************/
 int main(int argc, char *argv[])
+
 {
 	extern int getopt(int argc, char * const argv[], const char *optstring);
 	extern	int	optind;
@@ -164,7 +167,9 @@ int main(int argc, char *argv[])
 			{'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
 				"Quick sort : pivot is median of 3 elements with swaps. Nested loop."},
 			{'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
-				"QM or QMI sort : Hybrid Array sorting"},
+				"QM or QMI sort : Array sorting of Quicksort, Merge sort (, Insertion sort)"},
+			{'b', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
+				"MI sort : pointer sorting with binary search"},
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
 				"Quick sort : pivot is a miDDle element with swaps in K&R style. Single loop"},
 			{'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
@@ -182,27 +187,29 @@ int main(int argc, char *argv[])
 			"Insertion tree sort : median node tree"},
 #endif
 			{'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
-				"Merge and insertion sort : index sorting"},
-			{'k', MERGE_INSERT_BINARY, "mi_psort(*)", mi_psort, TRUE,
-				"Merge and insertion sort : pointer sorting"},
-			{'K', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
-				"Merge and insertion sort : pointer sorting with binary search"},
+				"MI sort : index sorting of Merge sort and conventional Insertion sort"},
+			{'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
+				"MI sort : pointer sorting"},
+			{'K', MERGE_NIBBLE_BINARY, "mi_pnblbin(*)", mi_pnblbin, TRUE,
+				"MI sort : pointer sorting with binary search and Nibble insertion sort"},
 			{'l', HOLE_LAST, "qsort_last()", qsort_last, FALSE,
 				"Quick sort : pivot is a Last element with a hole."},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
 				"Merge sort : double array"},
 			{'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
 				"Merge sort : double index"},
+			{'n', MERGE_NIBBLE, "mi_pnibble(*)", mi_pnibble, TRUE,
+				"MI sort : pointer sorting with Nibble insertion sort"},
 			{'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
-				"QM or QMI sort : Hybrid index sorting"},
+				"QM or QMI sort : index sorting"},
 			{'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-				"QM or QMI sort : Hybrid pointer sorting"},
+				"QM or QMI sort : pointer sorting"},
 			{'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
 				"Quick sort : pivot is a Random element with a hole."},
 			{'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
-				"Stable QM or QMI sort : Hybrid array sorting"},
+				"Stable QM or QMI sort : array sorting"},
 			{'S', STABLE_POINTER, "stable_pointer()", stable_pointer, TRUE,
-				"Stable QM or QMI sort : Hybrid pointer sorting"},
+				"Stable QM or QMI sort : pointer sorting"},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
 				"dUmmy sort : do nothing."},
 			{'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
@@ -277,7 +284,7 @@ int main(int argc, char *argv[])
 				"\t    3 : Built-in function qsort(3).\n"
 				"\t    b : Merge and insertion sort binary search.\n"
 				"\t    j : Merge and insertion sort serial search.(default)\n"
-				"\t    M : Merge sort.\n"
+				"\t    m : Merge sort.\n"
 #ifdef DEBUG
 				"\t    a : Merge sort for -A option.(not index sort)\n"
 #ifdef LOG2_ALGORITHM
@@ -341,7 +348,7 @@ int main(int argc, char *argv[])
 			case 'j':
 				small_array = mi_isort;
 				break;
-			case 'M':
+			case 'm':
 				small_array = imerge_sort;
 				break;
 			default:
@@ -361,7 +368,7 @@ int main(int argc, char *argv[])
 			case 'j':
 				pivot_sort = mi_psort;
 				break;
-			case 'M':
+			case 'm':
 				pivot_sort = merge_pointer;
 				break;
 			default:
@@ -381,7 +388,7 @@ int main(int argc, char *argv[])
 			case 'j':
 				small_index = mi_psort;
 				break;
-			case 'M':
+			case 'm':
 				small_index = merge_pointer;
 				break;
 			default:

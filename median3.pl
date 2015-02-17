@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# generate a bad data list for qsort_swap3().
+# generate a bad data list for qsort_med3().
 #
 use strict;
 use warnings;
