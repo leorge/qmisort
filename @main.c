@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 				"\t-p : Print out the last result.\n"
 				"\t-R : Repeat count.\n"
 #ifndef	DEBUG
-				"\t-T : UncerTainTy percenT to pass.\n"
+				"\t-T : UncerTainTy percenT to pass (default is 2 [%]).\n"
 #endif
 				"\t-W : Number of elements to select a pivot for -v option.\n"
 				"\t-Y : CYclic work buffer length.\n"
