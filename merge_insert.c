@@ -21,7 +21,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
 	if (nmemb <= MAX_SIZE) {	/* Insertion sort */
 		for (size_t idx = 1; idx < nmemb; idx++) {
-			void *pivot = store[idx];
+			register void *pivot = store[idx];
 #ifdef DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "insert %s\n", dump_data(pivot));
 #endif
