@@ -49,7 +49,7 @@ static void sort(void *base, size_t nmemb, int depth) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "sort to find a pivot\n");
 #endif
-		iqsort(index, pivot_number, comp);	// indexed qsort(3)
+		pqsort(index, pivot_number, comp);	// indexed qsort(3)
 		hole = index[pivot_number >> 1];
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));

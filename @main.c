@@ -73,6 +73,7 @@ static int cmpstring(const void *p1, const void *p2)	// Function to compare
 
 typedef enum {
 	DUMMY,
+	POINTER_QSORT3,
 	SWAP_FIRST,
 	SWAP_MIDDLE,
 	SWAP_MED3,
@@ -170,6 +171,8 @@ int main(int argc, char *argv[])
 				"QM or QMI sort : Array sorting of Quicksort, Merge sort (, Insertion sort)"},
 			{'b', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
 				"MI sort : pointer sorting with binary search"},
+			{'c', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
+				"Pointer sorting of qsort(3)"},
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
 				"Quick sort : pivot is a miDDle element with swaps in K&R style. Single loop"},
 			{'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
@@ -360,7 +363,7 @@ int main(int argc, char *argv[])
 		case 'P':	// Algorithm when nmemb is small for indeX sort.
 			switch(*optarg) {
 			case '3':
-				pivot_sort = iqsort;
+				pivot_sort = pqsort;
 				break;
 			case 'b':
 				pivot_sort = mi_pbin;
@@ -380,7 +383,7 @@ int main(int argc, char *argv[])
 		case 'X':	// Algorithm of Pointer sort to find a Pivot.
 			switch(*optarg) {
 			case '3':
-				small_index = iqsort;
+				small_index = pqsort;
 				break;
 			case 'b':
 				small_index = mi_pbin;

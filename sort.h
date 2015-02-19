@@ -90,7 +90,7 @@ void	mi_isort		(void *base, size_t nmemb, size_t size, int (*compare)(const void
 
 // pointer sorting
 void	insert_psort	(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void	iqsort			(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void	pqsort			(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void	merge_pointer	(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void	mi_pbin			(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void	mi_pnibble		(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
