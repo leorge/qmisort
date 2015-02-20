@@ -89,3 +89,13 @@ void pqsort(void **base, size_t nmemb, int (*compare)(const void *, const void *
 	comp = compare;
 	qsort((void *)base, nmemb, sizeof(void *), comp_idx);
 }
+
+void iqsort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+	if (nmemb <= 1) return;
+	void **idxtbl = make_index(base, nmemb, size);
+	if (idxtbl != NULL) {
+		pqsort(idxtbl, nmemb, compare);
+		unindex(base, idxtbl, nmemb, size);
+		free(idxtbl);
+	}
+}
