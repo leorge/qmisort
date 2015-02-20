@@ -100,7 +100,7 @@ void mi_pbin(void **base, size_t nmemb, int (*compare)(const void *, const void 
 	if (nmemb > 1) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"mi_pbin(base=%p, nmemb=%ld, compar) start.\n", base, nmemb);
+				"mi_pbin(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
 #endif
 		void **idxtbl = calloc(nmemb, sizeof(void *));	// double buffer
 		if (idxtbl == NULL) perror(NULL);
@@ -121,7 +121,7 @@ void mi_ibin(void *base, size_t nmemb, size_t size, int (*compare)(const void *,
 	if (nmemb > 1) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"mi_ibin(base=%p, nmemb=%ld, size=%ld, compar) start.\n", base, size, nmemb);
+				"mi_ibin(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
 #endif
 		void **idxtbl = make_index(base, nmemb, size);
 		if (idxtbl != NULL) {

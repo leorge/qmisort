@@ -414,7 +414,7 @@ static void	sort(NODE *tree) {
 #endif
 }
 
-void tree_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void tree_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	NODE	*nodes;
 	if (nmemb <= 1) {}
@@ -422,7 +422,7 @@ void tree_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *
 			(nodes = calloc(nmemb, sizeof(NODE))) == NULL)	// filled with 0
 		perror("calloc() error in tree_sort()");
 	else {
-		comp = compar;
+		comp = compare;
 		char	*element = base;	// adrs. of element
 		NODE	*node = nodes;		// element of nodes table
 		node->element = element; element += size;

@@ -56,13 +56,13 @@ static void heap(size_t nmemb, size_t node)
 #endif
 }
 
-void heap_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+void heap_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 	if (nmemb <= 1) return;
 #ifdef DEBUG
 	size_t	initial_size = nmemb;
 	qsort_called++;
 #endif
-	comp = compar;
+	comp = compare;
 	char	a[length = size]; key = a;
 	first = (char *)base;
 	last = first + (nmemb - 1) * size;	// next element of the last element

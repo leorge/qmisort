@@ -83,6 +83,7 @@ void	tree_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const voi
 // index sorting
 void	imerge_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	index_sort		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void	iqsort			(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	mi_ibin			(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	mi_inibble		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void	mi_inblbin		(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));

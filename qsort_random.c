@@ -93,11 +93,11 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
 }
 
-void qsort_random(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void qsort_random(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; pivot = a; *a = '\0';
-		length = size; comp = compar;
+		length = size; comp = compare;
 		sort(base, nmemb, random_depth);
 	}
 }

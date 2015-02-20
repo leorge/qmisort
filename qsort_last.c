@@ -71,11 +71,11 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_last(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void qsort_last(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; pivot = a; *a = '\0';
-		length = size; comp = compar;
+		length = size; comp = compare;
 		sort(base, nmemb);
 #ifdef	DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_last() done.\n");

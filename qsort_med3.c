@@ -72,11 +72,11 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_med3(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void qsort_med3(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; tmpbuf = a; *a = '\0';	// reused in this file
-		length = size; comp = compar;			// common in this file
+		length = size; comp = compare;			// common in this file
 		sort(base, nmemb);
 	}
 }

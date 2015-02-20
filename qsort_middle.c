@@ -58,12 +58,12 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_middle(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void qsort_middle(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; swapbuf = a; *a = '\0';
 		char b[size]; pivot = b; *b = '\0';
-		length = size; comp = compar;
+		length = size; comp = compare;
 		sort(base, nmemb);
 	}
 }

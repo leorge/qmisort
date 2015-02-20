@@ -70,11 +70,11 @@ void merge_pointer(void **base, size_t nmemb, int (*compare)(const void *, const
 	}
 }
 
-void imerge_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+void imerge_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 	if (nmemb <= 1) return;
 	void **idxtbl = make_index(base, nmemb, size);
 	if (idxtbl != NULL) {
-		merge_pointer(idxtbl, nmemb, compar);
+		merge_pointer(idxtbl, nmemb, compare);
 		unindex(base, idxtbl, nmemb, size);
 		free(idxtbl);
 	}

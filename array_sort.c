@@ -114,11 +114,11 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void array_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void array_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char a[size]; pivot = a; *a = '\0';
-		length = size; comp = compar;
+		length = size; comp = compare;
 		set_random();
 		private_boundary = pow(2, 2 * log2(nmemb) / 3);	// 2 ^ ( 2/3 * log2(N))
 		if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;

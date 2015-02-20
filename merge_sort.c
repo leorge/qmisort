@@ -72,14 +72,14 @@ static void sort(void *dst, void *src, bool revert,  size_t nmemb) {
 #endif
 }
 
-void merge_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+void merge_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 #ifdef DEBUG
 	if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_sort() nmemb = %ld\n", nmemb);
 #endif
 	if (nmemb <= 1) return;
 	void *dup = calloc(nmemb, size);
 	if (dup != NULL) {
-		length = size; comp = compar;
+		length = size; comp = compare;
 		memcpy(dup, base, nmemb * size);
 		sort(base, dup, FALSE, nmemb);
 		free(dup);

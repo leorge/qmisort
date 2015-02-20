@@ -143,12 +143,12 @@ void pointer_sort(void **idxtbl, size_t nmemb, int (*compare)(const void *, cons
 	}
 }
 
-void index_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void index_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb <= 1) return;
 	void **idxtbl = make_index(base, nmemb, size);
 	if (idxtbl != NULL) {
-		pointer_sort(idxtbl, nmemb, compar);
+		pointer_sort(idxtbl, nmemb, compare);
 		unindex(base, idxtbl, nmemb, size);
 		free(idxtbl);
 	}
@@ -185,13 +185,12 @@ static void address_sort(void **idxtbl, size_t nmemb, int (*compare)(const void 
 #endif
 }
 
-void stable_array(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void stable_array(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb <= 1) return;
 	void **idxtbl = make_index(base, nmemb, size);
 	if (idxtbl != NULL) {
-		pointer_sort(idxtbl, nmemb, compar);
-		address_sort(idxtbl, nmemb, compar);	// inserst this statement for index_sort()
+		pointer_sort(idxtbl, nmemb, compare);
 		unindex(base, idxtbl, nmemb, size);
 		free(idxtbl);
 	}

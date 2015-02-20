@@ -109,7 +109,7 @@ void mi_pnblbin(void **base, size_t nmemb, int (*compare)(const void *, const vo
 	if (nmemb > 1) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"mi_isort(base=%p, nmemb=%ld, compar) start.\n", base, nmemb);
+				"mi_isort(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
 #endif
 		void **idxtbl = calloc(nmemb, sizeof(void *));	// double buffer
 		if (idxtbl == NULL) perror(NULL);
@@ -126,15 +126,15 @@ void mi_pnblbin(void **base, size_t nmemb, int (*compare)(const void *, const vo
 }
 
 // index sort
-void mi_inblbin(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+void mi_inblbin(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 	if (nmemb > 1) {
 #ifdef DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"mi_sort(base=%p, nmemb=%ld, size=%ld, compar) start.\n", base, size, nmemb);
+				"mi_sort(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
 #endif
 		void **idxtbl = make_index(base, nmemb, size);
 		if (idxtbl != NULL) {
-			mi_psort(idxtbl, nmemb, compar);
+			mi_psort(idxtbl, nmemb, compare);
 			unindex(base, idxtbl, nmemb, size);
 			free(idxtbl);
 		}

@@ -109,7 +109,7 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
 }
 
-void qsort_various(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *))
+void qsort_various(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
 	if (nmemb > 1) {
 		char *buff = calloc(pivot_number, sizeof(void *));
@@ -119,7 +119,7 @@ void qsort_various(void *base, size_t nmemb, size_t size, int (*compar)(const vo
 					"pivot_number = %d\tboundary = %ld\n" , pivot_number, log2_boundary);
 #endif
 			char a[size]; pivot = a; *a = '\0';
-			length = size; comp = compar;
+			length = size; comp = compare;
 			set_random();
 			index = (void **)buff;
 			sort(base, nmemb, random_depth);

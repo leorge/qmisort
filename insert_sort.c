@@ -18,10 +18,9 @@ void insert_psort(void **idxtbl, size_t nmemb, int (*compare)(const void *, cons
 	qsort_called++;
 	if (trace_level >= TRACE_DUMP) dump_pointer("insert_psort() start.", idxtbl, nmemb);
 #endif
-	char *pivot;
 	for (size_t i = 1; i < nmemb; i++) {
 		size_t	hole = i, j;
-		register pivot = idxtbl[hole];
+		 register char *pivot = idxtbl[hole];
 		while (hole > 0) {
 			if (compare(idxtbl[j = hole - 1], pivot) <= 0) break;
 			idxtbl[hole] = idxtbl[j];
@@ -44,7 +43,7 @@ static void copy(void *dst, const void *src)
 }
 
 /* in-place sort	*/
-void insert_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
+void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 	if (nmemb <= 1) return;
 #ifdef DEBUG
 	if (trace_level >= TRACE_DUMP) dump_array("insert_sort() start.", base, nmemb, size);
@@ -57,7 +56,7 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void
 		char	*p, *hole = first + i * size;
 		copy(pivot, hole);	// make a hole
 		while (hole > first) {
-			if (compar(p = hole - size, pivot) <= 0) break;
+			if (compare(p = hole - size, pivot) <= 0) break;
 			copy(hole, p);	// move a hole
 			hole = p;
 		}
