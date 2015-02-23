@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 				"Quick sort : pivot is a Random element with a hole."},
 			{'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
 				"Stable QM or QMI sort : array sorting"},
-			{'S', STABLE_POINTER, "stable_pointer()", stable_pointer, TRUE,
+			{'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
 				"Stable QM or QMI sort : pointer sorting"},
 			{'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
 				"dUmmy sort : do nothing."},
@@ -538,13 +538,10 @@ QSORT:
     /* test */
 
     void **idxtbl;
+    long *cache, *clear;
     srand((unsigned)time(NULL));
     set_random();
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
-#define	ENOUGH	4000000L
-    	long	*cache = calloc(sizeof(long), ENOUGH), *clear = cache;	// really enough?
-    	for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
-    	free(cache);
     	if (index & idx) {
 			index &= ~idx;	// clear bit
 #ifdef DEBUG
@@ -552,6 +549,11 @@ QSORT:
 #endif
 REDO:
 			fprintf(OUT, "%s", info->name);
+#define	ENOUGH	4000000L
+			cache = calloc(sizeof(long), ENOUGH);
+			clear = cache;	// really enough?
+			for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
+			free(cache);
 #ifdef	DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "\n");
 #endif
