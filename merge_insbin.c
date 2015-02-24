@@ -20,9 +20,6 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 	void **first = store;
 #endif
 	if (nmemb <= MAX_SIZE) {	/* Insertion sort */
-#ifdef DEBUG
-		char	dumpbuf[MAX_SIZE + 1];
-#endif
 		for (size_t idx = 1; idx < nmemb; idx++) {
 			register void *pivot = store[idx];
 			// binary-search

@@ -179,8 +179,8 @@ static void address_sort(void **idxtbl, size_t nmemb, int (*compare)(const void 
 	sort(from, p - from);
 #ifdef DEBUG
 	if (trace_level >= TRACE_DUMP) {
+//		for (int i = 0; i < nmemb; i++) fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
 		fprintf(OUT, "address_sort() done.\n");
-		for (int i = 0; i < nmemb; i++) fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
 	}
 #endif
 }
@@ -191,6 +191,7 @@ void stable_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 	void **idxtbl = make_index(base, nmemb, size);
 	if (idxtbl != NULL) {
 		pointer_sort(idxtbl, nmemb, compare);
+		address_sort(idxtbl, nmemb, compare);
 		unindex(base, idxtbl, nmemb, size);
 		free(idxtbl);
 	}
