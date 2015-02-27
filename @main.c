@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
 				"MI sort : pointer sorting"},
 			{'K', MERGE_NIBBLE_BINARY, "mi_pnblbin(*)", mi_pnblbin, TRUE,
 				"MI sort : pointer sorting with binary search and Nibble insertion sort"},
-			{'l', HOLE_LAST, "qsort_last()", qsort_hole, FALSE,
+			{'l', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
 				"Quick sort : pivot is a Last element with a hole."},
 			{'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
 				"Merge sort : double array"},

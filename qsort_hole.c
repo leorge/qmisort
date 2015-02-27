@@ -78,7 +78,7 @@ void qsort_hole(void *base, size_t nmemb, size_t size, int (*compare)(const void
 		length = size; comp = compare;
 		sort(base, nmemb);
 #ifdef	DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_last() done.\n");
+		if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_hole() done.\n");
 #endif
 	}
 }
