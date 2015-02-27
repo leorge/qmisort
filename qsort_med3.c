@@ -1,7 +1,7 @@
 /*
- * qsort_trad.c
+ * qsort_med3.c
  *
- *	Traditional quick sort.
+ *	meidan of 3 quick sort.
  *
  *  Created on: 2013/02/04
  *      Author: leo
