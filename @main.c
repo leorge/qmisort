@@ -547,8 +547,7 @@ QSORT:
 #ifdef DEBUG
 			if (trace_level >= TRACE_DUMP) fprintf(OUT, "Start %s : %s\n", info->name, info->description);
 #endif
-REDO:
-			fprintf(OUT, "%s", info->name);
+REDO:		fprintf(OUT, "%s", info->name);
 #define	ENOUGH	4000000L
 			cache = calloc(sizeof(long), ENOUGH);
 			clear = cache;	// really enough?
