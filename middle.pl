@@ -5,13 +5,13 @@
 use strict;
 use warnings;
 $#ARGV < 0 && die "Usage : $0 count\n";
-my $n = shift(@ARGV);	# count
+my $n = shift(@ARGV);   # count
 my $fmt = sprintf "%%%dd\n", log($n) / log(10) + 1;
 my @list = ($n);
 while ($n > 1) {
-	my @mid = splice(@list, $#list / 2, 1, --$n);
-	unshift(@list, @mid);
+    my @mid = splice(@list, $#list / 2, 1, --$n);
+    unshift(@list, @mid);
 }
 foreach my $i (@list) {
-	printf $fmt, $i;
+    printf $fmt, $i;
 }

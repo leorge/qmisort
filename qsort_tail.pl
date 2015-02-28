@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-#	Create best data for qsort_tail().
+#   Create best data for qsort_tail().
 #
 use strict;
 use warnings;
@@ -10,14 +10,14 @@ my $fmt = sprintf("%%%dd\n", length(2**$power) + 1);
 #die "\$fmt = $fmt\n";
 my @left = (0);
 while ($power--) {
-	my $center = $#left + 1;
-	my @right = @left;
-	foreach (@right) {$_ += $center + 1;}
-	my $tail = pop(@right);
-	@left = (@left, $tail, @right, $center);
+    my $center = $#left + 1;
+    my @right = @left;
+    foreach (@right) {$_ += $center + 1;}
+    my $tail = pop(@right);
+    @left = (@left, $tail, @right, $center);
 }
 #die "@left\n";
 while (@left) {
-	my $head = shift(@left);
-	printf($fmt, $head);
+    my $head = shift(@left);
+    printf($fmt, $head);
 }

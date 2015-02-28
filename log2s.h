@@ -10,10 +10,10 @@
 
 #include <stdio.h>
 #include <stddef.h>
-typedef size_t TYPE;	// must be integer type
+typedef size_t TYPE;    // must be integer type
 int log2B(TYPE n);
 int log2R(TYPE n);
-int	log2G(TYPE n);
-int	log2A(TYPE n);
+int log2G(TYPE n);
+int log2A(TYPE n);
 
 #endif /* LOG2_H_ */

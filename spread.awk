@@ -1,6 +1,6 @@
 #!/usr/bin/awk -f
 #
-#	Make a matrix from output of shell scripts "spread".
+#   Make a matrix from output of shell scripts "spread".
 #
 BEGIN {
     OFS="\t";
