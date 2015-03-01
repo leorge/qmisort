@@ -78,10 +78,10 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
                     copy(hole, hi);
                     hole = hi;
-                    eq = NULL;  // not equivalent then reset
+                    eq = NULL;  // not equal then reset
                 }
                 else if (chk > 0) eq = NULL;
-                else if (eq == NULL) eq = hi;   // first equivalent element
+                else if (eq == NULL) eq = hi;   // first equal element
             }
         }
     }
