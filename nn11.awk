@@ -6,7 +6,7 @@ BEGIN {
     }
     else num = ARGV[1];
     fmt = sprintf("%d", num);
-    fmt = sprintf("%%%dd\n", length(fmt));
+    fmt = sprintf("%%0%dd\n", length(fmt));
     half = num / 2;
     for (i = 0; i++ < half;) printf(fmt, num);
     for (++num; i++ < num;) printf(fmt, 1);

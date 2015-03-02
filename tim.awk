@@ -9,7 +9,7 @@ BEGIN {
     }
     else num = ARGV[1];
     fmt = sprintf("%d", num -1);
-    fmt = sprintf("%%%dd\n", length(fmt));
+    fmt = sprintf("%%0%dd\n", length(fmt));
     amp = 1;
     while (num > 0) {
         x = --num + (amp = -amp);

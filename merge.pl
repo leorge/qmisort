@@ -7,7 +7,7 @@ use warnings;
 $#ARGV < 0 && die "usage : $0 power\n";
 my $power = shift(@ARGV);
 my $width = 2**$power;
-my $fmt = sprintf("%%%dd\n", length($width) + 1);
+my $fmt = sprintf("%%0%dd\n", length($width) + 1);
 #die "\$fmt = $fmt\n";
 my @src = (0..$width-1);
 for (; $power-- > 0; $width >>= 1) {

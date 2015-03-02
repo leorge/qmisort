@@ -6,7 +6,7 @@ use strict;
 use warnings;
 $#ARGV < 0 && die "Usage : $0 count\n";
 my $n = shift(@ARGV);   # count
-my $fmt = sprintf "%%%dd\n", log($n) / log(10) + 1;
+my $fmt = sprintf "%%0%dd\n", log($n) / log(10) + 1;
 my @list = ($n);
 unshift(@list, $n - 2); # (N-2, N)
 unshift(@list, --$n);   # (N-1, N-2, N)
