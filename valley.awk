@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     else num = ARGV[1];
-    fmt = sprintf("%d", num);
+    fmt = sprintf("%d", num - 1);
     fmt = sprintf("%%0%dd\n", length(fmt));
     for (i = num; --i >= 0;) printf(fmt, i--);
 #print "turn i =", i

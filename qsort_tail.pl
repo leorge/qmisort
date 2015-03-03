@@ -6,7 +6,7 @@ use strict;
 use warnings;
 $#ARGV < 0 && die "usage : $0 power\n";
 my $power = shift(@ARGV);
-my $fmt = sprintf("%%0%dd\n", length(2**$power) + 1);
+my $fmt = sprintf("%%0%dd\n", length(2**($power + 1) - 1));
 #die "\$fmt = $fmt\n";
 my @left = (0);
 while ($power--) {
