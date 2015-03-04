@@ -32,7 +32,7 @@
 
 /****   Public  ****/
 Trace   trace_level = TRACE_NONE;   // to debug
-size_t  log2_boundary;              //  nmemb to alternate to merge sort.
+size_t  small_boundary;              //  nmemb to alternate to merge sort.
 long    qsort_called, qsort_comp_str, qsort_moved;  // counters
 int     pivot_number;
 size_t  random_depth;
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
                 "Quick sort : Pivot is median of Various elements with a hole."},
     };
     // set default value to global variables.
-    log2_boundary = 8;
+    small_boundary = 8;
     pivot_number = 3;
     random_depth = 5;
     small_array = mi_isort;
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:B:D:pP:L:N:R:ST:V:W:X:Y:Z:");
+    strcat(optstring, "?A:B:D:F:pP:L:N:R:ST:V:W:X:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
             }
             puts(
                 "\n"
-                "\t-B : Boundary number to switch algorithm for -2 option.\n"
+                "\t-B : Boundary number to switch algorithm.\n"
                 "\t-D : Limit of Depth for randomize.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-p : Print out the last result.\n"
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
             return EXIT_SUCCESS;
             break;
         case 'B':
-            log2_boundary = (int)strtoul(optarg, NULL, 0);
+            small_boundary = (int)strtoul(optarg, NULL, 0);
             break;
         case 'D':
             random_depth = (int)strtoul(optarg, NULL, 0);

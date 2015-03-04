@@ -24,7 +24,7 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-static void sort(void *base, size_t nmemb, int depth) {
+static void sort(void *base, size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
@@ -32,8 +32,7 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    if (depth > 0) {
-        depth--;
+    if (nmemb >= small_boundary) {
         size_t  distance = (size_t)(nmemb / pivot_number);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
@@ -102,8 +101,8 @@ static void sort(void *base, size_t nmemb, int depth) {
 #ifdef DEBUG
     dump_rate(n_lo, n_hi);
 #endif
-    sort(first, n_lo, depth);
-    sort(eq + length, n_hi, depth);
+    sort(first, n_lo);
+    sort(eq + length, n_hi);
 #ifdef DEBUG
     dump_array("sort() done.", base, nmemb, length);
 #endif
@@ -116,13 +115,13 @@ void qsort_various(void *base, size_t nmemb, size_t size, int (*compare)(const v
         if (buff != NULL) {
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                    "pivot_number = %d\tboundary = %ld\n" , pivot_number, log2_boundary);
+                    "pivot_number = %d\tboundary = %ld\n" , pivot_number, small_boundary);
 #endif
             char a[size]; pivot = a; *a = '\0';
             length = size; comp = compare;
             set_random();
             index = (void **)buff;
-            sort(base, nmemb, random_depth);
+            sort(base, nmemb);
             free(buff);
         }
     }

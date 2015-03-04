@@ -46,7 +46,7 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 extern size_t   INS;                // main.c
 extern size_t   random_depth;       // main.c
 extern double   random_number;      // main.c
-extern size_t   log2_boundary;      // main.c
+extern size_t   small_boundary;      // main.c
 extern int      pivot_number;       // main.c
 extern bool     ispointer;          // index_sort.c
 extern double   usec, esd;          // timer.c
