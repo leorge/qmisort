@@ -14,7 +14,7 @@ javac -cp :. QuickX.java
 wget https://github.com/leorge/QuickJava/raw/master/KillQuickX.pl
 wget https://github.com/leorge/QuickJava/raw/master/QuickX.pl
 chmod +x *.pl
-./KillQuickX.pl 60 | xargs ./QuickX.pl 
+#./KillQuickX.pl 60 | xargs ./QuickX.pl 
 
 # Crash
 ./KillQuickX.pl 40000 | java -cp :. QuickX 2>&1 | head 
