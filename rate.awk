@@ -32,6 +32,7 @@ function dump() {
 }
 
 /^qsort\(3\) nmemb = / {
+    line_header = "\n";
     for (i = "0.0"; i <= 1; i += 0.1) line_header = line_header OFS i;
 }
 /^Start / {
