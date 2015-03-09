@@ -120,7 +120,8 @@ void array_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
         set_random();
-        private_boundary = pow(2, 2 * log2(nmemb) / 3); // 2 ^ ( 2/3 * log2(N))
+//        private_boundary = pow(2, 2 * log2(nmemb) / 3); // 2 ^ ( 2/3 * log2(N))
+        private_boundary = pow(nmemb, 2.0 / 3.0);
         if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
 #ifdef DEBUG
         search_pivot = 0;
