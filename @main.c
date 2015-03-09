@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
     small_boundary = 8;
     pivot_number = 3;
     random_depth = 5;
-    small_array = mi_isort;
+    small_array = imerge_sort;
     small_index = mi_psort;
     pivot_sort = small_index;
     func_log2 = log2G;      // default is built-in log2()
@@ -288,11 +288,11 @@ int main(int argc, char *argv[])
                 "\t-P : Algorithm of Pointer sort to find a Pivot.\n"
                 "\n\tfunc : function for algorithm option\n"
                 "\t    3 : Built-in function qsort(3).\n"
-                "\t    b : Merge and insertion sort binary search.\n"
-                "\t    j : Merge and insertion sort serial search.(default)\n"
-                "\t    m : Merge sort.\n"
+                "\t    b : Merge and insertion sort with binary search.\n"
+                "\t    j : Merge and insertion sort with serial search.\n"
+                "\t    m : Merge sort.(default)\n"
 #ifdef DEBUG
-                "\t    a : Merge sort for -A option.(not index sort)\n"
+                "\t    a : Array sorting of merge sort for -A option.\n"
 #ifdef LOG2_ALGORITHM
             "\nLog2 option : to search a highest \"1\" bit in nmemb.\n"
                 "\t-L a : Assembly.\n"
