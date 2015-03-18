@@ -75,6 +75,9 @@ typedef enum {
     DUMMY,
     INDEX_QSORT3,
     POINTER_QSORT3,
+    MERGE_ARRAY,
+    MERGE_INDEX,
+    MERGE_POINTER,
     SWAP_FIRST,
     SWAP_MIDDLE,
     SWAP_MED3,
@@ -82,10 +85,8 @@ typedef enum {
     HOLE_RANDOM,
     HOLE_VARIOUS,
     HOLE_LOG2,
+    ARRAY_SORT,
     HEAP_SORT,
-    MERGE_ARRAY,
-    MERGE_INDEX,
-    MERGE_POINTER,
     INSERT_SORT,
     INSERT_PSORT,
     TREE_SORT,
@@ -94,7 +95,6 @@ typedef enum {
     MERGE_NIBBLE,
     MERGE_INSERT_BINARY,
     MERGE_NIBBLE_BINARY,
-    ARRAY_SORT,
     INDEX_SORT,
     POINTER_SORT,
     STABLE_ARRAY,
@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
 #ifndef DEBUG
                 "\t-T : UncerTainTy percenT to pass (default is 2 [%]).\n"
 #endif
-                "\t-W : Number of elements to select a pivot for -v option.\n"
+                "\t-W : Number of elements to select a pivot for -v option (default is 3).\n"
                 "\t-Y : CYclic work buffer length.\n"
                 "\t-Z : siZe of an array element.\n"
             "\nAlgorithm option :\n"
