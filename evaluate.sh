@@ -4,7 +4,7 @@ if [ $# -eq 0 ] ; then
     echo "    max_size  : size of element in byte begin with 2^4 up to 2^max_size."
     echo "    max_nmemb : number of element begin with 2^12 up to 2^max_nmemb."
 else
-    rm -f cmd.tmp evaluate.tmp
+    rm -f evaluate.tmp
     min_size=4; max_size=$1; shift      # 2^4(=16) --> 2^max_size
     if [ $max_size -lt $min_size ]; then max_size=$min_size; fi
     min_nmemb=12; max_nmemb=$1; shift   # 2^12(=1024) --> 2^max_nmemb
@@ -24,7 +24,7 @@ else
             if [ $# -eq 0 ]; then   # no options
                 echo "$cmd options"
             else
-                echo $cmd | tee /dev/stderr >> cmd.tmp
+                echo $cmd | tee /dev/stderr >> evaluate.tmp
                 $cmd data.tmp | tee -a evaluate.tmp | \
                     awk -v sz=$size -v nmemb=$nmemb -v OFS="\t" '{print $1, nmemb, sz, $4}'
             fi
