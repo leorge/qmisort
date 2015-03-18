@@ -12,10 +12,6 @@ static int  (*comp)(const void *, const void *);
 static size_t   length;
 static char *swapbuf;
 
-#ifdef DEBUG
-static long shift_count;
-#endif
-
 /* wapper of memcpy() */
 static void swap(void *p1, void *p2)
 {
@@ -70,14 +66,8 @@ static void sort(void *base, size_t nmemb) {
 void qsort_first(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
-#ifdef DEBUG
-        shift_count = 0L;
-#endif
         char a[size]; swapbuf = a; *a = '\0';
         length = size; comp = compare;
         sort(base, nmemb);
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "shift_count =  %ld\n", shift_count);
-#endif
     }
 }
