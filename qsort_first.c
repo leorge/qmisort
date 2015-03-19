@@ -1,7 +1,7 @@
 /*
  * qsort_first.c
  *
- *  traditional quick sort using swap, pivot is a first element. nested loop.
+ *  Traditional quick sort using swap: pivot is a first element.
  *
  *  Created on: 2013/01/27
  *      Author: leo

@@ -1,7 +1,7 @@
 /*
  * qsort_middle.c
  *
- *  Pivot is a middle element.
+ *  Traditional quick sort using swap: pivot is a middle element.
  *
  *  Created on: 2015/03/20
  *      Author: leo

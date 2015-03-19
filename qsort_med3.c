@@ -1,12 +1,11 @@
 /*
  * qsort_med3.c
  *
- *  meidan of 3 quick sort.
+ *  Traditional quick sort using swap: pivot is a meidan of 3 quick sort.
  *
  *  Created on: 2013/02/04
  *      Author: leo
  */
-
 #include "sort.h"
 
 static int  (*comp)(const void *, const void *);
