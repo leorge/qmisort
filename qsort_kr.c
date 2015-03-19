@@ -1,7 +1,7 @@
 /*
- * qsort_middle.c
+ * qsort_kr.c
  *
- *  K&R style Quicksort. pivot is a middle element.
+ *  K&R style Quicksort. pivot is a middle element. Single loop.
  *
  *  Created on: 2013/02/09
  *      Author: leo
@@ -58,7 +58,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_middle(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+void qsort_kr(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
         char a[size]; swapbuf = a; *a = '\0';
