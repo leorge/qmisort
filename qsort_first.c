@@ -12,7 +12,7 @@ static int  (*comp)(const void *, const void *);
 static size_t   length;
 static char *swapbuf;
 
-/* wapper of memcpy() */
+/* exchange 2 elements */
 static void swap(void *p1, void *p2)
 {
     if (p1 == p2) return;
