@@ -80,6 +80,7 @@ typedef enum {
     MERGE_POINTER,
     SWAP_FIRST,
     SWAP_MIDDLE,
+    SWAP_KR,
     SWAP_MED3,
     HOLE_LAST,
     HOLE_RANDOM,
@@ -164,10 +165,14 @@ int main(int argc, char *argv[])
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
             // simple in-place sort.
+#ifdef  DEBUG
+            {'1', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
+                "Quick sort : pivot is a middle element with swaps in K&R style. Single loop."},
+#endif
             {'2', HOLE_LOG2, "qsort_log2()", qsort_log2, FALSE,
                 "Quick sort : pivot is median of log2(N) with a hole."},
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
-                "Quick sort : pivot is median of 3 elements with swaps. Nested loop."},
+                "Quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
                 "QM or QMI sort : Array sorting of Quicksort, Merge sort (, Insertion sort)"},
             {'b', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
@@ -177,9 +182,9 @@ int main(int argc, char *argv[])
             {'C', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
                 "Pointer sorting of qsort(3)"},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
-                "Quick sort : pivot is a miDDle element with swaps in K&R style. Single loop"},
+                "Quick sort : pivot is a miDDle element with swaps."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
-                "Quick sort : pivot is a First element with swaps. Nested loop."},
+                "Quick sort : pivot is a First element with swaps."},
             {'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
                 "merGe sort : pointer sorting (index sorting except indexing time)"},
 #ifdef  DEBUG

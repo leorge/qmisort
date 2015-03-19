@@ -72,6 +72,7 @@ void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_log2      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_med3      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
