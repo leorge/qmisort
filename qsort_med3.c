@@ -7,11 +7,11 @@
  *      Author: leo
  */
 
-#include    "sort.h"
+#include "sort.h"
 
 static int  (*comp)(const void *, const void *);
 static size_t   length;
-static char *tmpbuf;    // temporary buffer
+static char *swapbuf;
 
 /* exchange 2 elements */
 static void swap(void *p1, void *p2)
@@ -21,18 +21,17 @@ static void swap(void *p1, void *p2)
     qsort_moved += 3;
     if (trace_level >= TRACE_MOVE) fprintf(OUT, "swap(%s, %s)\n", dump_data(p1), dump_data(p2));
 #endif
-    memcpy(tmpbuf, p1, length);
+    memcpy(swapbuf, p1, length);
     memcpy(p1, p2, length);
-    memcpy(p2, tmpbuf, length);
+    memcpy(p2, swapbuf, length);
 }
 
 static void sort(void *base, size_t nmemb) {
-    if (nmemb <= 1) return;
+    if (nmemb <= 1) return; // 0 or 1
 #ifdef DEBUG
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-    // move a pivot data to the first
 #define first   ((char *)base)
     char *last = first + (nmemb - 1) * length;
     char *middle = first + length * (nmemb >> 1);
@@ -76,8 +75,8 @@ static void sort(void *base, size_t nmemb) {
 void qsort_med3(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
-        char a[size]; tmpbuf = a; *a = '\0';    // reused in this file
-        length = size; comp = compare;          // common in this file
+        char a[size]; swapbuf = a; *a = '\0';
+        length = size; comp = compare;
         sort(base, nmemb);
     }
 }
