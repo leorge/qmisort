@@ -43,11 +43,6 @@ void    (*small_index)();
 void    (*pivot_sort)();
 int     (*func_log2)();
 
-// Dump an element.
-const char *dump_data(const void *data) {
-    return ispointer? *(const char **)data: data ;
-}
-
 void set_random(void) {
     if (random_number == 0.0) {
         random_number = rand()/(double)(RAND_MAX - 1);  // 0 <= random_number < 1

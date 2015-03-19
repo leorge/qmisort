@@ -9,6 +9,11 @@
 
 #include    "sort.h"
 
+// Dump an element.
+const char *dump_data(const void *data) {
+    return ispointer? *(const char **)data: data ;
+}
+
 void dump_array(const char *msg, const void *base, size_t nmemb, size_t size)
 {
     if (trace_level < TRACE_DUMP) return;
