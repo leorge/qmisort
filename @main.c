@@ -79,6 +79,7 @@ typedef enum {
     SWAP_MED3,
     HOLE_LAST,
     HOLE_RANDOM,
+    HOLE_RANDOM3,
     HOLE_VARIOUS,
     HOLE_LOG2,
     ARRAY_SORT,
@@ -182,6 +183,8 @@ int main(int argc, char *argv[])
                 "Quick sort : pivot is a First element with swaps."},
             {'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
                 "merGe sort : pointer sorting (index sorting except indexing time)"},
+			{'h', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
+				"Quick sort : pivot is a Last element with a hole."},
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort"},
@@ -198,8 +201,6 @@ int main(int argc, char *argv[])
                 "MI sort : pointer sorting"},
             {'K', MERGE_NIBBLE_BINARY, "mi_pnblbin(*)", mi_pnblbin, TRUE,
                 "MI sort : pointer sorting with binary search and Nibble insertion sort"},
-            {'l', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
-                "Quick sort : pivot is a Last element with a hole."},
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
                 "Merge sort : double array"},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
@@ -220,6 +221,8 @@ int main(int argc, char *argv[])
                 "dUmmy sort : do nothing."},
             {'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
                 "Quick sort : Pivot is median of Various elements with a hole."},
+			{'w', HOLE_RANDOM3, "qsort_random3()", qsort_random3, FALSE,
+				"Quick sort : pivot is a median of 3 random element with a hole."},
     };
     // set default value to global variables.
     small_boundary = 8;
