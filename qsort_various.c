@@ -38,7 +38,7 @@ static void sort(void *base, size_t nmemb) {
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
 #endif
         distance *= length;     // size in byte
-        hole = base + (size_t)(random_number * nmemb / pivot_number) * length;  // 1st pick up point
+        hole = first + (size_t)(random_number * nmemb / pivot_number) * length;  // 1st pick up point
         for (int idx = 0; idx < pivot_number; hole += distance) {
 #ifdef  DEBUG
             if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array[%ld] at %p = %s\n", (hole - first) / length, hole, dump_data(hole));
