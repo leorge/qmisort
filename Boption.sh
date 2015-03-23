@@ -7,16 +7,16 @@ fi
 
 # execution
 
-P=$1; shift # get parameter
-if [ $P -le 3 ]; then P=4; fi
-N=`echo 2^$P | bc`
-src/random.awk $N > random.$P   # generate a data file
-E=`expr $P - 1` # End of Loop
+maxP=$1; shift # get parameter
+if [ $maxP -le 3 ]; then maxP=4; fi
+N=`echo 2^$maxP | bc`
+src/random.awk $N > random.$maxP   # generate a data file
+E=`expr $maxP - 1` # End of Loop
 for power in `seq 3 $E`; do
     B=`echo 2^$power | bc`
     cmd="Release/Sort -N $N $* -B $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$P
+    $cmd random.$maxP
 done > Boption.tmp
 
 # edit output
