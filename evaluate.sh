@@ -14,7 +14,7 @@ else
     min_nmemb=12; max_nmemb=$1; shift   # 2^12(=1024) --> 2^max_nmemb
     if [ $max_nmemb -lt $min_nmemb ]; then max_nmemb=$min_nmemb; fi
     options=$*
-    src/random.awk `echo 2^$max_nmemb-1|bc` > data.tmp  # create a data file
+    src/random.awk `echo 2^$max_nmemb | bc` > random.$max_nmemb  # create a data file
     for i in `seq $min_size $max_size`  # size of an element
     do
         if [ $i -gt $min_size ]; then echo ; fi # make a gap
@@ -29,7 +29,7 @@ else
                 echo "$cmd options"
             else
                 echo $cmd | tee /dev/stderr >> $Result
-                $cmd data.tmp | tee -a $Result | \
+                $cmd random.$max_nmemb | tee -a $Result | \
                     awk -v sz=$size -v nmemb=$nmemb -v OFS="\t" '{print $1, nmemb, sz, $4}'
             fi
         done
