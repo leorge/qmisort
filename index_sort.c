@@ -11,7 +11,6 @@
 
 static int      (*comp)(const void *, const void *);
 static void *index[MAX_BIT];    // address of picked up elements
-static size_t   private_boundary;
 #ifdef  DEBUG
 static  size_t  comp_idx_count, search_pivot;
 #endif
@@ -32,7 +31,7 @@ static void sort(void *base[], size_t nmemb) {
     qsort_called++; // Counted in small_index() or pivot_sort()
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
-    if (nmemb <= private_boundary) {
+    if (nmemb <= small_boundary) {
         (*small_index)(base, nmemb, comp);
     }
     else {
@@ -127,10 +126,7 @@ void pointer_sort(void **idxtbl, size_t nmemb, int (*compare)(const void *, cons
     if (idxtbl != NULL) {
         comp = compare;
         set_random();
-        private_boundary = pow(2, 2 * log2(nmemb) / 3); // 2 ^ ( 2/3 * log2(N))
-        if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT,"private_boundary = %ld\n", private_boundary);
         search_pivot = comp_idx_count = 0;
 #endif
         sort(idxtbl, nmemb);
