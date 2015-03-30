@@ -16,8 +16,8 @@ for (; $power-- > 0; $width >>= 1) {
         my @part = splice(@src, 0, $width);
         my @left = (); my @right = ();
         while (@part) {
-            @right = (@right, shift(@part));
-            @left = (@left, shift(@part));
+            push(@right, shift(@part));
+            push(@left, shift(@part));
         }
         @dst = (@dst, @left, @right);   # push, push
     }
