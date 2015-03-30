@@ -13,6 +13,13 @@
 #include <string.h>
 
 #define OUT     stdout
+
+typedef	enum {	// Scheme in hybrid sorting while N is large.
+	RANDOM,
+	RANDOM3,
+	LOG2,
+} QsortAlogrithm;
+
 typedef enum {  // trace lelve
     TRACE_NONE,
     TRACE_COUNT,    // count up
@@ -46,8 +53,9 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 extern size_t   INS;                // main.c
 extern size_t   random_depth;       // main.c
 extern double   random_number;      // main.c
-extern size_t   small_boundary;      // main.c
+extern size_t   small_boundary;     // main.c
 extern int      pivot_number;       // main.c
+extern QsortAlogrithm	QA;			// main.c
 extern bool     ispointer;          // index_sort.c
 extern double   usec, esd;          // timer.c
 extern long     *microsec;          // timer.c

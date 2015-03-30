@@ -37,6 +37,7 @@ long    qsort_called, qsort_comp_str, qsort_moved;  // counters
 int     pivot_number;
 size_t  random_depth;
 double  random_number;
+QsortAlogrithm	QA = RANDOM3;
 
 void    (*small_array)();
 void    (*small_index)();
@@ -82,7 +83,6 @@ typedef enum {
     HOLE_RANDOM3,
     HOLE_VARIOUS,
     HOLE_LOG2,
-    ARRAY_SORT,
     HEAP_SORT,
     INSERT_SORT,
     INSERT_PSORT,
@@ -92,6 +92,7 @@ typedef enum {
     MERGE_NIBBLE,
     MERGE_INSERT_BINARY,
     MERGE_NIBBLE_BINARY,
+    ARRAY_SORT,
     INDEX_SORT,
     POINTER_SORT,
     STABLE_ARRAY,
@@ -170,53 +171,53 @@ int main(int argc, char *argv[])
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "Quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
-                "QM or QMI sort : Array sorting of Quicksort, Merge sort (, Insertion sort)"},
+                "hybrid sorting of quicksort : Array sorting."},
             {'b', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
-                "MI sort : pointer sorting with binary search"},
+                "MI sort : pointer sorting with binary search."},
             {'c', INDEX_QSORT3, "iqsort()", iqsort, FALSE,
-                "index sorting of qsort(3)"},
+                "index sorting of qsort(3)."},
             {'C', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
-                "Pointer sorting of qsort(3)"},
+                "Pointer sorting of qsort(3)."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "Quick sort : pivot is a miDDle element with swaps."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
                 "Quick sort : pivot is a First element with swaps."},
             {'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
-                "merGe sort : pointer sorting (index sorting except indexing time)"},
+                "merGe sort : pointer sorting (index sorting except indexing time)."},
 			{'h', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
 				"Quick sort : pivot is a Last element with a hole."},
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
-                "Heap sort"},
+                "Heap sort."},
             {'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
-            "Insertion sort : array sorting"},
+            "Insertion sort : array sorting."},
             {'I', INSERT_PSORT, "insert_psort(*)", insert_psort, TRUE,
-            "Insertion sort : pointer sorting"},
+            "Insertion sort : pointer sorting."},
             {'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
-            "Insertion tree sort : median node tree"},
+            "Insertion tree sort : median node tree."},
 #endif
             {'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
-                "MI sort : index sorting of Merge sort and conventional Insertion sort"},
+                "MI sort : index sorting of Merge sort and conventional Insertion sort."},
             {'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
-                "MI sort : pointer sorting"},
+                "MI sort : pointer sorting."},
             {'K', MERGE_NIBBLE_BINARY, "mi_pnblbin(*)", mi_pnblbin, TRUE,
-                "MI sort : pointer sorting with binary search and Nibble insertion sort"},
+                "MI sort : pointer sorting with binary search and Nibble insertion sort."},
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
-                "Merge sort : double array"},
+                "Merge sort : double array."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
-                "Merge sort : double index"},
+                "Merge sort : double index."},
             {'n', MERGE_NIBBLE, "mi_pnibble(*)", mi_pnibble, TRUE,
-                "MI sort : pointer sorting with Nibble insertion sort"},
+                "MI sort : pointer sorting with Nibble insertion sort."},
             {'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
-                "QM or QMI sort : index sorting"},
+                "hybrid sorting of quicksort : index sorting."},
             {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-                "QM or QMI sort : pointer sorting"},
+                "hybrid sorting of quicksort : pointer sorting."},
             {'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
                 "Quick sort : pivot is a Random element with a hole."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
-                "Stable QM or QMI sort : array sorting"},
+                "Stable QM or QMI sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
-                "Stable QM or QMI sort : pointer sorting"},
+                "Stable QM or QMI sort : pointer sorting."},
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing."},
             {'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
@@ -248,7 +249,9 @@ int main(int argc, char *argv[])
     typedef long INDEX;
     INDEX   index = 0, idx;
     bool    print_out = FALSE;
+    bool	IsPercentB = FALSE;
     int     opt, repeat_count, buffer_length = 1;
+    double	Boption = 0.0;
     size_t  nmemb = 31, size = 0;
     int     limit = 2;      // boundary precent to pass
 
@@ -274,7 +277,6 @@ int main(int argc, char *argv[])
             }
             puts(
                 "\n"
-                "\t-B : Boundary number to switch algorithm.\n"
                 "\t-D : Limit of Depth for randomize.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-p : Print out the last result.\n"
@@ -284,16 +286,23 @@ int main(int argc, char *argv[])
 #endif
                 "\t-W : Number of elements to select a pivot for -v option (default is 3).\n"
                 "\t-Y : CYclic work buffer length.\n"
-                "\t-Z : siZe of an array element.\n"
+                "\t-Z : siZe of an array element.\n\n"
+				"\t-B : Boundary to switch algorithm or choice of pivot in hole scheme. (default is 8)\n"
+				"\t       If the value is less than 0 then value means depth.\n"
+				"\t       Else if the value is followed by % 0 then value means depth in percent.\n"
+                "\t-P : Algorithm to Find a pivot while N is large.\n"
+                "\t       r - Random element. (default)\n"
+                "\t       3 - median of random 3 elements.\n"
+                "\t       2 - median of random log2(n) elements.\n"
             "\nAlgorithm option :\n"
                 "\t-A : Algorithm when nmemb is small for Array sort.\n"
                 "\t-X : Algorithm when nmemb is small for indeX sort.\n"
-                "\t-P : Algorithm of Pointer sort to find a Pivot.\n"
+                "\t-F : Algorithm of pointer sort to Find a pivot.\n"
                 "\n\tfunc : function for algorithm option\n"
-                "\t    3 : Built-in function qsort(3).\n"
-                "\t    b : Merge and insertion sort with binary search.\n"
-                "\t    j : Merge and insertion sort with serial search.\n"
-                "\t    m : Merge sort.(default)\n"
+                "\t       G - GNU library qsort(3).\n"
+                "\t       b - Merge and insertion sort with binary search.\n"
+                "\t       j - Merge and insertion sort with serial search.\n"
+                "\t       m - Merge sort. (default)\n"
 #ifdef DEBUG
                 "\t    a : Array sorting of merge sort for -A option.\n"
 #ifdef LOG2_ALGORITHM
@@ -314,7 +323,9 @@ int main(int argc, char *argv[])
             return EXIT_SUCCESS;
             break;
         case 'B':
-            small_boundary = (int)strtoul(optarg, NULL, 0);
+			p = &optarg[strlen(optarg) - 1];
+			if (*p == '%') IsPercentB = TRUE;
+            Boption= atof(optarg);
             break;
         case 'D':
             random_depth = (int)strtoul(optarg, NULL, 0);
@@ -345,7 +356,7 @@ int main(int argc, char *argv[])
             break;
         case 'A':   // Algorithm when nmemb is small for Array sort
             switch(*optarg) {
-            case '3':
+            case 'G':
                 small_array = qsort;
                 break;
             case 'a':
@@ -361,14 +372,14 @@ int main(int argc, char *argv[])
                 small_array = imerge_sort;
                 break;
             default:
-                fprintf(stderr, "Illegal value for -A option \"%s\"\n", optarg);
+                fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
                 return EXIT_FAILURE;
                 break;
             }
             break;
-        case 'P':   // Algorithm when nmemb is small for indeX sort.
+        case 'F':   // Algorithm when nmemb is small for indeX sort.
             switch(*optarg) {
-            case '3':
+            case 'G':
                 pivot_sort = pqsort;
                 break;
             case 'b':
@@ -381,14 +392,14 @@ int main(int argc, char *argv[])
                 pivot_sort = merge_pointer;
                 break;
             default:
-                fprintf(stderr, "Illegal value for -P option \"%s\"\n", optarg);
+                fprintf(stderr, "Illegal value \"%s\" for -F option.\n", optarg);
                 return EXIT_FAILURE;
                 break;
             }
             break;
         case 'X':   // Algorithm of Pointer sort to find a Pivot.
             switch(*optarg) {
-            case '3':
+            case 'G':
                 small_index = pqsort;
                 break;
             case 'b':
@@ -401,11 +412,28 @@ int main(int argc, char *argv[])
                 small_index = merge_pointer;
                 break;
             default:
-                fprintf(stderr, "Illegal value for -I option \"%s\"\n", optarg);
+                fprintf(stderr, "Illegal value \"%s\" for -X option.\n", optarg);
                 return EXIT_FAILURE;
                 break;
             }
             break;
+		case 'P':   // Algorithm to Find a pivot while N is large in hybrid sorting
+			switch(*optarg) {
+			case '2':
+				QA = LOG2;
+				break;
+			case '3':
+				QA = RANDOM3;
+				break;
+			case 'r':
+				QA = RANDOM;
+				break;
+			default:
+                fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
+				return EXIT_FAILURE;
+				break;
+			}
+			break;
 #ifdef  LOG2_ALGORITHM
         case 'L':
             switch(toupper(*optarg)) {
@@ -495,6 +523,13 @@ int main(int argc, char *argv[])
     /***** Prepare *****/
 
     int skip = repeat_count > 1 ? 1: 0;
+    if (Boption < 0) {	// depth for hybrid sorting boundary
+    	small_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
+    }
+    else {	// size
+    	small_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
+    }
+    if (small_boundary < 8) small_boundary = 8;
 
 //#define   BUFCYCLE    2
     char    **workarea = (char **)malloc(sizeof(char *) * buffer_length);

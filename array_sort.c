@@ -10,10 +10,9 @@
 #include "sort.h"
 
 static int      (*comp)(const void *, const void *);
-static void *index[MAX_BIT];    // address of picked up elements
+static void 	*index[MAX_BIT];    // address of picked up elements
 static size_t   length;
-static char *pivot;
-static size_t   private_boundary;
+static char 	*pivot;
 #ifdef  DEBUG
 static  size_t  search_pivot;
 #endif
@@ -33,33 +32,56 @@ static void sort(void *base, size_t nmemb) {
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-    if (nmemb <= private_boundary) {
+    if (nmemb <= small_boundary) {	// N is small
         (*small_array)(base, nmemb, length, comp);
     }
-    else {  // qsort_log2()
+    else {	// N is large
 #define first   ((char *)base)
-        int pickup = ((*func_log2)(nmemb) - 1) | 1; // make an odd number 2N-1
-        size_t  distance = (size_t)(nmemb / pickup);    // distance between elements
+    	size_t  distance;
+    	char    *hole;
+    	int pickup;
+    	switch (QA) {	// Quicksort Algorithm
+    	case RANDOM:
+            hole = base + (size_t)(random_number * nmemb) * length;		// pick up one element at random
+    		break;
+    	case RANDOM3:
+			distance = nmemb / 3;    // distance between elements
+			char	*p1, *p2, *p3;
+			p1 = base + (size_t)(random_number * distance) * length;		// pick up median of random 3 elements
+			p3 = (p2 = p1 + distance * length) + distance * length;
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "nmemb = %ld\tchoose = %d\tdistance = %ld\n", nmemb, pickup, distance);
+    		if (trace_level >= TRACE_DUMP) fprintf(OUT,
+    				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
 #endif
-        distance *= length;     // size in byte
-        char    *hole = base + (size_t)(random_number * nmemb / pickup) * length;   // 1st pick up point
-        for (int idx = 0; idx < pickup; hole += distance) {
+			hole = (comp(p1, p3) < 0 ?
+				   (comp(p2, p1) < 0 ? p1: (comp(p2,  p3) < 0 ? p2 : p3)) :
+				   (comp(p2, p3) < 0 ? p3 : (comp(p2, p1) < 0 ? p2 : p1)));
+    		break;
+    	case LOG2:
+    		pickup = ((*func_log2)(nmemb) - 1) | 1; // make an odd number
+    		distance = (size_t)(nmemb / pickup);    // distance between elements
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array[%ld] at %p = %s\n", (hole - first) / length, hole, dump_data(hole));
+    		if (trace_level >= TRACE_DUMP) fprintf(OUT,
+    				"nmemb = %ld\tchoose = %d\tdistance = %ld\n", nmemb, pickup, distance);
 #endif
-            index[idx++] = hole;
-        }
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "sort to find a pivot\n");
-        search_pivot++;
+    		distance *= length;     // size in byte
+    		hole = base + (size_t)(random_number * nmemb / pickup) * length;   // 1st pick up point
+    		for (int idx = 0; idx < pickup; hole += distance) {
+#ifdef  DEBUG
+    			if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array[%ld] at %p = %s\n", (hole - first) / length, hole, dump_data(hole));
 #endif
-        (*pivot_sort)(index, pickup, comp);
-        hole = index[pickup >> 1];
+    			index[idx++] = hole;
+    		}
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
+    		if (trace_level >= TRACE_DUMP) fprintf(OUT, "sort to find a pivot\n");
+    		search_pivot++;
+#endif
+    		(*pivot_sort)(index, pickup, comp);
+    		hole = index[pickup >> 1];
+    		break;
+    	}
+#ifdef DEBUG
+    	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
 #endif
         char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
@@ -120,12 +142,8 @@ void array_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
         set_random();
-//        private_boundary = pow(2, 2 * log2(nmemb) / 3); // 2 ^ ( 2/3 * log2(N))
-        private_boundary = pow(nmemb, 2.0 / 3.0);
-        if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
 #ifdef DEBUG
         search_pivot = 0;
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "private_boundary = %ld\n", private_boundary);
 #endif
         sort(base, nmemb);
 #ifdef DEBUG
@@ -172,8 +190,6 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
         comp_p = compare;   // comp() calls compare()
         length = sizeof(POINTER_INDEX);
         set_random();
-        private_boundary = pow(2, 2 * log2(nmemb) / 3); // 2 ^ ( 2/3 * log2(N))
-//      if (private_boundary < MAX_SIZE) private_boundary = MAX_SIZE;
         sort(tbl, nmemb);   // sort array
         /*  sort to be stable and reoder idxtbl */
         comp = icomp;
