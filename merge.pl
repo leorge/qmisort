@@ -4,27 +4,23 @@
 #
 use strict;
 use warnings;
-$#ARGV < 0 && die "usage : $0 power\n";
-my $power = shift(@ARGV);
-my $width = 2**$power;
-my $fmt = sprintf("%%0%dd\n", length($width - 1));
-#die "\$width = $width\t\$fmt = $fmt\n";
-my @src = (0..$width-1);
-for (; $power-- > 0; $width >>= 1) {
-    my @dst = ();
-    while (@src) {
-        my @part = splice(@src, 0, $width);
-        my @left = (); my @right = ();
-        while (@part) {
-            push(@right, shift(@part));
-            push(@left, shift(@part));
+$#ARGV < 0 && die "usage : $0 N\n";
+my $N = shift(@ARGV);
+our $fmt = sprintf("%%0%dd\n", length($N - 1));
+#warn "\$N = $N\t\$fmt = $fmt\n";
+&merge(0..$N-1);
+sub merge {
+    my @src = @_;
+#warn "(@src)\n";
+    if (! $#src) {printf $fmt, $src[0];}
+    else {
+        my @right = ();
+        my @left = ();
+        while(@src) {
+            push(@left, shift(@src));
+            if (@src) {push(@right, shift(@src));}
         }
-        @dst = (@dst, @left, @right);   # push, push
+        &merge(@left);
+        if (@right) {&merge(@right);}
     }
-    @src = @dst;
-}
-#die "@src\n";
-while (@src) {
-    my $head = shift(@src);
-    printf $fmt, $head;
 }
