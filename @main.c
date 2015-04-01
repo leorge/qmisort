@@ -31,18 +31,18 @@
 //#define   LOG2_ALGORITHM 1
 
 /****   Public  ****/
-Trace   trace_level = TRACE_NONE;   // to debug
-size_t  small_boundary;              //  nmemb to alternate to merge sort.
-long    qsort_called, qsort_comp_str, qsort_moved;  // counters
-int     pivot_number;
-size_t  random_depth;
-double  random_number;
 QsortAlogrithm	QA = RANDOM3;
+Trace   trace_level = TRACE_NONE;   // to debug
+size_t  small_boundary = 8;              //  nmemb to alternate to merge sort.
+long    qsort_called, qsort_comp_str, qsort_moved;  // counters
+int     pivot_number = 3;
+size_t  random_depth = 5;
+double  random_number;
 
-void    (*small_array)();
-void    (*small_index)();
-void    (*pivot_sort)();
-int     (*func_log2)();
+void    (*small_array)() = imerge_sort;
+void    (*small_index)() = mi_psort;
+void    (*pivot_sort)() = small_index;
+int     (*func_log2)() = log2G;
 
 void set_random(void) {
     if (random_number == 0.0) {
@@ -225,15 +225,6 @@ int main(int argc, char *argv[])
 			{'w', HOLE_RANDOM3, "qsort_random3()", qsort_random3, FALSE,
 				"Quick sort : pivot is a median of 3 random element with a hole."},
     };
-    // set default value to global variables.
-    small_boundary = 8;
-    pivot_number = 3;
-    random_depth = 5;
-    small_array = imerge_sort;
-    small_index = mi_psort;
-    pivot_sort = small_index;
-    func_log2 = log2G;      // default is built-in log2()
-    ispointer = FALSE;      // index_sort.c
 
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to enumeration

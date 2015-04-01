@@ -14,7 +14,7 @@ static void *index[MAX_BIT];    // address of picked up elements
 #ifdef  DEBUG
 static  size_t  comp_idx_count, search_pivot;
 #endif
-bool    ispointer;
+bool    ispointer = FALSE;
 
 static int  comp_idx(const void *p1, const void *p2) {
 #ifdef DEBUG
