@@ -11,8 +11,7 @@ maxP=$1; shift # get parameter
 if [ $maxP -le 3 ]; then maxP=4; fi
 N=`echo 2^$maxP | bc`
 src/random.awk $N > random.$maxP   # generate a data file
-E=`expr $maxP - 4` # End of Loop
-for power in `seq 3 $E`; do
+for power in `seq 3 $maxP`; do
     B=`echo 2^$power | bc`
     cmd="Release/Sort -N $N $* -B $B"
     echo $cmd | tee /dev/stderr
