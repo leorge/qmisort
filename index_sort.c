@@ -14,7 +14,6 @@ static void *index[MAX_BIT];    // address of picked up elements
 #ifdef  DEBUG
 static  size_t  comp_idx_count, search_pivot;
 #endif
-bool    ispointer = FALSE;
 
 static int  comp_idx(const void *p1, const void *p2) {
 #ifdef DEBUG
@@ -35,33 +34,58 @@ static void sort(void *base[], size_t nmemb) {
         (*small_index)(base, nmemb, comp);
     }
     else {
-        int pickup = ((*func_log2)(nmemb) - 1) | 1; // make an odd number 2N-1
-        size_t  distance = (size_t)(nmemb / pickup);    // distance between elements
+    	size_t  distance;
+    	void **hole;
+    	int pickup;
+    	switch (QA) {	// Quicksort Algorithm
+    	case RANDOM:
+            hole = &base[(size_t)(random_number * nmemb)];  // pick up one element at random
+    		break;
+    	case RANDOM3:
+            distance = (size_t)(nmemb / 3);	    // distance between elements
+            void **p1, **p2, **p3;
+            p1 = &base[(size_t)(random_number * distance)];
+            p3 = (p2 = p1 + distance) + distance;
 #ifdef  DEBUG
-        ispointer = TRUE;
-        if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "nmemb = %ld\tbit_width = %d\tdistance = %ld\n", nmemb, pickup, distance);
+    		if (trace_level >= TRACE_DUMP) fprintf(OUT,
+    				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n",
+    				nmemb, distance, dump_data(*p1), dump_data(*p2), dump_data(*p3));
 #endif
-        void **hole = &base[(size_t)(random_number * nmemb / pickup)];  // 1st pick up point
-        for (int idx = 0; idx < pickup; hole += distance) {
+			hole = (comp(*p1, *p3) < 0 ?
+				   (comp(*p2, *p1) < 0 ? p1: (comp(*p2,  *p3) < 0 ? p2 : p3)) :
+				   (comp(*p2, *p3) < 0 ? p3 : (comp(*p2, *p1) < 0 ? p2 : p1)));
+    		break;
+    	case LOG2:
+        	pickup = ((*func_log2)(nmemb) - 1) | 1; // make an odd number 2N-1
+            distance = (size_t)(nmemb / pickup);    // distance between elements
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DEBUG) fprintf(OUT, "%s\n", dump_data(*hole));
+            if (trace_level >= TRACE_DUMP) fprintf(OUT,
+                "nmemb = %ld\tbit_width = %d\tdistance = %ld\n", nmemb, pickup, distance);
 #endif
-            index[idx++] = hole;
-        }
+            hole = &base[(size_t)(random_number * nmemb / pickup)];  // 1st pick up point
+            for (int idx = 0; idx < pickup; hole += distance) {
+#ifdef  DEBUG
+                ispointer = TRUE;
+                if (trace_level >= TRACE_DEBUG) fprintf(OUT, "%s\n", dump_data(*hole));
+#endif
+                index[idx++] = hole;
+            }
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "sort to find a pivot\n");
-        search_pivot++;
+			if (trace_level >= TRACE_DUMP) {
+				fprintf(OUT, "index :");
+				for (int idx = 0; idx < pickup; ) fprintf(OUT, " %s", dump_data(index[idx++]));
+				fprintf(OUT, "\nsort to find a pivot\n");
+			}
+            search_pivot++;
 #endif
-        (*pivot_sort)(index, pickup, comp_idx);
-        hole = index[pickup >> 1];      // get address of address of middle element
+            (*pivot_sort)(index, pickup, comp_idx);
+            hole = index[pickup >> 1];      // get address of address of middle element
+            break;
+    	}
 #ifdef  DEBUG
         ispointer = FALSE;
         if (trace_level >= TRACE_DUMP) {
             fprintf(OUT, "pivot = %s\n", dump_data(*hole));
-            fprintf(OUT, "index :");
-            for (int idx = 0; idx < pickup; ) fprintf(OUT, " %s", dump_data(index[idx++]));
-            fprintf(OUT, "\n");
         }
 #endif
         void    **last = &base[nmemb - 1];
