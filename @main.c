@@ -41,7 +41,7 @@ double  random_number;
 
 void    (*small_array)() = imerge_sort;
 void    (*small_index)() = mi_psort;
-void    (*pivot_sort)() = small_index;
+void    (*pivot_sort)() = mi_psort;
 int     (*func_log2)() = log2G;
 
 void set_random(void) {
@@ -517,10 +517,12 @@ int main(int argc, char *argv[])
     if (Boption < 0) {	// depth for hybrid sorting boundary
     	small_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
     }
-    else {	// size
+    else if (Boption > 0) {	// size
     	small_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
     }
-    if (small_boundary < 8) small_boundary = 8;
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "small_boundary = %ld\n", small_boundary);
+#endif
 
 //#define   BUFCYCLE    2
     char    **workarea = (char **)malloc(sizeof(char *) * buffer_length);
