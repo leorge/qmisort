@@ -9,6 +9,8 @@
 
 #include    "sort.h"
 
+bool    ispointer = FALSE;
+
 // Dump an element.
 const char *dump_data(const void *data) {
     return ispointer? *(const char **)data: data ;
