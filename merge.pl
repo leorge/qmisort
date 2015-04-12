@@ -17,8 +17,8 @@ sub merge {
         my @right = ();
         my @left = ();
         while(@src) {
-            push(@left, shift(@src));
-            if (@src) {push(@right, shift(@src));}
+            unshift(@left, pop(@src));
+            if (@src) {unshift(@right, pop(@src));}
         }
         &merge(@left);
         if (@right) {&merge(@right);}
