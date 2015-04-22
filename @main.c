@@ -40,7 +40,7 @@ size_t  random_depth = 5;
 double  random_number;
 
 void    (*small_array)() = imerge_sort;
-void    (*small_index)() = mi_psort;
+void    (*small_index)() = merge_pointer;
 void    (*pivot_sort)() = mi_psort;
 int     (*func_log2)() = log2G;
 
