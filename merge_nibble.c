@@ -26,12 +26,12 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
         void **load = revert ? dst : src;   // source
         INSERT_INDEX index = 0, mask;
         for (size_t idx = 1; idx < nmemb; idx++) {
-            register void *pivot = load[idx];
+            void *pivot = load[idx];
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "insert %s at %ld index = %s\n",
                 dump_data(pivot), idx, dump_index(dumpbuf, index, idx));
 #endif
-            // binary-search
+            // simple search
             size_t pos = 0;
             for (INSERT_INDEX i = index; pos < idx ; pos++)
                 if (comp(pivot, load[i & MASK_DIGIT]) >= 0) break;

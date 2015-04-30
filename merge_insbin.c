@@ -21,7 +21,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
     if (nmemb <= MAX_SIZE) {    /* Insertion sort */
         for (size_t idx = 1; idx < nmemb; idx++) {
-            register void *pivot = store[idx];
+            void *pivot = store[idx];
             // binary-search
             int     ck;
             size_t pos = 0;

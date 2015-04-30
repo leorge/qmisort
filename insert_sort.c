@@ -20,7 +20,7 @@ void insert_psort(void **idxtbl, size_t nmemb, int (*compare)(const void *, cons
 #endif
     for (size_t i = 1; i < nmemb; i++) {
         size_t  hole = i, j;
-         register char *pivot = idxtbl[hole];
+         char *pivot = idxtbl[hole];
         while (hole > 0) {
             if (compare(idxtbl[j = hole - 1], pivot) <= 0) break;
             idxtbl[hole] = idxtbl[j];
