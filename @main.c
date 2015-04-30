@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
             "Insertion sort : array sorting."},
             {'I', INSERT_PSORT, "insert_psort(*)", insert_psort, TRUE,
             "Insertion sort : pointer sorting."},
-            {'J', TREE_SORT, "tree_sort()", tree_sort, FALSE,
+            {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
             "Insertion tree sort : median node tree."},
 #endif
             {'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
                 "\n\tfunc : function for algorithm option\n"
                 "\t       G - GNU library qsort(3).\n"
                 "\t       b - Merge and insertion sort with binary search.\n"
-                "\t       j - Merge and insertion sort with serial search.\n"
+                "\t       l - Merge and insertion sort with serial search.\n"
                 "\t       m - Merge sort. (default)\n"
 #ifdef DEBUG
                 "\t    a : Array sorting of merge sort for -A option.\n"
@@ -354,9 +354,9 @@ int main(int argc, char *argv[])
                 small_array = merge_sort;
                 break;
             case 'b':
-                small_array = mi_ibin;
+                small_array = mi_inblbin;
                 break;
-            case 'j':
+            case 'l':
                 small_array = mi_isort;
                 break;
             case 'm':
@@ -374,9 +374,9 @@ int main(int argc, char *argv[])
                 pivot_sort = pqsort;
                 break;
             case 'b':
-                pivot_sort = mi_pbin;
+                pivot_sort = mi_pnblbin;
                 break;
-            case 'j':
+            case 'l':
                 pivot_sort = mi_psort;
                 break;
             case 'm':
@@ -394,9 +394,9 @@ int main(int argc, char *argv[])
                 small_index = pqsort;
                 break;
             case 'b':
-                small_index = mi_pbin;
+                small_index = mi_pnblbin;
                 break;
-            case 'j':
+            case 'l':
                 small_index = mi_psort;
                 break;
             case 'm':
