@@ -21,7 +21,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
     if (nmemb <= MAX_SIZE) {    /* Insertion sort */
         for (size_t idx = 1; idx < nmemb; idx++) {
-            void *pivot = store[idx];
+            void *pivot = store[idx];	// save an address
             // binary-search
             int     ck;
             size_t pos = 0;
@@ -39,7 +39,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
             void **p = &store[hi = idx], **q = p;
             while (hi-- != pos)
                 *p-- = *--q;
-            *p = pivot; // from load[] to store[]
+            *p = pivot;	// restore an address
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) dump_pointer("sorted ", store, idx + 1);
 #endif

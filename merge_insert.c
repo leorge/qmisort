@@ -21,17 +21,17 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
     if (nmemb <= MAX_SIZE) {    /* Insertion sort */
         for (size_t idx = 1; idx < nmemb; idx++) {
-            void *pivot = store[idx];
+            void *pivot = store[idx];	// save an address
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "insert %s\n", dump_data(pivot));
 #endif
-            // simple search
+            // linear search
             void **p = &store[idx], **q = p;
             do {
                 if (comp(*--p, pivot) <= 0) break;
                 *q-- = *p;  // slide an element
             } while (p != store);
-            *q = pivot; // from load[] to store[]
+            *q = pivot;	// restore an address
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) dump_pointer("sorted ", store, idx + 1);
 #endif
