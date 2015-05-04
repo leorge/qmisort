@@ -11,28 +11,6 @@
 
 static size_t   length;
 
-/* index sort   */
-void insert_psort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *)) {
-    if (nmemb <= 1) return;
-#ifdef DEBUG
-    qsort_called++;
-    if (trace_level >= TRACE_DUMP) dump_pointer("insert_psort() start.", idxtbl, nmemb);
-#endif
-    for (size_t i = 1; i < nmemb; i++) {
-        size_t  hole = i, j;
-         char *pivot = idxtbl[hole];
-        while (hole > 0) {
-            if (compare(idxtbl[j = hole - 1], pivot) <= 0) break;
-            idxtbl[hole] = idxtbl[j];
-            hole = j;
-        }
-        idxtbl[hole] = pivot;
-    }
-#ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("insert_psort() done.", idxtbl, nmemb);
-#endif
-}
-
 static void copy(void *dst, const void *src)
 {
 #ifdef  DEBUG
@@ -43,26 +21,40 @@ static void copy(void *dst, const void *src)
 }
 
 /* in-place sort    */
-void binary_serach(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+void insert_binary(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("insert_sort() start.", base, nmemb, size);
     qsort_called++;
 #endif
-    length = size;
+    length = size;	// for copy()
 #define first   ((char *)base)
     char pivot[size];
-    for (size_t i = 1; i < nmemb; i++) {
-        char    *p, *hole = first + i * size;
+    size_t idx = 1;
+    char *hole = first + size;
+    for (; idx < nmemb; hole += size) {
         copy(pivot, hole);  // make a hole
-        while (hole > first) {
-            if (compare(p = hole - size, pivot) <= 0) break;
-            copy(hole, p);  // move a hole
-            hole = p;
-        }
-        copy(hole, pivot);  // bury the last hole
+        // binary search
+        int     ck;
+        size_t  pos = 0, lo = 0, hi = idx - 1;
+        while (lo <= hi)
+        {   // binary search
+            ck = compare(pivot, first + size * (pos = lo + ((hi - lo) >> 1)));
+            if (ck == 0) break; // found an equal element.
+            else if (ck > 0) lo = pos + 1;
+            else if (pos == 0) break;
+            else hi = pos - 1;      // ck < 0
+        };
+        if (ck > 0) pos++;
+        // store an element
+        char *p = hole;;
+        for (hi = idx++; hi-- != pos; p -= size) copy(p, p - size);
+        copy(p, pivot);  // bury the last hole
+#ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) dump_array("sorted array", base, idx, size);
+#endif
+    }
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("insert_sort() done.", base, nmemb, size);
 #endif
-    }
 }

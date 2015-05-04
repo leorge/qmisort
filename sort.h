@@ -76,7 +76,8 @@ extern int  (*func_log2)();
 // array sorting
 void    array_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    insert_binary   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    insert_linear   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -100,7 +101,6 @@ void    mi_inblbin      (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    mi_isort        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sorting
-void    insert_psort    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pqsort          (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_pbin         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

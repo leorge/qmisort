@@ -11,28 +11,6 @@
 
 static size_t   length;
 
-/* index sort   */
-void insert_psort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *)) {
-    if (nmemb <= 1) return;
-#ifdef DEBUG
-    qsort_called++;
-    if (trace_level >= TRACE_DUMP) dump_pointer("insert_psort() start.", idxtbl, nmemb);
-#endif
-    for (size_t i = 1; i < nmemb; i++) {
-        size_t  hole = i, j;
-         char *pivot = idxtbl[hole];
-        while (hole > 0) {
-            if (compare(idxtbl[j = hole - 1], pivot) <= 0) break;
-            idxtbl[hole] = idxtbl[j];
-            hole = j;
-        }
-        idxtbl[hole] = pivot;
-    }
-#ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("insert_psort() done.", idxtbl, nmemb);
-#endif
-}
-
 static void copy(void *dst, const void *src)
 {
 #ifdef  DEBUG
@@ -43,7 +21,7 @@ static void copy(void *dst, const void *src)
 }
 
 /* in-place sort    */
-void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+void insert_linear(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("insert_sort() start.", base, nmemb, size);
@@ -62,7 +40,10 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
         }
         copy(hole, pivot);  // bury the last hole
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_array("insert_sort() done.", base, nmemb, size);
+        if (trace_level >= TRACE_DUMP) dump_array("insert_sort() done.", base, i + 1, size);
 #endif
     }
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP) dump_array("insert_sort() done.", base, nmemb, size);
+#endif
 }
