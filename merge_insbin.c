@@ -28,7 +28,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
             size_t lo = 0, hi = idx - 1;
             while (lo <= hi)
             {   // binary search
-                ck = comp(pivot, store[pos = (lo + hi) >> 1]);
+                ck = comp(pivot, store[pos = lo + ((hi - lo) >> 1)]);
                 if (ck == 0) break; // found an equal element.
                 else if (ck > 0) lo = pos + 1;
                 else if (pos == 0) break;
