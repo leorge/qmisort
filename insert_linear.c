@@ -1,7 +1,7 @@
 /*
- * insert_sort.c
+ * insert_linear.c
  *
- *  Insertion sort.
+ *  Insertion sort with linear search.
  *
  *  Created on: 2013/01/08
  *      Author: leo
