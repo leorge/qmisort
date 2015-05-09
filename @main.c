@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "Quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
-                "hybrid sorting of quicksort : Array sorting."},
+                "hybrid sorting of quicksort : array sorting."},
             {'b', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
                 "MI sort : pointer sorting with binary search."},
             {'c', INDEX_QSORT3, "iqsort()", iqsort, FALSE,
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
             "Insertion tree sort : median node tree."},
 #endif
             {'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
-                "MI sort : index sorting of Merge sort and conventional Insertion sort."},
+                "MI sort : index sorting of Merge sort and conventional insertion sort."},
             {'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "MI sort : pointer sorting."},
             {'K', MERGE_NIBBLE_BINARY, "mi_pnblbin(*)", mi_pnblbin, TRUE,
@@ -286,14 +286,14 @@ int main(int argc, char *argv[])
                 "\t       3 - median of random 3 elements.\n"
                 "\t       2 - median of random log2(n) elements.\n"
             "\nAlgorithm option :\n"
-                "\t-A : Algorithm when nmemb is small for Array sort.\n"
+                "\t-A : Algorithm when nmemb is small for array sort.\n"
                 "\t-X : Algorithm when nmemb is small for indeX sort.\n"
                 "\t-F : Algorithm of pointer sort to Find a pivot.\n"
                 "\n\tfunc : function for algorithm option\n"
                 "\t       G - GNU library qsort(3).\n"
-                "\t       b - Merge and insertion sort with binary search.\n"
-                "\t       l - Merge and insertion sort with serial search.\n"
+                "\t       l - Merge and insertion sort with linear search.\n"
                 "\t       m - Merge sort. (default)\n"
+                "\t       n - Merge and nibble insertion sort with binary search.\n"
 #ifdef DEBUG
                 "\t    a : Array sorting of merge sort for -A option.\n"
 #ifdef LOG2_ALGORITHM
@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
             case 'a':
                 small_array = merge_sort;
                 break;
-            case 'b':
+            case 'n':
                 small_array = mi_inblbin;
                 break;
             case 'l':
@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
             case 'G':
                 pivot_sort = pqsort;
                 break;
-            case 'b':
+            case 'n':
                 pivot_sort = mi_pnblbin;
                 break;
             case 'l':
@@ -393,7 +393,7 @@ int main(int argc, char *argv[])
             case 'G':
                 small_index = pqsort;
                 break;
-            case 'b':
+            case 'n':
                 small_index = mi_pnblbin;
                 break;
             case 'l':
