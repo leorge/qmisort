@@ -293,7 +293,8 @@ int main(int argc, char *argv[])
                 "\t       G - GNU library qsort(3).\n"
                 "\t       l - Merge and insertion sort with linear search.\n"
                 "\t       m - Merge sort. (default)\n"
-                "\t       n - Merge and nibble insertion sort with binary search.\n"
+				"\t       a - Merge sort. Not index sorting for -A option.\n"
+				"\t       n - Merge and nibble insertion sort with binary search.\n"
 #ifdef DEBUG
                 "\t    a : Array sorting of merge sort for -A option.\n"
 #ifdef LOG2_ALGORITHM
