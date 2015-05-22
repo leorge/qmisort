@@ -292,11 +292,10 @@ int main(int argc, char *argv[])
                 "\n\tfunc : function for algorithm option\n"
                 "\t       G - GNU library qsort(3).\n"
                 "\t       l - Merge and insertion sort with linear search.\n"
-                "\t       m - Merge sort. (default)\n"
-				"\t       a - Merge sort. Not index sorting for -A option.\n"
+                "\t       m - Index sorting of merge sort. (default)\n"
+				"\t       a - Array sorting of merge sort for -A option.\n"
 				"\t       n - Merge and nibble insertion sort with binary search.\n"
 #ifdef DEBUG
-                "\t    a : Array sorting of merge sort for -A option.\n"
 #ifdef LOG2_ALGORITHM
             "\nLog2 option : to search a highest \"1\" bit in nmemb.\n"
                 "\t-L a : Assembly.\n"
