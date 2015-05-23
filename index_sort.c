@@ -27,7 +27,7 @@ static int  comp_idx(const void *p1, const void *p2) {
 static void sort(void *base[], size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    qsort_called++; // Counted in small_index() or pivot_sort()
+    qsort_called++; // Counted in middle_index() or pivot_sort()
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
     if (nmemb <= middle_boundary) {

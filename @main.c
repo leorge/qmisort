@@ -528,7 +528,7 @@ int main(int argc, char *argv[])
     	middle_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "small_boundary = %ld\n", middle_boundary);
+    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "middle_boundary = %ld\n", middle_boundary);
 #endif
 
 //#define   BUFCYCLE    2
