@@ -24,7 +24,7 @@ static void copy(void *dst, const void *src)
 void insert_linear(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_array("insert_sort() start.", base, nmemb, size);
+    if (trace_level >= TRACE_DUMP) dump_array("insert_linear() start.", base, nmemb, size);
     qsort_called++;
 #endif
     length = size;
@@ -40,10 +40,10 @@ void insert_linear(void *base, size_t nmemb, size_t size, int (*compare)(const v
         }
         copy(hole, pivot);  // bury the last hole
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_array("insert_sort() done.", base, i + 1, size);
+        if (trace_level >= TRACE_DUMP) dump_array("insert_linear() done.", base, i + 1, size);
 #endif
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_array("insert_sort() done.", base, nmemb, size);
+    if (trace_level >= TRACE_DUMP) dump_array("insert_linear() done.", base, nmemb, size);
 #endif
 }
