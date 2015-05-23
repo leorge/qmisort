@@ -69,7 +69,7 @@ extern Trace    trace_level;            // main.c
 /***** Functions *****/
 extern void set_random(void);
 extern void (*middle_array)();
-extern void (*small_index)();
+extern void (*middle_index)();
 extern void (*pivot_sort)();
 extern int  (*func_log2)();
 

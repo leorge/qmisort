@@ -40,7 +40,7 @@ size_t  random_depth = 5;
 double  random_number;
 
 void    (*middle_array)() = imerge_sort;
-void    (*small_index)() = merge_pointer;
+void    (*middle_index)() = merge_pointer;
 void    (*pivot_sort)() = mi_psort;
 int     (*func_log2)() = log2G;
 
@@ -398,16 +398,16 @@ int main(int argc, char *argv[])
         case 'X':   // Algorithm of Pointer sort to find a Pivot.
             switch(*optarg) {
             case 'G':
-                small_index = pqsort;
+                middle_index = pqsort;
                 break;
             case 'n':
-                small_index = mi_pnblbin;
+                middle_index = mi_pnblbin;
                 break;
             case 'l':
-                small_index = mi_psort;
+                middle_index = mi_psort;
                 break;
             case 'm':
-                small_index = merge_pointer;
+                middle_index = merge_pointer;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -X option.\n", optarg);
