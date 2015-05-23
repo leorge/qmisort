@@ -68,12 +68,13 @@ extern Trace    trace_level;            // main.c
 
 /***** Functions *****/
 extern void set_random(void);
-extern void (*small_array)();
+extern void (*middle_array)();
 extern void (*small_index)();
 extern void (*pivot_sort)();
 extern int  (*func_log2)();
 
 // array sorting
+void    bubble_array     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    array_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_binary   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -101,6 +102,7 @@ void    mi_inblbin      (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    mi_isort        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sorting
+void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pqsort          (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_pbin         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

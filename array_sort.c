@@ -33,7 +33,7 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
     if (nmemb <= small_boundary) {	// N is small
-        (*small_array)(base, nmemb, length, comp);
+        (*middle_array)(base, nmemb, length, comp);
     }
     else {	// N is large
 #define first   ((char *)base)
