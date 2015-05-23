@@ -31,7 +31,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    if (nmemb >= small_boundary) {
+    if (nmemb >= middle_boundary) {
         size_t  distance = (size_t)(nmemb / 3);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);

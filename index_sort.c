@@ -30,7 +30,7 @@ static void sort(void *base[], size_t nmemb) {
     qsort_called++; // Counted in small_index() or pivot_sort()
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
-    if (nmemb <= small_boundary) {
+    if (nmemb <= middle_boundary) {
         (*middle_index)(base, nmemb, comp);
     }
     else {

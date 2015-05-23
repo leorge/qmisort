@@ -33,7 +33,7 @@
 /****   Public  ****/
 QsortAlogrithm	QA = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
-size_t  small_boundary = 8;              //  nmemb to alternate to merge sort.
+size_t  middle_boundary = 8;              //  nmemb to alternate to merge sort.
 long    qsort_called, qsort_comp_str, qsort_moved;  // counters
 int     pivot_number = 3;
 size_t  random_depth = 5;
@@ -522,13 +522,13 @@ int main(int argc, char *argv[])
 
     int skip = repeat_count > 1 ? 1: 0;
     if (Boption < 0) {	// depth for hybrid sorting boundary
-    	small_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
+    	middle_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
     }
     else if (Boption > 0) {	// size
-    	small_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
+    	middle_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "small_boundary = %ld\n", small_boundary);
+    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "small_boundary = %ld\n", middle_boundary);
 #endif
 
 //#define   BUFCYCLE    2
