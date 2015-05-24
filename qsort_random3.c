@@ -7,7 +7,6 @@
  *      Author: leo
  */
 #include "sort.h"
-#include "log2s.h"
 #include <math.h>
 
 static int      (*comp)(const void *, const void *);

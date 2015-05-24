@@ -71,7 +71,6 @@ extern void set_random(void);
 extern void (*middle_array)();
 extern void (*middle_index)();
 extern void (*pivot_sort)();
-extern int  (*func_log2)();
 
 // array sorting
 void    bubble_array     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));

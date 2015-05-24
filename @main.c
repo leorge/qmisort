@@ -21,14 +21,12 @@
 #include    <time.h>
 #include    <unistd.h>
 #include    "sort.h"
-#include    "log2s.h"
 
 /*
  * Uncomment or define symbols to examine algorithm.
  */
 //#define   HEAP_SORT 1
 //#define   INSERTION_SORT 1
-//#define   LOG2_ALGORITHM 1
 
 /****   Public  ****/
 QsortAlogrithm	QA = RANDOM3;
@@ -42,7 +40,6 @@ double  random_number;
 void    (*middle_array)() = imerge_sort;
 void    (*middle_index)() = merge_pointer;
 void    (*pivot_sort)() = mi_psort;
-int     (*func_log2)() = log2G;
 
 void set_random(void) {
     if (random_number == 0.0) {
@@ -292,8 +289,8 @@ int main(int argc, char *argv[])
                 "\t       3 - median of random 3 elements.\n"
                 "\t       2 - median of random log2(n) elements.\n"
             "\nAlgorithm option :\n"
-                "\t-A : Algorithm when nmemb is small for array sort.\n"
-                "\t-X : Algorithm when nmemb is small for indeX sort.\n"
+                "\t-A : Algorithm when nmemb is middle for array sort.\n"
+                "\t-X : Algorithm when nmemb is middle for indeX sort.\n"
                 "\t-F : Algorithm of pointer sort to Find a pivot.\n"
                 "\n\tfunc : function for algorithm option\n"
                 "\t       G - GNU library qsort(3).\n"
@@ -303,13 +300,6 @@ int main(int argc, char *argv[])
 				"\t       a - Array sorting of merge sort for -A option.\n"
 				"\t       n - Merge and nibble insertion sort with binary search.\n"
 #ifdef DEBUG
-#ifdef LOG2_ALGORITHM
-            "\nLog2 option : to search a highest \"1\" bit in nmemb.\n"
-                "\t-L a : Assembly.\n"
-                "\t-L b : Binary search.\n"
-                "\t-L r : Right shift count.\n"
-                "\t(default) : Built-in function log2(3).\n"
-#endif
             "\nTrace option :\n"
                 "\t-V 1 : Show Count.\n"
                 "\t-V 2 : Trace action.\n"
@@ -352,7 +342,7 @@ int main(int argc, char *argv[])
         case 'Z':
             size = (size_t)strtoul(optarg, NULL, 0);
             break;
-        case 'A':   // Algorithm when nmemb is small for Array sort
+        case 'A':   // Algorithm when nmemb is middle for Array sort
             switch(*optarg) {
             case 'G':
                 middle_array = qsort;
@@ -375,7 +365,7 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case 'F':   // Algorithm when nmemb is small for indeX sort.
+        case 'F':   // Algorithm when nmemb is middle for indeX sort.
             switch(*optarg) {
             case 'G':
                 pivot_sort = pqsort;
@@ -432,21 +422,6 @@ int main(int argc, char *argv[])
 				break;
 			}
 			break;
-#ifdef  LOG2_ALGORITHM
-        case 'L':
-            switch(toupper(*optarg)) {
-            case 'A':
-                func_log2 = log2A;
-                break;
-            case 'B':
-                func_log2 = log2B;
-                break;
-            case 'R':
-                func_log2 = log2R;
-                break;
-            }
-            break;
-#endif
         default:    // select sorting algorithm
             for (info = test, i = idx = 0; idx < sizeof(test) / sizeof(INFO); idx++, info++) {
                 if (info->option == opt) {

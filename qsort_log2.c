@@ -7,7 +7,6 @@
  *      Author: leo
  */
 #include    "sort.h"
-#include    "log2s.h"
 #include    <math.h>
 
 static int      (*comp)(const void *, const void *);
@@ -36,7 +35,7 @@ static void sort(void *base, size_t nmemb) {
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
     if (nmemb > middle_boundary) {
-        int     pickup = ((*func_log2)(nmemb) - 1) | 1; // make an odd number 2N-1
+        int     pickup = ((int)log2(nmemb) - 1) | 1; // make an odd number 2N-1
         size_t  distance = (size_t)(nmemb / pickup);        // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tbit_width = %d\tdistance = %ld\n" , nmemb, pickup, distance);

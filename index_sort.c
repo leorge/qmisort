@@ -56,7 +56,7 @@ static void sort(void *base[], size_t nmemb) {
 				   (comp(*p2, *p3) < 0 ? p3 : (comp(*p2, *p1) < 0 ? p2 : p1)));
     		break;
     	case LOG2:
-        	pickup = ((*func_log2)(nmemb) - 1) | 1; // make an odd number 2N-1
+        	pickup = ((int)log2(nmemb) - 1) | 1; // make an odd number 2N-1
             distance = (size_t)(nmemb / pickup);    // distance between elements
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
