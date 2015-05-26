@@ -30,12 +30,12 @@ static void sort(void *base[], size_t nmemb) {
     qsort_called++; // Counted in middle_index() or pivot_sort()
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
-    if (nmemb <= middle_boundary) {
-        (*middle_index)(base, nmemb, comp);
+    if (nmemb <= medium_boundary) {
+        (*medium_index)(base, nmemb, comp);
     }
     else {
     	size_t  distance;
-    	void **hole;
+    	void **hole = base;	// first element as a default
     	int pickup;
     	switch (QA) {	// Quicksort Algorithm
     	case RANDOM:
@@ -92,7 +92,7 @@ static void sort(void *base[], size_t nmemb) {
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- last = %s\n", dump_data(*hole), dump_data(*last));
 #endif
-        void    *pivot = *hole; *hole = *last;
+        void    *pivot = *hole; *hole = *last;	// *pivot <-- *hole <-- *last  cf. sort() in array_sort.c
         void    **lo, **hi = hole = last, **eq = NULL;
         for (hi--, lo = base; lo < hole; lo++) {
 #ifdef  DEBUG
