@@ -95,16 +95,14 @@ void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    imerge_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    index_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    iqsort          (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    mi_ibin         (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    mi_inibble      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    mi_inblbin      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+//void    mi_ibin         (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    mi_isort        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sorting
 void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pqsort          (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    mi_pbin         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+//void    mi_pbin         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_psort        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pointer_sort    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
