@@ -195,8 +195,6 @@ int main(int argc, char *argv[])
                 "Heap sort."},
             {'i', INSERT_LINEAR, "insert_linear()", insert_linear, FALSE,
             "Insertion sort : linear search."},
-            {'I', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
-            "Insertion sort : binary search."},
             {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
             "Insertion tree sort : median node tree."},
 #endif
