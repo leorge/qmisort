@@ -31,7 +31,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    if (nmemb >= middle_boundary) {
+    if (nmemb >= medium_boundary) {
         size_t  distance = (size_t)(nmemb / pivot_number);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
@@ -114,7 +114,7 @@ void qsort_various(void *base, size_t nmemb, size_t size, int (*compare)(const v
         if (buff != NULL) {
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                    "pivot_number = %d\tboundary = %ld\n" , pivot_number, middle_boundary);
+                    "pivot_number = %d\tboundary = %ld\n" , pivot_number, medium_boundary);
 #endif
             char a[size]; pivot = a; *a = '\0';
             length = size; comp = compare;

@@ -32,8 +32,8 @@ static void sort(void *base, size_t nmemb) {
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-    if (nmemb <= middle_boundary) {
-        (*middle_array)(base, nmemb, length, comp);
+    if (nmemb <= medium_boundary) {
+        (*small_pointer)(base, nmemb, length, comp);
     }
     else {	// N is large
 #define first   ((char *)base)

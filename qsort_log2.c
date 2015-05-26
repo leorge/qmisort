@@ -34,7 +34,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    if (nmemb > middle_boundary) {
+    if (nmemb > medium_boundary) {
         int     pickup = ((int)log2(nmemb) - 1) | 1; // make an odd number 2N-1
         size_t  distance = (size_t)(nmemb / pickup);        // distance of elements
 #ifdef  DEBUG
