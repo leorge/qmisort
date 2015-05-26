@@ -53,7 +53,7 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 extern size_t   INS;                // main.c
 extern size_t   random_depth;       // main.c
 extern double   random_number;      // main.c
-extern size_t   middle_boundary;    // main.c
+extern size_t   medium_boundary;    // main.c
 extern int      pivot_number;       // main.c
 extern QsortAlogrithm	QA;			// main.c
 extern bool     ispointer;          // index_sort.c
@@ -68,8 +68,8 @@ extern Trace    trace_level;            // main.c
 
 /***** Functions *****/
 extern void set_random(void);
-extern void (*middle_array)();
-extern void (*middle_index)();
+extern void (*small_pointer)();
+extern void (*medium_index)();
 extern void (*pivot_sort)();
 
 // array sorting
@@ -105,8 +105,6 @@ void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *
 void    pqsort          (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_pbin         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    mi_pnibble      (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    mi_pnblbin      (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_psort        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pointer_sort    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
