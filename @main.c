@@ -31,14 +31,15 @@
 /****   Public  ****/
 QsortAlogrithm	QA = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
-size_t  middle_boundary = 8;              //  nmemb to alternate to merge sort.
+size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
+size_t  small_boundary = 8;        	//  nmemb to alternate from merge sort.
 long    qsort_called, qsort_comp_str, qsort_moved;  // counters
 int     pivot_number = 3;
 size_t  random_depth = 5;
 double  random_number;
 
-void    (*middle_array)() = imerge_sort;
-void    (*middle_index)() = merge_pointer;
+void    (*small_pointer)() = imerge_sort;
+void    (*medium_index)() = merge_pointer;
 void    (*pivot_sort)() = mi_psort;
 
 void set_random(void) {
@@ -203,14 +204,10 @@ int main(int argc, char *argv[])
                 "MI sort : index sorting of Merge sort and conventional insertion sort."},
             {'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "MI sort : pointer sorting."},
-            {'K', MERGE_NIBBLE_BINARY, "mi_pnblbin(*)", mi_pnblbin, TRUE,
-                "MI sort : pointer sorting with binary search and Nibble insertion sort."},
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
-            {'n', MERGE_NIBBLE, "mi_pnibble(*)", mi_pnibble, TRUE,
-                "MI sort : pointer sorting with Nibble insertion sort."},
             {'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
                 "hybrid sorting of quicksort : index sorting."},
             {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
@@ -235,7 +232,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:B:D:F:pP:L:N:R:ST:V:W:X:Y:Z:");
+    strcat(optstring, "?A:B:D:F:L:N:pP:R:ST:V:W:X:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -289,8 +286,8 @@ int main(int argc, char *argv[])
                 "\t       3 - median of random 3 elements.\n"
                 "\t       2 - median of random log2(n) elements.\n"
             "\nAlgorithm option :\n"
-                "\t-A : Algorithm when nmemb is middle for array sort.\n"
-                "\t-X : Algorithm when nmemb is middle for indeX sort.\n"
+                "\t-A : Algorithm when nmemb is medium for array sort.\n"
+                "\t-X : Algorithm when nmemb is medium for indeX sort.\n"
                 "\t-F : Algorithm of pointer sort to Find a pivot.\n"
                 "\n\tfunc : function for algorithm option\n"
                 "\t       G - GNU library qsort(3).\n"
@@ -298,7 +295,6 @@ int main(int argc, char *argv[])
                 "\t       l - Merge and insertion sort with linear search.\n"
                 "\t       m - Index sorting of merge sort. (default)\n"
 				"\t       a - Array sorting of merge sort for -A option.\n"
-				"\t       n - Merge and nibble insertion sort with binary search.\n"
 #ifdef DEBUG
             "\nTrace option :\n"
                 "\t-V 1 : Show Count.\n"
@@ -342,22 +338,19 @@ int main(int argc, char *argv[])
         case 'Z':
             size = (size_t)strtoul(optarg, NULL, 0);
             break;
-        case 'A':   // Algorithm when nmemb is middle for Array sort
+        case 'A':   // Algorithm when nmemb is medium for Array sort
             switch(*optarg) {
             case 'G':
-                middle_array = qsort;
+                small_pointer = qsort;
                 break;
             case 'a':
-                middle_array = merge_sort;
-                break;
-            case 'n':
-                middle_array = mi_inblbin;
+                small_pointer = merge_sort;
                 break;
             case 'l':
-                middle_array = mi_isort;
+                small_pointer = mi_isort;
                 break;
             case 'm':
-                middle_array = imerge_sort;
+                small_pointer = imerge_sort;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
@@ -365,13 +358,10 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case 'F':   // Algorithm when nmemb is middle for indeX sort.
+        case 'F':   // Algorithm when nmemb is medium for indeX sort.
             switch(*optarg) {
             case 'G':
                 pivot_sort = pqsort;
-                break;
-            case 'n':
-                pivot_sort = mi_pnblbin;
                 break;
             case 'l':
                 pivot_sort = mi_psort;
@@ -388,16 +378,13 @@ int main(int argc, char *argv[])
         case 'X':   // Algorithm of Pointer sort to find a Pivot.
             switch(*optarg) {
             case 'G':
-                middle_index = pqsort;
-                break;
-            case 'n':
-                middle_index = mi_pnblbin;
+                medium_index = pqsort;
                 break;
             case 'l':
-                middle_index = mi_psort;
+                medium_index = mi_psort;
                 break;
             case 'm':
-                middle_index = merge_pointer;
+                medium_index = merge_pointer;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -X option.\n", optarg);
@@ -497,13 +484,13 @@ int main(int argc, char *argv[])
 
     int skip = repeat_count > 1 ? 1: 0;
     if (Boption < 0) {	// depth for hybrid sorting boundary
-    	middle_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
+    	medium_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
     }
     else if (Boption > 0) {	// size
-    	middle_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
+    	medium_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "middle_boundary = %ld\n", middle_boundary);
+    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
 #endif
 
 //#define   BUFCYCLE    2
