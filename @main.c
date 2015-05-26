@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
-            {'i', INSERT_LINEAR, "insert_linear()", insert_linear, FALSE,
+            {'i', INSERT_LINEAR, "insert_sort()", insert_sort, FALSE,
             "Insertion sort : linear search."},
             {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
             "Insertion tree sort : median node tree."},

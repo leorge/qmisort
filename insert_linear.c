@@ -21,7 +21,7 @@ static void copy(void *dst, const void *src)
 }
 
 /* in-place sort    */
-void insert_linear(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("insert_linear() start.", base, nmemb, size);
