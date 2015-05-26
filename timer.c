@@ -7,7 +7,6 @@
  *      Author: leo
  */
 #include    <sys/time.h>
-//#include  <sys/resource.h>
 #include    <math.h>
 #include    <time.h>
 #include    "sort.h"
