@@ -54,7 +54,7 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-void bubble_array(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
     char pivot[size];
 #ifdef DEBUG
