@@ -31,7 +31,10 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    if (nmemb >= medium_boundary) {
+    if (nmemb <= medium_boundary) {
+        hole = first + length * (nmemb >> 1);  // middle element
+    }
+    else {
         size_t  distance = (size_t)(nmemb / pivot_number);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
@@ -53,7 +56,6 @@ static void sort(void *base, size_t nmemb) {
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
 #endif
     }
-    else hole = first + length * (nmemb >> 1);  // middle element
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
 #endif
