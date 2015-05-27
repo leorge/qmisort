@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
                 "Pointer sorting of qsort(3)."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "Quick sort : pivot is a miDDle element with swaps."},
-			{'E', BUBBLE_ARRAY, "bubble_array()", bubble_array, FALSE,
+			{'E', BUBBLE_ARRAY, "bubble_array()", bubble_sort, FALSE,
 				"Bubble sort : array sorting."},
 			{'e', BUBBLE_POINTER, "pbubble_pointer()", bubble_pointer, TRUE,
 				"Bubble sort : pointer sorting."},
