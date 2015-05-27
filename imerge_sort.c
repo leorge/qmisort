@@ -9,7 +9,7 @@
 
 static int  (*comp)(const void *, const void *);
 
-static void sort(void **dst, void **src, bool revert, size_t nmemb) {
+static void psort(void **dst, void **src, bool revert, size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
@@ -17,8 +17,8 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
     size_t n_lo = nmemb >> 1;   // = nmemb / 2
     size_t n_hi = nmemb - n_lo;
-    sort(dst, src, ! revert, n_lo);
-    sort(&dst[n_lo], &src[n_lo], ! revert, n_hi);
+    psort(dst, src, ! revert, n_lo);
+    psort(&dst[n_lo], &src[n_lo], ! revert, n_hi);
     void **store = revert ? src : dst;
 #ifdef DEBUG
     void **first = store;
@@ -65,7 +65,7 @@ void merge_pointer(void **base, size_t nmemb, int (*compare)(const void *, const
     else {
         comp = compare;
         memcpy(idxtbl, base, nmemb * sizeof(void *));   // copy pointers
-        sort(base, idxtbl, FALSE, nmemb);
+        psort(base, idxtbl, FALSE, nmemb);
         free(idxtbl);
     }
 }

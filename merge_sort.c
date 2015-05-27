@@ -23,7 +23,7 @@ static void copy(void *dst, const void *src, size_t size)
     memcpy(dst, src, size * length); /* restore an elements  */
 }
 
-static void sort(void *dst, void *src, bool revert,  size_t nmemb) {
+static void asort(void *dst, void *src, bool revert,  size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
@@ -31,8 +31,8 @@ static void sort(void *dst, void *src, bool revert,  size_t nmemb) {
 #endif
     size_t n_lo = nmemb >> 1;   // = nmemb / 2
     size_t n_hi = nmemb - n_lo;
-    sort(dst, src, ! revert, n_lo);
-    sort((char *)dst + n_lo * length, (char *)src + n_lo * length, ! revert, n_hi);
+    asort(dst, src, ! revert, n_lo);
+    asort((char *)dst + n_lo * length, (char *)src + n_lo * length, ! revert, n_hi);
     char *store = revert ? src : dst;
 #ifdef DEBUG
     char *first = store;        // for debugging
@@ -81,7 +81,7 @@ void merge_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
     if (dup != NULL) {
         length = size; comp = compare;
         memcpy(dup, base, nmemb * size);
-        sort(base, dup, FALSE, nmemb);
+        asort(base, dup, FALSE, nmemb);
         free(dup);
     }
 }
