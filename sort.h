@@ -73,10 +73,9 @@ extern void (*medium_index)();
 extern void (*pivot_sort)();
 
 // array sorting
-void    bubble_array     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    bubble_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    array_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-//void    insert_binary   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -95,14 +94,12 @@ void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    imerge_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    index_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    iqsort          (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-//void    mi_ibin         (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    mi_isort        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sorting
 void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pqsort          (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-//void    mi_pbin         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_psort        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pointer_sort    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
