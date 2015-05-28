@@ -164,8 +164,6 @@ int main(int argc, char *argv[])
             {'1', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
                 "Quick sort : pivot is a middle element with swaps in K&R style. Single loop."},
 #endif
-            {'2', HOLE_LOG2, "qsort_log2()", qsort_log2, FALSE,
-                "Quick sort : pivot is median of log2(N) with a hole."},
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "Quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
@@ -207,8 +205,6 @@ int main(int argc, char *argv[])
             {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
                 "Quick sort : entire array sorting."},
             {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-                "hybrid sorting of quicksort : pointer sorting."},
-            {'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
                 "Quick sort : pivot is a Random element with a hole."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
                 "Stable QM or QMI sort : array sorting."},
@@ -216,10 +212,6 @@ int main(int argc, char *argv[])
                 "Stable QM or QMI sort : pointer sorting."},
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing."},
-            {'v', HOLE_VARIOUS, "qsort_various()", qsort_various, FALSE,
-                "Quick sort : Pivot is median of Various elements with a hole."},
-			{'w', HOLE_RANDOM3, "qsort_random3()", qsort_random3, FALSE,
-				"Quick sort : pivot is a median of 3 random element with a hole."},
 			{'x', INDEX_SORT, "index_sort()", index_sort, FALSE,
 				"hybrid sorting of quicksort : index sorting."},
     };

@@ -32,11 +32,8 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
 #define first   ((char *)base)
-	char    *hole;
-    if (nmemb <= medium_boundary) {
-        hole = first + length * (nmemb >> 1);	// middle element
-    }
-    else {	// N is large
+	char    *hole = first + length * (nmemb >> 1);	// middle element
+    if (nmemb > medium_boundary) {
     	size_t  distance;
     	switch (QA) {	// Quicksort Algorithm
     	case RANDOM:
@@ -61,6 +58,8 @@ static void sort(void *base, size_t nmemb) {
     	case LOG2:
         	distance = ((size_t)log2(nmemb) - 1) | 1;
     		hole = pivot_array(base, nmemb, length, distance, comp);
+    		break;
+    	default:
     		break;
     	}
     }

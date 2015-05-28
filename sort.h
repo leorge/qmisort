@@ -16,6 +16,7 @@
 #define OUT     stdout
 
 typedef	enum {	// Scheme in hybrid sorting while N is large.
+	MIDDLE,
 	RANDOM,
 	RANDOM3,
 	VARIOUS,
@@ -83,12 +84,8 @@ void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    qsort_log2      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_med3      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    qsort_random    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    qsort_random3   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    qsort_various   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    quick_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
