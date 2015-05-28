@@ -77,21 +77,17 @@ typedef enum {
     SWAP_MED3,
     HOLE_LAST,
     QUICK_SORT,
-//    HOLE_RANDOM,
-//    HOLE_RANDOM3,
-//    HOLE_VARIOUS,
-//    HOLE_LOG2,
     HEAP_SORT,
     INSERT_LINEAR,
     INSERT_BINARY,
     TREE_SORT,
+    BUBBLE_ARRAY,
+    BUBBLE_POINTER,
     MERGE_INSERT_INDEX,
     MERGE_INSERT_POINTER,
     ARRAY_SORT,
     INDEX_SORT,
     POINTER_SORT,
-    BUBBLE_ARRAY,
-    BUBBLE_POINTER,
     STABLE_ARRAY,
     STABLE_POINTER,
 } TEST_TYPE;
@@ -159,58 +155,60 @@ int main(int argc, char *argv[])
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
             // simple in-place sort.
-#ifdef  DEBUG
-            {'1', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
-                "Quick sort : pivot is a middle element with swaps in K&R style. Single loop."},
-#endif
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
-                "Quick sort : pivot is median of 3 elements with swaps."},
+                "quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
-            {'c', INDEX_QSORT3, "iqsort()", iqsort, FALSE,
-                "index sorting of qsort(3)."},
-            {'C', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
-                "Pointer sorting of qsort(3)."},
-            {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
-                "Quick sort : pivot is a miDDle element with swaps."},
-			{'E', BUBBLE_ARRAY, "bubble_array()", bubble_sort, FALSE,
-				"Bubble sort : array sorting."},
-			{'e', BUBBLE_POINTER, "pbubble_pointer()", bubble_pointer, TRUE,
+			{'B', BUBBLE_POINTER, "pbubble_pointer()", bubble_pointer, TRUE,
 				"Bubble sort : pointer sorting."},
+			{'b', BUBBLE_ARRAY, "bubble_array()", bubble_sort, FALSE,
+				"Bubble sort : array sorting."},
+			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
+				"quick sort : pivot is the miDDle element with swaps."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
-                "Quick sort : pivot is a First element with swaps."},
+                "quick sort : pivot is the First element with swaps."},
             {'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
-                "merGe sort : pointer sorting (ignore indexing and reordering time)."},
+                "merGe sort : pointer sorting."},
 			{'h', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
-				"Quick sort : pivot is a Last element with a hole. Simplest."},
+				"quick sort : prototype of Hole scheme."},
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
             {'i', INSERT_LINEAR, "insert_sort()", insert_sort, FALSE,
             "Insertion sort : linear search."},
-            {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
-            "Insertion tree sort : median node tree."},
 #endif
-            {'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
+            {'J', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
                 "hybrid sorting of merge sort : index sorting."},
-            {'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
+            {'j', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "hybrid sorting of merge sort : pointer sorting."},
+#ifdef  DEBUG
+            {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
+                "quick sort : pivot is the middle element with swaps in K&R style."},
+#endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
+			{'P', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
+				"Pointer sorting of qsort(3) to measure sorting time in index sorting."},
+			{'p', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
+				"hybrid sorting of quick sort : Pointer sorting."},
             {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
-                "Quick sort : To test pivot selection. cf. -P option."},
-            {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-                "hybrid sorting of quick sort : pointer sorting."},
+                "Quick sort : to test pivot selection. cf. -V option."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
-                "Stable QM or QMI sort : array sorting."},
+                "Stable hybrid sorting of quick sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
-                "Stable QM or QMI sort : pointer sorting."},
+                "Stable hybrid sorting of quick sort : pointer sorting."},
+#ifdef  DEBUG
+			{'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
+			"insertion Tree sort : median node tree."},
+#endif
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
-                "dUmmy sort : do nothing."},
+                "dUmmy sort : do nothing to cause error."},
+			{'X', INDEX_QSORT3, "iqsort()", iqsort, FALSE,
+				"indeX sorting of qsort(3) to reduce copies."},
 			{'x', INDEX_SORT, "index_sort()", index_sort, FALSE,
-				"hybrid sorting of quick sort : index sorting."},
+				"hybrid sorting of quick sort : indeX sorting."},
     };
 
     // prepare to analyze command arguments
@@ -219,7 +217,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:B:F:L:N:pP:R:ST:V:v:X:Y:Z:");
+    strcat(optstring, "?A:D:F:L:lN:oR:ST:V:v:X:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -229,7 +227,7 @@ int main(int argc, char *argv[])
     bool    print_out = FALSE;
     bool	IsPercentB = FALSE;
     int     opt, repeat_count, buffer_length = 1;
-    double	Boption = 0.0;
+    double	Loption = 0.0;
     size_t  nmemb = 31, size = 0;
     int     limit = 2;      // boundary precent to pass
 
@@ -244,7 +242,7 @@ int main(int argc, char *argv[])
             printf("Usage : %s [options]"
                 " [-Z element_size] [-R repeat_count] [-NB nmemb] [-D depth] [-AXP func] [-L log] [-W width]"
 #ifdef  DEBUG
-                    " [-V trace_level]"
+                    " [-D trace_level]"
 #endif
                     " [filename]\nOptions :\n"
                     "\t-? : show this help.\n"
@@ -255,54 +253,51 @@ int main(int argc, char *argv[])
             }
             puts(
                 "\n"
-                "\t-D : Limit of Depth for randomize.\n"
-                "\t-N : Number of members (default is 31).\n"
-                "\t-p : Print out the last result.\n"
-                "\t-R : Repeat count.\n"
-#ifndef DEBUG
-                "\t-T : UncerTainTy percenT to pass (default is 2 [%]).\n"
-#endif
-                "\t-v : Number of elements to select a pivot for -P v option (default is 5).\n"
-                "\t-Y : CYclic work buffer length.\n"
-                "\t-Z : siZe of an array element.\n\n"
-				"\t-B : Boundary to switch algorithm or choice of pivot in hole scheme. (default is 8)\n"
+				"\t-A : Algorithm when nmemb is medium for hybrid sorting of quick sort.\n"
+				"\t       G - GNU library qsort(3).\n"
+				"\t       b - Merge and bubble sort.\n"
+				"\t       l - Merge and insertion sort with linear search.\n"
+				"\t       m - Index sorting of merge sort. (default)\n"
+				"\t       a - Array sorting of merge sort.\n"
+				"\t-l : nmemb to change algorithm when N is smaLL. (default is 8)\n"
+				"\t-L : nmemb to change algorithm from N is Large. (default is 1000)\n"
 				"\t       If the value is less than 0 then value means depth.\n"
-				"\t       Else if the value is followed by % 0 then value means depth in percent.\n"
-                "\t-P : Algorithm to Find a pivot while N is not small. default is middle element\n"
-                "\t       r - Random element.\n"
-                "\t       3 - median of random 3 elements.\n"
-                "\t       v - median of various elements. cf. -v option\n"
-                "\t       2 - median of random log2(n) elements.\n"
-            "\nAlgorithm option :\n"
-                "\t-A : Algorithm when nmemb is medium for array sort.\n"
-                "\t-X : Algorithm when nmemb is medium for indeX sort.\n"
-                "\t-F : Algorithm of pointer sort to Find a pivot.\n"
-                "\n\tfunc : function for algorithm option\n"
-                "\t       G - GNU library qsort(3).\n"
-                "\t       b - Merge and bubble sort.\n"
-                "\t       l - Merge and insertion sort with linear search.\n"
-                "\t       m - Index sorting of merge sort. (default)\n"
-				"\t       a - Array sorting of merge sort for -A option.\n"
+				"\t       Else if % is added then value means depth in percent.\n"
+                "\t-N : Number of members (default is 31).\n"
+				"\t-V : algorithm to decide a piVot. default is a middle element\n"
+				"\t       r - Random element.\n"
+				"\t       3 - median of random 3 elements.\n"
+				"\t       2 - median of random log2(n) elements.\n"
+				"\t       v - median of various elements. cf. -v option\n"
+                "\t-o : print Out the last result.\n"
+                "\t-R : Repeat count for sampling to calculate estimated standard deviation.\n"
+#ifndef DEBUG
+                "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
+#endif
+                "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
+                "\t-Y : cYclic work buffer length.\n"
+                "\t-Z : siZe of an array element.\n"
 #ifdef DEBUG
-            "\nTrace option :\n"
-                "\t-V 1 : Show Count.\n"
-                "\t-V 2 : Trace action.\n"
-                "\t-V 3 : Trace data copy.\n"
-                "\t-V 4 : Trace comparison.\n"
-                "\t-V 5 : Others to debug."
+            	"\n"
+                "\t-D : trace level for Debug.\n"
+                "\t       1 - Counts.\n"
+                "\t       2 - and actions.\n"
+                "\t       3 - and copies.\n"
+                "\t       4 - and comparisons.\n"
+                "\t       5 - and Others."
 #endif
             );
             return EXIT_SUCCESS;
             break;
-        case 'B':
+        case 'L':
 			p = &optarg[strlen(optarg) - 1];
 			if (*p == '%') IsPercentB = TRUE;
-            Boption= atof(optarg);
+            Loption= atof(optarg);
             break;
         case 'N':
             nmemb = strtoul(optarg, NULL, 0);           // Check a definition of size_t
             break;
-        case 'p':
+        case 'o':
             print_out = TRUE;
             break;
         case 'R':
@@ -311,7 +306,7 @@ int main(int argc, char *argv[])
         case 'T':
             limit = atoi(optarg);
             break;
-        case 'V':   // ignored in Release
+        case 'D':   // ignored in Release
             trace_level = strtoul(optarg, NULL, 0);
             break;
         case 'v':
@@ -377,7 +372,7 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-		case 'P':   // Algorithm to Find a pivot while N is large in hybrid sorting
+		case 'V':   // Algorithm to Find a pivot while N is large in hybrid sorting
 			switch(*optarg) {
 			case '2':
 				QA = LOG2;
@@ -468,14 +463,14 @@ int main(int argc, char *argv[])
     /***** Prepare *****/
 
     int skip = repeat_count > 1 ? 1: 0;
-    if (Boption < 0) {	// depth for hybrid sorting boundary
-    	medium_boundary = nmemb / pow(2.0, -Boption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
+    if (Loption < 0) {	// depth for hybrid sorting boundary
+    	medium_boundary = nmemb / pow(2.0, -Loption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
     }
-    else if (Boption > 0) {	// size
-    	medium_boundary = IsPercentB ? (nmemb * Boption) / 100: Boption;
+    else if (Loption > 0) {	// size
+    	medium_boundary = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP && Boption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
+    if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
 #endif
 
 //#define   BUFCYCLE    2
