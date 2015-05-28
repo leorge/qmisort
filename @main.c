@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
             {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
-                "Quick sort : entire array sorting."},
+                "Quick sort : entire quick sort with hole scheme.."},
             {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
                 "Quick sort : pivot is a Random element with a hole."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:B:D:F:L:N:pP:R:ST:V:W:X:Y:Z:");
+    strcat(optstring, "?A:B:D:F:L:N:pP:R:ST:V:v:X:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -265,14 +265,15 @@ int main(int argc, char *argv[])
 #ifndef DEBUG
                 "\t-T : UncerTainTy percenT to pass (default is 2 [%]).\n"
 #endif
-                "\t-W : Number of elements to select a pivot for -v option (default is 3).\n"
+                "\t-v : Number of elements to select a pivot for -P v option.\n"
                 "\t-Y : CYclic work buffer length.\n"
                 "\t-Z : siZe of an array element.\n\n"
 				"\t-B : Boundary to switch algorithm or choice of pivot in hole scheme. (default is 8)\n"
 				"\t       If the value is less than 0 then value means depth.\n"
 				"\t       Else if the value is followed by % 0 then value means depth in percent.\n"
-                "\t-P : Algorithm to Find a pivot while N is large.\n"
-                "\t       r - Random element. (default)\n"
+                "\t-P : Algorithm to Find a pivot while N is large. default is middle element\n"
+                "\t       r - Random element.\n"
+                "\t       v - median of various elements.\n"
                 "\t       3 - median of random 3 elements.\n"
                 "\t       2 - median of random log2(n) elements.\n"
             "\nAlgorithm option :\n"
@@ -319,7 +320,7 @@ int main(int argc, char *argv[])
         case 'V':   // ignored in Release
             trace_level = strtoul(optarg, NULL, 0);
             break;
-        case 'W':
+        case 'v':
             pivot_number = (int)strtoul(optarg, NULL, 0) | 1;   // make an odd number
             break;
         case 'Y':
