@@ -81,6 +81,8 @@ static void sort(void *base[], size_t nmemb) {
             (*pivot_sort)(index, pickup, comp_idx);
             hole = index[pickup >> 1];      // get address of address of middle element
             break;
+    	default:
+    		break;
     	}
 #ifdef  DEBUG
         ispointer = FALSE;

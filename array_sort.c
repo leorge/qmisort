@@ -79,6 +79,8 @@ static void sort(void *base, size_t nmemb) {
     		(*pivot_sort)(index, pickup, comp);
     		hole = index[pickup >> 1];
     		break;
+    	default:
+    		break;
     	}
 #ifdef DEBUG
     	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
