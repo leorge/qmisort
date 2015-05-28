@@ -35,7 +35,6 @@ size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
 size_t  small_boundary = 8;        	//  nmemb to alternate from merge sort.
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 int     pivot_number = 3;
-size_t  random_depth = 5;
 double  random_number;
 
 void    (*small_pointer)() = imerge_sort;
@@ -77,17 +76,17 @@ typedef enum {
     SWAP_KR,
     SWAP_MED3,
     HOLE_LAST,
-    HOLE_RANDOM,
-    HOLE_RANDOM3,
-    HOLE_VARIOUS,
-    HOLE_LOG2,
+    QUICK_SORT,
+//    HOLE_RANDOM,
+//    HOLE_RANDOM3,
+//    HOLE_VARIOUS,
+//    HOLE_LOG2,
     HEAP_SORT,
     INSERT_LINEAR,
     INSERT_BINARY,
     TREE_SORT,
     MERGE_INSERT_INDEX,
     MERGE_INSERT_POINTER,
-    QUICK_SORT,
     ARRAY_SORT,
     INDEX_SORT,
     POINTER_SORT,
@@ -167,9 +166,7 @@ int main(int argc, char *argv[])
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "Quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
-                "hybrid sorting of quicksort : array sorting."},
-//            {'b', MERGE_INSERT_BINARY, "mi_pbin(*)", mi_pbin, TRUE,
-//                "MI sort : pointer sorting with binary search."},
+                "hybrid sorting of quick sort : array sorting."},
             {'c', INDEX_QSORT3, "iqsort()", iqsort, FALSE,
                 "index sorting of qsort(3)."},
             {'C', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
@@ -183,9 +180,9 @@ int main(int argc, char *argv[])
             {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
                 "Quick sort : pivot is a First element with swaps."},
             {'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
-                "merGe sort : pointer sorting (index sorting except indexing time)."},
+                "merGe sort : pointer sorting (ignore indexing and reordering time)."},
 			{'h', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
-				"Quick sort : pivot is a Last element with a hole."},
+				"Quick sort : pivot is a Last element with a hole. Simplest."},
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
@@ -195,17 +192,17 @@ int main(int argc, char *argv[])
             "Insertion tree sort : median node tree."},
 #endif
             {'j', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
-                "MI sort : index sorting of Merge sort and conventional insertion sort."},
+                "hybrid sorting of merge sort : index sorting."},
             {'k', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
-                "MI sort : pointer sorting."},
+                "hybrid sorting of merge sort : pointer sorting."},
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
             {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
-                "Quick sort : entire quick sort with hole scheme.."},
+                "Quick sort : To test pivot selection. cf. -P option."},
             {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
-                "Quick sort : pivot is a Random element with a hole."},
+                "hybrid sorting of quick sort : pointer sorting."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
                 "Stable QM or QMI sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
@@ -213,7 +210,7 @@ int main(int argc, char *argv[])
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing."},
 			{'x', INDEX_SORT, "index_sort()", index_sort, FALSE,
-				"hybrid sorting of quicksort : index sorting."},
+				"hybrid sorting of quick sort : index sorting."},
     };
 
     // prepare to analyze command arguments
@@ -222,7 +219,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:B:D:F:L:N:pP:R:ST:V:v:X:Y:Z:");
+    strcat(optstring, "?A:B:F:L:N:pP:R:ST:V:v:X:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -265,16 +262,16 @@ int main(int argc, char *argv[])
 #ifndef DEBUG
                 "\t-T : UncerTainTy percenT to pass (default is 2 [%]).\n"
 #endif
-                "\t-v : Number of elements to select a pivot for -P v option.\n"
+                "\t-v : Number of elements to select a pivot for -P v option (default is 5).\n"
                 "\t-Y : CYclic work buffer length.\n"
                 "\t-Z : siZe of an array element.\n\n"
 				"\t-B : Boundary to switch algorithm or choice of pivot in hole scheme. (default is 8)\n"
 				"\t       If the value is less than 0 then value means depth.\n"
 				"\t       Else if the value is followed by % 0 then value means depth in percent.\n"
-                "\t-P : Algorithm to Find a pivot while N is large. default is middle element\n"
+                "\t-P : Algorithm to Find a pivot while N is not small. default is middle element\n"
                 "\t       r - Random element.\n"
-                "\t       v - median of various elements.\n"
                 "\t       3 - median of random 3 elements.\n"
+                "\t       v - median of various elements. cf. -v option\n"
                 "\t       2 - median of random log2(n) elements.\n"
             "\nAlgorithm option :\n"
                 "\t-A : Algorithm when nmemb is medium for array sort.\n"
@@ -301,9 +298,6 @@ int main(int argc, char *argv[])
 			p = &optarg[strlen(optarg) - 1];
 			if (*p == '%') IsPercentB = TRUE;
             Boption= atof(optarg);
-            break;
-        case 'D':
-            random_depth = (int)strtoul(optarg, NULL, 0);
             break;
         case 'N':
             nmemb = strtoul(optarg, NULL, 0);           // Check a definition of size_t
