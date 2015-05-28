@@ -33,7 +33,7 @@ QsortAlogrithm	QA = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
 size_t  small_boundary = 8;        	//  nmemb to alternate from merge sort.
-long    qsort_called, qsort_comp_str, qsort_moved;  // counters
+long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 int     pivot_number = 3;
 size_t  random_depth = 5;
 double  random_number;
@@ -87,7 +87,7 @@ typedef enum {
     TREE_SORT,
     MERGE_INSERT_INDEX,
     MERGE_INSERT_POINTER,
-//    MERGE_INSERT_BINARY,
+    QUICK_SORT,
     ARRAY_SORT,
     INDEX_SORT,
     POINTER_SORT,
@@ -204,8 +204,8 @@ int main(int argc, char *argv[])
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
-            {'q', INDEX_SORT, "index_sort()", index_sort, FALSE,
-                "hybrid sorting of quicksort : index sorting."},
+            {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
+                "Quick sort : entire array sorting."},
             {'Q', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
                 "hybrid sorting of quicksort : pointer sorting."},
             {'r', HOLE_RANDOM, "qsort_random()", qsort_random, FALSE,
@@ -220,6 +220,8 @@ int main(int argc, char *argv[])
                 "Quick sort : Pivot is median of Various elements with a hole."},
 			{'w', HOLE_RANDOM3, "qsort_random3()", qsort_random3, FALSE,
 				"Quick sort : pivot is a median of 3 random element with a hole."},
+			{'x', INDEX_SORT, "index_sort()", index_sort, FALSE,
+				"hybrid sorting of quicksort : index sorting."},
     };
 
     // prepare to analyze command arguments

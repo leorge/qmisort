@@ -11,12 +11,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #define OUT     stdout
 
 typedef	enum {	// Scheme in hybrid sorting while N is large.
 	RANDOM,
 	RANDOM3,
+	VARIOUS,
 	LOG2,
 } QsortAlogrithm;
 
@@ -87,6 +89,7 @@ void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort_random    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_random3   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_various   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    quick_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
@@ -103,6 +106,10 @@ void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *
 void    mi_psort        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pointer_sort    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+
+// search pivot
+void	*pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *));
+void	*pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *));
 
 // others
 const char  *dump_data(const void *data);

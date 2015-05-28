@@ -7,7 +7,6 @@
  *      Author: leo
  */
 
-#include    <assert.h>
 #include    <string.h>
 #include    "sort.h"
 

@@ -1,7 +1,7 @@
 /*
  * merge_sort.c
  *
- *  Double buffer merge sort.
+ *  Entire merge sort.
  *
  *  Created on: 2013/01/11
  *      Author: leo
