@@ -78,11 +78,13 @@ typedef enum {
     HOLE_LAST,
     QUICK_SORT,
     HEAP_SORT,
-    INSERT_LINEAR,
-    INSERT_BINARY,
+    INSERT_SORT,
+    INSERT_POINTER,
     TREE_SORT,
     BUBBLE_ARRAY,
     BUBBLE_POINTER,
+    COCKTAIL_ARRAY,
+    COCKTAIL_POINTER,
     MERGE_INSERT_INDEX,
     MERGE_INSERT_POINTER,
     ARRAY_SORT,
@@ -159,10 +161,16 @@ int main(int argc, char *argv[])
                 "quick sort : pivot is median of 3 elements with swaps."},
             {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
-			{'B', BUBBLE_POINTER, "pbubble_pointer()", bubble_pointer, TRUE,
-				"Bubble sort : pointer sorting."},
-			{'b', BUBBLE_ARRAY, "bubble_array()", bubble_sort, FALSE,
-				"Bubble sort : array sorting."},
+#ifdef  DEBUG
+			{'b', BUBBLE_ARRAY, "bubble_sort()", bubble_sort, FALSE,
+				"Bubble sort : with no swaps."},
+//			{'B', BUBBLE_POINTER, "bubble_pointer()", bubble_pointer, TRUE,
+//				"Bubble sort : pointer sorting."},
+			{'c', COCKTAIL_ARRAY, "cocktail_sort()", cocktail_sort, FALSE,
+				"Cocktail sort : bidirectional bubble sort."},
+//			{'C', COCKTAIL_POINTER, "cocktail_pointer()", cocktail_pointer, TRUE,
+//				"Cocktail sort : pointer sorting."},
+#endif
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
 				"quick sort : pivot is the miDDle element with swaps."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
@@ -174,13 +182,13 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
-            {'i', INSERT_LINEAR, "insert_sort()", insert_sort, FALSE,
+            {'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
             "Insertion sort : linear search."},
 #endif
-            {'J', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
-                "hybrid sorting of merge sort : index sorting."},
             {'j', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "hybrid sorting of merge sort : pointer sorting."},
+			{'J', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
+				"hybrid sorting of merge sort : index sorting."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
                 "quick sort : pivot is the middle element with swaps in K&R style."},
@@ -240,7 +248,7 @@ int main(int argc, char *argv[])
         switch (opt) {
         case '?':
             printf("Usage : %s [options]"
-                " [-Z element_size] [-R repeat_count] [-NB nmemb] [-D depth] [-AXP func] [-L log] [-W width]"
+                " [-Z element_size] [-R repeat_count] [-NL nmemb] [-AV func] [-v choice]"
 #ifdef  DEBUG
                     " [-D trace_level]"
 #endif
@@ -270,7 +278,7 @@ int main(int argc, char *argv[])
 				"\t       2 - median of random log2(n) elements.\n"
 				"\t       v - median of various elements. cf. -v option\n"
                 "\t-o : print Out the last result.\n"
-                "\t-R : Repeat count for sampling to calculate estimated standard deviation.\n"
+                "\t-R : Repeat count of sampling to calculate estimated standard deviation.\n"
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
 #endif
