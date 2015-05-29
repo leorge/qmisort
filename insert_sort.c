@@ -11,6 +11,7 @@
 
 static size_t   length;
 
+/* array sorting */
 static void copy(void *dst, const void *src)
 {
 #ifdef  DEBUG
@@ -20,17 +21,18 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-/* in-place sort    */
 void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("insert_linear() start.", base, nmemb, size);
-    qsort_called++;
 #endif
     length = size;
 #define first   ((char *)base)
     char pivot[size];
     for (size_t i = 1; i < nmemb; i++) {
+#ifdef DEBUG
+        qsort_called++;	// loop count
+#endif
         char    *p, *hole = first + i * size;
         copy(pivot, hole);  // make a hole
         while (hole > first) {
