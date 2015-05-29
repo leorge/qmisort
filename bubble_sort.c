@@ -1,5 +1,5 @@
 /*
- * bubble.c
+ * bubble_sort.c
  *
  *	Bubble sort without swaps.
  *
@@ -20,27 +20,27 @@ void bubble_pointer(void **base, size_t nmemb, int (*compare)(const void *, cons
             "bubble_pointer(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
     qsort_called++;
 #endif
-    void **top = base;
-    void **bottom = top + nmemb - 1;
+    void **first = base;
+    void **last = first + nmemb - 1;
     do {
-        void **p1, **p2, **anchor = top + 1;
-        for (p1 = top; (p2 = p1 + 1) <= bottom; p1++) {	// search a reverse order pair
+        void **p1, **p2, **anchor = first + 1;
+        for (p1 = first; (p2 = p1 + 1) <= last; p1++) {	// search a reverse order pair
         	if (compare(*p1, *p2) > 0) {	// found
-                pivot = *p1; *p1 = *p2;		// save and shift left
-        		for (p1 = p2; (p2 = p1 + 1) <= bottom; p1++) {	// search a greater element
+                pivot = *p1; *p1 = *p2;		// save and shift first
+        		for (p1 = p2; (p2 = p1 + 1) <= last; p1++) {	// search a greater element
         			if (compare(*p2, pivot) > 0) break;	// found
-        			*p1 = *p2;	// shift left
+        			*p1 = *p2;	// shift first
         		}
         		*(anchor = p1) = pivot;	// restore
         	}
         }
-        bottom = anchor - 1;
+        last = anchor - 1;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer()", base, anchor - top);
+        if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer()", base, anchor - first);
 #endif
-    } while (top < bottom);
+    } while (first < last);
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pbubble_pointer() done.\n");
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "bubble_pointer() done.\n");
 #endif
 }
 
@@ -59,29 +59,31 @@ void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
     char pivot[size];
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("bubble_sort() start.", base, nmemb, size);
-    qsort_called++;
     *pivot = 0;
 #endif
     length = size;
-    char *top = base;
-    char *bottom = top + (nmemb - 1) * size;
+    char *first = base;
+    char *last = first + (nmemb - 1) * size;
     do {
-        char *p1, *p2, *anchor = top + size;
-        for (p1 = top; (p2 = p1 + size) <= bottom; p1 += size) {	// search a reverse order pair
+        char *p1, *p2, *anchor = first + size;
+#ifdef DEBUG
+		qsort_called++;	// loop count
+#endif
+        for (p1 = first; (p2 = p1 + size) <= last; p1 += size) {	// search a reverse order pair
         	if (compare(p1, p2) > 0) {	// found
-                copy(pivot, p1); copy(p1, p2);		// save and shift left
-        		for (p1 = p2; (p2 = p1 + size) <= bottom; p1 += size) {	// search a greater element
+                copy(pivot, p1); copy(p1, p2);		// save and shift first
+        		for (p1 = p2; (p2 = p1 + size) <= last; p1 += size) {	// search a greater element
         			if (compare(p2, pivot) > 0) break;	// found
-        			copy(p1, p2);	// shift left
+        			copy(p1, p2);	// shift first
         		}
         		copy(anchor = p1, pivot);	// restore
         	}
         }
-        bottom = anchor - size;
+        last = anchor - size;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_array("bubble_array()", base, (anchor - top) / size, size);
+        if (trace_level >= TRACE_DUMP) dump_array("bubble_array()", base, (anchor - first) / size, size);
 #endif
-    } while (top < bottom);
+    } while (first < last);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) dump_array("bubble_sort() done.", base, nmemb, size);
 #endif
