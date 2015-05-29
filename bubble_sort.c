@@ -16,14 +16,15 @@ void bubble_pointer(void **base, size_t nmemb, int (*compare)(const void *, cons
     if (nmemb <= 1) return;
     void *pivot;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "bubble_pointer(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
-    qsort_called++;
+    if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer() start in " __FILE__, base, nmemb);
 #endif
     void **first = base;
     void **last = first + nmemb - 1;
     do {
         void **p1, **p2, **anchor = first + 1;
+#ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer()", base, last - first + 1);
+#endif
         for (p1 = first; (p2 = p1 + 1) <= last; p1++) {	// search a reverse order pair
         	if (compare(*p1, *p2) > 0) {	// found
                 pivot = *p1; *p1 = *p2;		// save and shift first
@@ -35,12 +36,9 @@ void bubble_pointer(void **base, size_t nmemb, int (*compare)(const void *, cons
         	}
         }
         last = anchor - 1;
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer()", base, anchor - first);
-#endif
     } while (first < last);
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "bubble_pointer() done.\n");
+    if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer() done.", base, nmemb);
 #endif
 }
 
@@ -58,7 +56,6 @@ void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
     if (nmemb <= 1) return;
     char pivot[size];
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_array("bubble_sort() start.", base, nmemb, size);
     *pivot = 0;
 #endif
     length = size;
@@ -67,10 +64,14 @@ void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
     do {
         char *p1, *p2, *anchor = first + size;
 #ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) dump_array("search", first, (last - first) / size + 1, size);
 		qsort_called++;	// loop count
 #endif
         for (p1 = first; (p2 = p1 + size) <= last; p1 += size) {	// search a reverse order pair
         	if (compare(p1, p2) > 0) {	// found
+#ifdef DEBUG
+        		if (trace_level >= TRACE_DUMP) fprintf(OUT, "revese order %s --> %s\n", p1, p2);
+#endif
                 copy(pivot, p1); copy(p1, p2);		// save and shift first
         		for (p1 = p2; (p2 = p1 + size) <= last; p1 += size) {	// search a greater element
         			if (compare(p2, pivot) > 0) break;	// found
@@ -80,9 +81,6 @@ void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
         	}
         }
         last = anchor - size;
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_array("bubble_array()", base, (anchor - first) / size, size);
-#endif
     } while (first < last);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) dump_array("bubble_sort() done.", base, nmemb, size);

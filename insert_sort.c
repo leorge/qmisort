@@ -30,10 +30,14 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
 #define first   ((char *)base)
     char pivot[size];
     for (size_t i = 1; i < nmemb; i++) {
+        char    *p, *hole = first + i * size;
 #ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) {
+        	char msg[20 + size]; sprintf(msg, "insert %s", hole);
+        	dump_array(msg, base, i, size);
+        }
         qsort_called++;	// loop count
 #endif
-        char    *p, *hole = first + i * size;
         copy(pivot, hole);  // make a hole
         while (hole > first) {
             if (compare(p = hole - size, pivot) <= 0) break;
@@ -41,9 +45,6 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
             hole = p;
         }
         copy(hole, pivot);  // bury the last hole
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_array("insert_linear() done.", base, i + 1, size);
-#endif
     }
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_array("insert_linear() done.", base, nmemb, size);
