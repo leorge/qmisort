@@ -76,8 +76,9 @@ extern void (*medium_index)();
 extern void (*pivot_sort)();
 
 // array sorting
-void    bubble_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    array_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    bubble_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    cocktail_sort   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -98,6 +99,7 @@ void    mi_isort        (void *base, size_t nmemb, size_t size, int (*compare)(c
 
 // pointer sorting
 void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    cocktail_pointer(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    pqsort          (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    mi_psort        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
