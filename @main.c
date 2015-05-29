@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:F:L:lN:oR:ST:V:v:X:Y:Z:");
+    strcat(optstring, "?A:D:F:L:l:N:oR:T:V:v:X:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -289,10 +289,16 @@ int main(int argc, char *argv[])
             );
             return EXIT_SUCCESS;
             break;
+        case 'D':   // ignored in Release
+            trace_level = strtoul(optarg, NULL, 0);
+            break;
         case 'L':
 			p = &optarg[strlen(optarg) - 1];
 			if (*p == '%') IsPercentB = TRUE;
-            Loption= atof(optarg);
+            Loption = atof(optarg);
+            break;
+        case 'l':
+            small_boundary = (int)strtoul(optarg, NULL, 0);
             break;
         case 'N':
             nmemb = strtoul(optarg, NULL, 0);           // Check a definition of size_t
@@ -305,9 +311,6 @@ int main(int argc, char *argv[])
             break;
         case 'T':
             limit = atoi(optarg);
-            break;
-        case 'D':   // ignored in Release
-            trace_level = strtoul(optarg, NULL, 0);
             break;
         case 'v':
             pivot_number = (int)strtoul(optarg, NULL, 0) | 1;   // make an odd number
