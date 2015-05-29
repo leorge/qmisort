@@ -33,7 +33,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
 	char    *hole = first + length * (nmemb >> 1);	// middle element
-    if (nmemb > medium_boundary) {
+    if (nmemb > small_boundary) {
     	size_t  distance;
     	switch (QA) {	// Quicksort Algorithm
     	case RANDOM:
