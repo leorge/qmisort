@@ -60,7 +60,9 @@ static void sort(void *base, size_t nmemb) {
             hole = pivot_array(base, nmemb, length, distance, comp);
             break;
         default:
-        	hole = first + length * (nmemb >> 1);  // middle element
+#ifdef DEBUG
+        	assert(FALSE);
+#endif
             break;
         }
     }
