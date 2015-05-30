@@ -32,17 +32,17 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
 #define first   ((char *)base)
-    char    *hole;
+    char    *hole = first + length * (nmemb >> 1);
     if (nmemb > small_boundary) {
         size_t  distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:
-            hole = base + (size_t)(random_number * nmemb) * length;     // pick up one element at random
+            hole = first + (size_t)(random_number * nmemb) * length;     // pick up one element at random
             break;
         case RANDOM3:
             distance = nmemb / 3;    // distance between elements
             char    *p1, *p2, *p3;
-            p1 = base + (size_t)(random_number * distance) * length;        // pick up median of random 3 elements
+            p1 = first + (size_t)(random_number * distance) * length;        // pick up median of random 3 elements
             p3 = (p2 = p1 + distance * length) + distance * length;
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
@@ -126,7 +126,6 @@ void quick_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
     if (nmemb > 1) {
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
-        set_random();
 #ifdef DEBUG
         search_pivot = 0;
 #endif
