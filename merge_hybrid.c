@@ -85,7 +85,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 }
 
 // pointer sort
-void mi_psort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void merge_phybrid(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb > 1) {
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT,
@@ -114,7 +114,7 @@ void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 #endif
         void **idxtbl = make_index(base, nmemb, size);
         if (idxtbl != NULL) {
-            mi_psort(idxtbl, nmemb, compare);
+            merge_phybrid(idxtbl, nmemb, compare);
             unindex(base, idxtbl, nmemb, size);
             free(idxtbl);
         }
