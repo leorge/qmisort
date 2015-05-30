@@ -32,7 +32,7 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
     if (nmemb <= medium_boundary) {
-        merge_hybrid(base, nmemb, length, comp);
+        medium_func(base, nmemb, length, comp);
     }
     else {  // N is large
 #define first   ((char *)base)
