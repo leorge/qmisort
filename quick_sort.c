@@ -32,8 +32,11 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
 #define first   ((char *)base)
-    char    *hole = first + length * (nmemb >> 1);
+    char    *hole;
     if (nmemb > small_boundary) {
+        hole = first + length * (nmemb >> 1);	// middle
+    }
+    else {
         size_t  distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:

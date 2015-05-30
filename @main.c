@@ -282,7 +282,6 @@ int main(int argc, char *argv[])
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
                 "\t-V : algorithm to decide a piVot in quick sort.\n"
-				"\t       d - miDDle element.\n"
                 "\t       r - Random element.\n"
                 "\t       3 - median of random 3 elements (default).\n"
                 "\t       2 - median of random log2(n) elements.\n"
@@ -352,9 +351,6 @@ int main(int argc, char *argv[])
             break;
         case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
             switch(*optarg) {
-            case 'd':
-                pivot_scheme = MIDDLE;
-                break;
             case '2':
                 pivot_scheme = LOG2;
                 break;
