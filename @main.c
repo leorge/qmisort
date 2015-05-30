@@ -37,8 +37,8 @@ long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 int     pivot_number = 5;
 double  random_number;
 
-void    (*small_pointer)() = merge_index;
-void    (*medium_index)() = merge_pointer;
+void    (*small_func)() = merge_index;
+void    (*medium_func)() = merge_pointer;
 
 void set_random(void) {
     if (random_number == 0.0) {
@@ -273,17 +273,17 @@ int main(int argc, char *argv[])
 				"\t       If the value is less than 0 then value means depth.\n"
 				"\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
-				"\t-V : algorithm to decide a piVot. default is a middle element\n"
-				"\t       r - Random element.\n"
-				"\t       3 - median of random 3 elements.\n"
-				"\t       2 - median of random log2(n) elements.\n"
-				"\t       v - median of various elements. cf. -v option\n"
                 "\t-o : print Out the last result.\n"
                 "\t-R : Repeat count of sampling to calculate estimated standard deviation.\n"
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
+				"\t-V : algorithm to decide a piVot. default is a middle element\n"
+				"\t       r - Random element.\n"
+				"\t       3 - median of random 3 elements.\n"
+				"\t       2 - median of random log2(n) elements.\n"
+				"\t       v - median of various elements. cf. -v option\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-Z : siZe of an array element.\n"
 #ifdef DEBUG
@@ -332,17 +332,14 @@ int main(int argc, char *argv[])
             break;
         case 'A':   // Algorithm when nmemb is medium for Array sort
             switch(*optarg) {
-            case 'G':
-                small_pointer = qsort;
-                break;
-            case 'a':
-                small_pointer = merge_sort;
-                break;
-            case 'l':
-                small_pointer = merge_hybrid;
-                break;
             case 'm':
-                small_pointer = merge_index;
+                small_func = merge_sort;
+                break;
+            case 'M':
+                small_func = merge_index;
+                break;
+            case 'h':
+                small_func = merge_hybrid;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
