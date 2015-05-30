@@ -78,9 +78,10 @@ typedef enum {
     HOLE_LAST,
     QUICK_SORT,
     HEAP_SORT,
+    TREE_SORT,
     INSERT_SORT,
     INSERT_POINTER,
-    TREE_SORT,
+    NIBBLE_SORT,
     BUBBLE_ARRAY,
     BUBBLE_POINTER,
     COCKTAIL_ARRAY,
@@ -164,12 +165,12 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
 			{'b', BUBBLE_ARRAY, "bubble_sort()", bubble_sort, FALSE,
 				"Bubble sort : with no swaps."},
-//			{'B', BUBBLE_POINTER, "bubble_pointer()", bubble_pointer, TRUE,
-//				"Bubble sort : pointer sorting."},
+			{'B', BUBBLE_POINTER, "bubble_pointer()", bubble_pointer, TRUE,
+				"Bubble sort : pointer sorting."},
 			{'c', COCKTAIL_ARRAY, "cocktail_sort()", cocktail_sort, FALSE,
 				"Cocktail sort : bidirectional bubble sort."},
-//			{'C', COCKTAIL_POINTER, "cocktail_pointer()", cocktail_pointer, TRUE,
-//				"Cocktail sort : pointer sorting."},
+			{'C', COCKTAIL_POINTER, "cocktail_pointer()", cocktail_pointer, TRUE,
+				"Cocktail sort : pointer sorting."},
 #endif
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
 				"quick sort : pivot is the miDDle element with swaps."},
@@ -182,8 +183,10 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
-            {'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
-            "Insertion sort : linear search."},
+			{'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
+			"Insertion sort : linear search."},
+			{'I', INSERT_POINTER, "insert_pointer()", insert_pointer, TRUE,
+			"Insertion sort : pointer sorting."},
 #endif
             {'j', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "hybrid sorting of merge sort : pointer sorting."},
@@ -197,6 +200,10 @@ int main(int argc, char *argv[])
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
+#ifdef  DEBUG
+            {'n', NIBBLE_SORT, "nibble_sort()", nibble_sort, FALSE,
+                "Nibble sort : Nibble insertion sort with binary search if N<=16."},
+#endif
 			{'P', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
 				"Pointer sorting of qsort(3) to measure sorting time in index sorting."},
 			{'p', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
@@ -209,7 +216,7 @@ int main(int argc, char *argv[])
                 "Stable hybrid sorting of quick sort : pointer sorting."},
 #ifdef  DEBUG
 			{'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
-			"insertion Tree sort : median node tree."},
+			"Tree sort : median node tree."},
 #endif
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
