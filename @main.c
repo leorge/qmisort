@@ -171,6 +171,10 @@ int main(int argc, char *argv[])
 #endif
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "quick sort : pivot is the miDDle element with swaps."},
+			{'e', MERGE_HYBRID_POINTER, "mi_psort(*)", merge_phybrid, TRUE,
+				"hybrid sorting of mErgE sort : pointer sorting."},
+			{'E', MERGE_HYBRID_INDEX, "merge_hybrid()", merge_hybrid, FALSE,
+				"hybrid sorting of mErgE sort : index sorting."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
                 "quick sort : pivot is the First element with swaps."},
             {'G', MERGE_POINTER, "merge_pointer(*)", merge_pointer, TRUE,
@@ -184,12 +188,6 @@ int main(int argc, char *argv[])
             "Insertion sort : linear search."},
 //          {'I', INSERT_POINTER, "insert_pointer()", insert_pointer, TRUE,
 //          "Insertion sort : pointer sorting."},
-#endif
-            {'j', MERGE_HYBRID_POINTER, "mi_psort(*)", merge_phybrid, TRUE,
-                "hybrid sorting of merge sort : pointer sorting."},
-            {'J', MERGE_HYBRID_INDEX, "merge_hybrid()", merge_hybrid, FALSE,
-                "hybrid sorting of merge sort : index sorting."},
-#ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
                 "quick sort : pivot is the middle element with swaps in K&R style."},
 #endif
