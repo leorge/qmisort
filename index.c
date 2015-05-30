@@ -54,13 +54,14 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
     static char *name = "unindex()";
     if (trace_level >= TRACE_DUMP) {
         dump_pointer(name, idxtbl, nmemb);
-        for (int i = 0; i < nmemb; i++)
-            fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
+        if (trace_level >= TRACE_DEBUG)
+        	for (int i = 0; i < nmemb; i++)
+        		fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
     }
 #endif
     for (adrs = array1d, ptr = idxtbl, i = 0; i < nmemb; adrs += size, ptr++, i++) {    // cyclic permutation
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "array1d[%ld] = %p\t%s\n", i, adrs, dump_data(adrs));
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%ld] = %p\t%s\n", i, adrs, dump_data(adrs));
 #endif
         void    **p, *dst, *src;
         if (*(p = ptr) != adrs) {
@@ -73,9 +74,6 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
             copy(*p = src, tbuf, size);     // restore saved element
         }
     }
-#ifdef DEBUG
-    dump_array(name, array1d, nmemb, size);
-#endif
 }
 
 /***** Pointer sort of qsort(3) *****/
