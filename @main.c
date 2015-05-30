@@ -81,7 +81,6 @@ typedef enum {
     TREE_SORT,
     INSERT_SORT,
     INSERT_POINTER,
-    NIBBLE_SORT,
     BUBBLE_ARRAY,
     BUBBLE_POINTER,
     COCKTAIL_ARRAY,
@@ -200,10 +199,6 @@ int main(int argc, char *argv[])
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
                 "Merge sort : index sorting."},
-#ifdef  DEBUG
-            {'n', NIBBLE_SORT, "nibble_sort()", nibble_sort, FALSE,
-                "Nibble sort : Nibble insertion sort with binary search if N<=16."},
-#endif
 			{'P', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
 				"Pointer sorting of qsort(3) to measure sorting time in index sorting."},
 			{'p', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
