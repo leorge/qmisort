@@ -24,13 +24,13 @@ static void sort(void *base[], size_t nmemb) {
         (*medium_func)(base, nmemb, comp);
     }
     else {
-    	size_t distance = ((size_t)log2(nmemb) - 1) | 1;
-		void **hole = pivot_pointer(base, nmemb, distance, comp);
+        size_t distance = ((size_t)log2(nmemb) - 1) | 1;
+        void **hole = pivot_pointer(base, nmemb, distance, comp);
         void **last = &base[nmemb - 1];
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- last = %s\n", dump_data(*hole), dump_data(*last));
 #endif
-        void    *pivot = *hole; *hole = *last;	// *pivot <-- *hole <-- *last  cf. sort() in array_sort.c
+        void    *pivot = *hole; *hole = *last;  // *pivot <-- *hole <-- *last  cf. sort() in array_sort.c
         void    **lo, **hi = hole = last, **eq = NULL;
         for (hi--, lo = base; lo < hole; lo++) {
 #ifdef  DEBUG

@@ -18,15 +18,15 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
 #endif
     void **top = base, **bottom = &base[nmemb - 1], **middle = &base[nmemb >> 1];
     while (top < bottom) {
-    	void **hole = &top[(bottom - top) >> 1];	// middle
-    	void *pivot = *hole;	// store middle data
-    	*hole = *bottom; hole = bottom;	// last data --> middle
+        void **hole = &top[(bottom - top) >> 1];    // middle
+        void *pivot = *hole;    // store middle data
+        *hole = *bottom; hole = bottom; // last data --> middle
         void **lo = top, **hi = bottom, **eq = NULL;
         for (; lo < hole; lo++) {
             if (compare(*lo, pivot) >= 0) {
 #ifdef  DEBUG
                 if (trace_level >= TRACE_MOVE) fprintf(OUT, "move %s --> %s\n"
-                		, dump_data(*lo), dump_data(*hole));
+                        , dump_data(*lo), dump_data(*hole));
 #endif
                 *hole = *lo;
                 hole = lo;
@@ -35,7 +35,7 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
                     if ((chk =compare(*hi, pivot)) < 0) {
 #ifdef  DEBUG
                         if (trace_level >= TRACE_MOVE) fprintf(OUT, "move %s <-- %s\n"
-                        		, dump_data(*hole), dump_data(*hi));
+                                , dump_data(*hole), dump_data(*hi));
 #endif
                         hole = hi;
                         eq = NULL;  // not equal then reset
@@ -45,24 +45,24 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
                 }
             }
         }
-        *hole = pivot;	// restore
+        *hole = pivot;  // restore
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) {
-        	fprintf(OUT, "hole = %s\tmiddle = %s\teq = %s\n", dump_data(*hole),
-        			dump_data(*middle), eq ? dump_data(*eq) : "(null)");
-        	dump_pointer("", top, bottom - top + 1);
+            fprintf(OUT, "hole = %s\tmiddle = %s\teq = %s\n", dump_data(*hole),
+                    dump_data(*middle), eq ? dump_data(*eq) : "(null)");
+            dump_pointer("", top, bottom - top + 1);
         }
 #endif
-        if (hole == middle) break;	// if input data is sorted then break soon.
+        if (hole == middle) break;  // if input data is sorted then break soon.
         else if (middle < hole) bottom = hole - 1;
-        else if (eq == NULL) top = hole + 1;	// hole < middle && not continuous
-        else if (eq < middle) top = eq + 1;		// hole < eq < middle
-        else break;	// hole < middle <= eq
+        else if (eq == NULL) top = hole + 1;    // hole < middle && not continuous
+        else if (eq < middle) top = eq + 1;     // hole < eq < middle
+        else break; // hole < middle <= eq
     }
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,"search_median() --> %s\n", dump_data(*middle));
 #endif
-    return	*middle;
+    return  *middle;
 }
 
 /* array sorting */
@@ -70,11 +70,11 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
 {
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
-    		"pivot_array(base, nmemb = %ld, size = %ld, pickup = %ld, compare())\n", nmemb, size, pickup);
-	assert(base != NULL);
-	assert(nmemb > 1);
-	assert(size != 0);
-	assert(pickup != 0);
+            "pivot_array(base, nmemb = %ld, size = %ld, pickup = %ld, compare())\n", nmemb, size, pickup);
+    assert(base != NULL);
+    assert(nmemb > 1);
+    assert(size != 0);
+    assert(pickup != 0);
     assert(compare != NULL);
 #endif
     size_t  distance = (size_t)(nmemb / pickup);      // distance of elements
@@ -97,10 +97,10 @@ void *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(con
 {
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
-    		"pivot_pointer(base, nmemb = %ld, pickup = %ld, compare())\n", nmemb, pickup);
-	assert(base != NULL);
-	assert(nmemb > 1);
-	assert(pickup != 0);
+            "pivot_pointer(base, nmemb = %ld, pickup = %ld, compare())\n", nmemb, pickup);
+    assert(base != NULL);
+    assert(nmemb > 1);
+    assert(pickup != 0);
 #endif
     size_t distance = (size_t)(nmemb / pickup);    // distance between elements
     void **p = &base[(size_t)(random_number * nmemb / pickup)];  // 1st pick up point

@@ -22,14 +22,14 @@ void insert_pointer(void **base, size_t nmemb, int (*compare)(const void *, cons
         p2 = base + i;
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
-        	fprintf(OUT, "insert %s", dump_data(*p2));
-        	dump_pointer("", base, i);
+            fprintf(OUT, "insert %s", dump_data(*p2));
+            dump_pointer("", base, i);
         }
 #endif
         pivot = *p2;
         while (p2 > base) {
-        	if (compare(*(p1 = p2 - 1), pivot) <= 0) break;
-        	*p2 = *p1; p2 = p1;
+            if (compare(*(p1 = p2 - 1), pivot) <= 0) break;
+            *p2 = *p1; p2 = p1;
         }
         *p2 = pivot;
     }
@@ -60,10 +60,10 @@ void insert_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
         char    *p1, *p2 = first + i * size;
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
-        	char msg[20 + size]; sprintf(msg, "insert %s", p2);
-        	dump_array(msg, base, i, size);
+            char msg[20 + size]; sprintf(msg, "insert %s", p2);
+            dump_array(msg, base, i, size);
         }
-        qsort_called++;	// loop count
+        qsort_called++; // loop count
 #endif
         copy(pivot, p2);
         while (p2 > first) {

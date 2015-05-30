@@ -55,8 +55,8 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
     if (trace_level >= TRACE_DUMP) {
         dump_pointer(name, idxtbl, nmemb);
         if (trace_level >= TRACE_DEBUG)
-        	for (int i = 0; i < nmemb; i++)
-        		fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
+            for (int i = 0; i < nmemb; i++)
+                fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
     }
 #endif
     for (adrs = array1d, ptr = idxtbl, i = 0; i < nmemb; adrs += size, ptr++, i++) {    // cyclic permutation

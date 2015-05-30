@@ -11,7 +11,7 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
-static char 	*pivot;
+static char     *pivot;
 #ifdef  DEBUG
 static  size_t  search_pivot;
 #endif
@@ -34,9 +34,9 @@ static void sort(void *base, size_t nmemb) {
     if (nmemb <= medium_boundary) {
         merge_hybrid(base, nmemb, length, comp);
     }
-    else {	// N is large
+    else {  // N is large
 #define first   ((char *)base)
-		char *hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1,comp);
+        char *hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1,comp);
         char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
