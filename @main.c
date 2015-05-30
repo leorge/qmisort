@@ -29,17 +29,16 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-QsortAlogrithm	QA = RANDOM3;
+QsortAlogrithm	QA = LOG2;
 Trace   trace_level = TRACE_NONE;   // to debug
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
 size_t  small_boundary = 8;        	//  nmemb to alternate from merge sort.
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
-int     pivot_number = 3;
+int     pivot_number = 5;
 double  random_number;
 
-void    (*small_pointer)() = imerge_sort;
+void    (*small_pointer)() = merge_index;
 void    (*medium_index)() = merge_pointer;
-void    (*pivot_sort)() = mi_psort;
 
 void set_random(void) {
     if (random_number == 0.0) {
@@ -85,10 +84,10 @@ typedef enum {
     BUBBLE_POINTER,
     COCKTAIL_ARRAY,
     COCKTAIL_POINTER,
-    MERGE_INSERT_INDEX,
-    MERGE_INSERT_POINTER,
-    ARRAY_SORT,
-    INDEX_SORT,
+    MERGE_HYBRID_INDEX,
+    MERGE_HYBRID_POINTER,
+    HYBRID_ARRAY,
+    HYBRID_INDEX,
     POINTER_SORT,
     STABLE_ARRAY,
     STABLE_POINTER,
@@ -159,7 +158,7 @@ int main(int argc, char *argv[])
             // simple in-place sort.
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "quick sort : pivot is median of 3 elements with swaps."},
-            {'a', ARRAY_SORT, "array_sort()", array_sort, FALSE,
+            {'a', HYBRID_ARRAY, "array_sort()", hybrid_array, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
 #ifdef  DEBUG
 			{'b', BUBBLE_ARRAY, "bubble_sort()", bubble_sort, FALSE,
@@ -187,9 +186,9 @@ int main(int argc, char *argv[])
 //			{'I', INSERT_POINTER, "insert_pointer()", insert_pointer, TRUE,
 //			"Insertion sort : pointer sorting."},
 #endif
-            {'j', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
+            {'j', MERGE_HYBRID_POINTER, "mi_psort(*)", merge_phybrid, TRUE,
                 "hybrid sorting of merge sort : pointer sorting."},
-			{'J', MERGE_INSERT_INDEX, "mi_isort()", merge_hybrid, FALSE,
+			{'J', MERGE_HYBRID_INDEX, "merge_hybrid()", merge_hybrid, FALSE,
 				"hybrid sorting of merge sort : index sorting."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
@@ -197,11 +196,11 @@ int main(int argc, char *argv[])
 #endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
                 "Merge sort : array sorting."},
-            {'M', MERGE_INDEX, "imerge_sort()", imerge_sort, FALSE,
+            {'M', MERGE_INDEX, "imerge_sort()", merge_index, FALSE,
                 "Merge sort : index sorting."},
-			{'P', POINTER_QSORT3, "pqsort()", pqsort, TRUE,
+			{'P', POINTER_QSORT3, "pqsort()", qsort3_pointer, TRUE,
 				"Pointer sorting of qsort(3) to measure sorting time in index sorting."},
-			{'p', POINTER_SORT, "pointer_sort(*)", pointer_sort, TRUE,
+			{'p', POINTER_SORT, "pointer_sort(*)", hybrid_pointer, TRUE,
 				"hybrid sorting of quick sort : Pointer sorting."},
             {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
                 "Quick sort : to test pivot selection. cf. -V option."},
@@ -215,9 +214,9 @@ int main(int argc, char *argv[])
 #endif
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
-			{'X', INDEX_QSORT3, "iqsort()", iqsort, FALSE,
+			{'X', INDEX_QSORT3, "iqsort()", qsort3_index, FALSE,
 				"indeX sorting of qsort(3) to reduce copies."},
-			{'x', INDEX_SORT, "index_sort()", index_sort, FALSE,
+			{'x', HYBRID_INDEX, "index_sort()", hybrid_index, FALSE,
 				"hybrid sorting of quick sort : indeX sorting."},
     };
 
@@ -227,7 +226,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:F:L:l:N:oR:T:V:v:X:Y:Z:");
+    strcat(optstring, "?D:L:l:N:oR:T:V:v:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -343,7 +342,7 @@ int main(int argc, char *argv[])
                 small_pointer = merge_hybrid;
                 break;
             case 'm':
-                small_pointer = imerge_sort;
+                small_pointer = merge_index;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
@@ -351,41 +350,7 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case 'F':   // Algorithm when nmemb is medium for indeX sort.
-            switch(*optarg) {
-            case 'G':
-                pivot_sort = pqsort;
-                break;
-            case 'l':
-                pivot_sort = mi_psort;
-                break;
-            case 'm':
-                pivot_sort = merge_pointer;
-                break;
-            default:
-                fprintf(stderr, "Illegal value \"%s\" for -F option.\n", optarg);
-                return EXIT_FAILURE;
-                break;
-            }
-            break;
-        case 'X':   // Algorithm of Pointer sort to find a Pivot.
-            switch(*optarg) {
-            case 'G':
-                medium_index = pqsort;
-                break;
-            case 'l':
-                medium_index = mi_psort;
-                break;
-            case 'm':
-                medium_index = merge_pointer;
-                break;
-            default:
-                fprintf(stderr, "Illegal value \"%s\" for -X option.\n", optarg);
-                return EXIT_FAILURE;
-                break;
-            }
-            break;
-		case 'V':   // Algorithm to Find a pivot while N is large in hybrid sorting
+		case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
 			switch(*optarg) {
 			case '2':
 				QA = LOG2;
@@ -395,6 +360,9 @@ int main(int argc, char *argv[])
 				break;
 			case 'r':
 				QA = RANDOM;
+				break;
+			case 'v':
+				QA = VARIOUS;
 				break;
 			default:
                 fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
