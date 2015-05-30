@@ -20,22 +20,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
     void **first = store;
 #endif
     if (nmemb <= small_boundary) {    /* Insertion sort */
-        for (size_t idx = 1; idx < nmemb; idx++) {
-            void *pivot = store[idx];	// save an address
-#ifdef DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "insert %s\n", dump_data(pivot));
-#endif
-            // linear search
-            void **p = &store[idx], **q = p;
-            do {
-                if (comp(*--p, pivot) <= 0) break;
-                *q-- = *p;  // slide an element
-            } while (p != store);
-            *q = pivot;	// restore an address
-#ifdef DEBUG
-            if (trace_level >= TRACE_DUMP) dump_pointer("sorted ", store, idx + 1);
-#endif
-        }
+    	insert_pointer(store, nmemb, comp);
     }
     else {
         size_t n_lo = nmemb >> 1;   // = nmemb / 2

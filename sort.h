@@ -71,8 +71,8 @@ extern Trace    trace_level;            // main.c
 
 /***** Functions *****/
 extern void set_random(void);
-extern void (*small_pointer)();
-extern void (*medium_index)();
+extern void (*small_func)();
+extern void (*medium_func)();
 
 // array sorting
 void    hybrid_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));

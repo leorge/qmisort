@@ -21,7 +21,7 @@ static void sort(void *base[], size_t nmemb) {
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
     if (nmemb <= medium_boundary) {
-        (*medium_index)(base, nmemb, comp);
+        (*medium_func)(base, nmemb, comp);
     }
     else {
     	size_t distance = ((size_t)log2(nmemb) - 1) | 1;
