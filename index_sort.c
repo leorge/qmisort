@@ -87,7 +87,6 @@ void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
     if (nmemb <= 1) return;
     if (idxtbl != NULL) {
         comp = compare;
-        set_random();
         sort(idxtbl, nmemb);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
