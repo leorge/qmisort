@@ -165,12 +165,12 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
 			{'b', BUBBLE_ARRAY, "bubble_sort()", bubble_sort, FALSE,
 				"Bubble sort : with no swaps."},
-			{'B', BUBBLE_POINTER, "bubble_pointer()", bubble_pointer, TRUE,
-				"Bubble sort : pointer sorting."},
+//			{'B', BUBBLE_POINTER, "bubble_pointer()", bubble_pointer, TRUE,
+//				"Bubble sort : pointer sorting."},
 			{'c', COCKTAIL_ARRAY, "cocktail_sort()", cocktail_sort, FALSE,
 				"Cocktail sort : bidirectional bubble sort."},
-			{'C', COCKTAIL_POINTER, "cocktail_pointer()", cocktail_pointer, TRUE,
-				"Cocktail sort : pointer sorting."},
+//			{'C', COCKTAIL_POINTER, "cocktail_pointer()", cocktail_pointer, TRUE,
+//				"Cocktail sort : pointer sorting."},
 #endif
 			{'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
 				"quick sort : pivot is the miDDle element with swaps."},
@@ -185,8 +185,8 @@ int main(int argc, char *argv[])
                 "Heap sort."},
 			{'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
 			"Insertion sort : linear search."},
-			{'I', INSERT_POINTER, "insert_pointer()", insert_pointer, TRUE,
-			"Insertion sort : pointer sorting."},
+//			{'I', INSERT_POINTER, "insert_pointer()", insert_pointer, TRUE,
+//			"Insertion sort : pointer sorting."},
 #endif
             {'j', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "hybrid sorting of merge sort : pointer sorting."},
