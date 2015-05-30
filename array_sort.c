@@ -10,7 +10,6 @@
 #include "sort.h"
 
 static int      (*comp)(const void *, const void *);
-static void 	*index[MAX_BIT];    // address of picked up elements
 static size_t   length;
 static char 	*pivot;
 #ifdef  DEBUG
@@ -33,58 +32,11 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
     if (nmemb <= medium_boundary) {
-        (*small_pointer)(base, nmemb, length, comp);
+        merge_hybrid(base, nmemb, length, comp);
     }
     else {	// N is large
 #define first   ((char *)base)
-    	size_t  distance;
-    	char    *hole;
-    	int pickup;
-    	switch (QA) {	// Quicksort Algorithm
-    	case RANDOM:
-            hole = base + (size_t)(random_number * nmemb) * length;		// pick up one element at random
-    		break;
-    	case RANDOM3:
-			distance = nmemb / 3;    // distance between elements
-			char	*p1, *p2, *p3;
-			p1 = base + (size_t)(random_number * distance) * length;		// pick up median of random 3 elements
-			p3 = (p2 = p1 + distance * length) + distance * length;
-#ifdef  DEBUG
-    		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-    				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
-#endif
-			hole = (comp(p1, p3) < 0 ?
-				   (comp(p2, p1) < 0 ? p1: (comp(p2,  p3) < 0 ? p2 : p3)) :
-				   (comp(p2, p3) < 0 ? p3 : (comp(p2, p1) < 0 ? p2 : p1)));
-    		break;
-    	case LOG2:
-    		pickup = ((int)log2(nmemb) - 1) | 1; // make an odd number
-    		distance = (size_t)(nmemb / pickup);    // distance between elements
-#ifdef  DEBUG
-    		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-    				"nmemb = %ld\tchoose = %d\tdistance = %ld\n", nmemb, pickup, distance);
-#endif
-    		distance *= length;     // size in byte
-    		hole = base + (size_t)(random_number * nmemb / pickup) * length;   // 1st pick up point
-    		for (int idx = 0; idx < pickup; hole += distance) {
-#ifdef  DEBUG
-    			if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array[%ld] at %p = %s\n", (hole - first) / length, hole, dump_data(hole));
-#endif
-    			index[idx++] = hole;
-    		}
-#ifdef DEBUG
-    		if (trace_level >= TRACE_DUMP) fprintf(OUT, "sort to find a pivot\n");
-    		search_pivot++;
-#endif
-    		(*pivot_sort)(index, pickup, comp);
-    		hole = index[pickup >> 1];
-    		break;
-    	default:
-    		break;
-    	}
-#ifdef DEBUG
-    	if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
-#endif
+		char *hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1,comp);
         char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
@@ -138,7 +90,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void array_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+void hybrid_array(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
         char a[size]; pivot = a; *a = '\0';
