@@ -40,12 +40,10 @@ size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
 void set_random(void) {
-    if (random_number == 0.0) {
-        random_number = rand()/(double)(RAND_MAX - 1);  // 0 <= random_number < 1
+	random_number = rand()/(double)(RAND_MAX - 1);  // 0 <= random_number < 1
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %f\n", random_number);
+	if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %f\n", random_number);
 #endif
-    }
 }
 
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
@@ -506,26 +504,38 @@ QSORT:
     void **idxtbl;
     long *cache, *clear;
     srand((unsigned)time(NULL));
-    set_random();
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
+//    	set_random();
         if (index & idx) {
             index &= ~idx;  // clear bit
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "Start %s : %s\n", info->name, info->description);
+#else
+REDO:
 #endif
-REDO:       fprintf(OUT, "%s", info->name);
+#ifdef DEBUG
+			if (trace_level == TRACE_NONE)	// don't add a semicolon ";"
+#endif
+			fprintf(OUT, "%s", info->name);
 #define ENOUGH  4000000L
             cache = calloc(sizeof(long), ENOUGH);
             clear = cache;  // really enough?
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
-#ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "\n");
-#endif
             begin_timer(repeat_count);
             for (int i = 0; i < repeat_count; i++) {
                 qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
-                if (repeat_count > 1) set_random();
+#ifdef  DEBUG
+                if (trace_level != TRACE_NONE) {
+                    if (repeat_count > 1) {
+                    	sleep(1);	// to generate another random number
+                        set_random();
+                    }
+                	begin_timer(1);
+                }
+#else
+                set_random();
+#endif
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
                 if (info->pointer_sort) {
@@ -542,8 +552,18 @@ REDO:       fprintf(OUT, "%s", info->name);
                     (*info->sort_function)(workbuff, nmemb, size, cmpstring);
                     stop_timer();
                 }
+#ifdef  DEBUG
+                if (trace_level != TRACE_NONE) {
+        			fprintf(OUT, "%s", info->name);
+                    elapsed_time(info->description, skip);
+                }
+#endif
             }
+#ifdef  DEBUG
+            if (trace_level == TRACE_NONE) elapsed_time(info->description, skip);
+#else
             if (elapsed_time(info->description, skip) > limit) goto REDO;
+#endif
             if (check_result(info->name, workbuff)) {   // error
                 print_out = TRUE;
                 break;
