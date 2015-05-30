@@ -10,19 +10,9 @@
 #include "sort.h"
 
 static int      (*comp)(const void *, const void *);
-static void *index[MAX_BIT];    // address of picked up elements
 #ifdef  DEBUG
-static  size_t  comp_idx_count, search_pivot;
+static  size_t  search_pivot;
 #endif
-
-static int  comp_idx(const void *p1, const void *p2) {
-#ifdef DEBUG
-    comp_idx_count++;
-    if (trace_level >= TRACE_DEBUG) fprintf(OUT, "comp_idx(%s, %s)\n",
-        dump_data(*(char * const *)p1), dump_data(*(char * const *)p2));
-#endif
-    return  comp(*(char * const *)p1, *(char * const *)p2);
-}
 
 static void sort(void *base[], size_t nmemb) {
     if (nmemb <= 1) return;
@@ -34,63 +24,9 @@ static void sort(void *base[], size_t nmemb) {
         (*medium_index)(base, nmemb, comp);
     }
     else {
-    	size_t  distance;
-    	void **hole = base;	// first element as a default
-    	int pickup;
-    	switch (QA) {	// Quicksort Algorithm
-    	case RANDOM:
-            hole = &base[(size_t)(random_number * nmemb)];  // pick up one element at random
-    		break;
-    	case RANDOM3:
-            distance = (size_t)(nmemb / 3);	    // distance between elements
-            void **p1, **p2, **p3;
-            p1 = &base[(size_t)(random_number * distance)];
-            p3 = (p2 = p1 + distance) + distance;
-#ifdef  DEBUG
-    		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-    				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n",
-    				nmemb, distance, dump_data(*p1), dump_data(*p2), dump_data(*p3));
-#endif
-			hole = (comp(*p1, *p3) < 0 ?
-				   (comp(*p2, *p1) < 0 ? p1: (comp(*p2,  *p3) < 0 ? p2 : p3)) :
-				   (comp(*p2, *p3) < 0 ? p3 : (comp(*p2, *p1) < 0 ? p2 : p1)));
-    		break;
-    	case LOG2:
-        	pickup = ((int)log2(nmemb) - 1) | 1; // make an odd number 2N-1
-            distance = (size_t)(nmemb / pickup);    // distance between elements
-#ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                "nmemb = %ld\tbit_width = %d\tdistance = %ld\n", nmemb, pickup, distance);
-#endif
-            hole = &base[(size_t)(random_number * nmemb / pickup)];  // 1st pick up point
-            for (int idx = 0; idx < pickup; hole += distance) {
-#ifdef  DEBUG
-                ispointer = TRUE;
-                if (trace_level >= TRACE_DEBUG) fprintf(OUT, "%s\n", dump_data(*hole));
-#endif
-                index[idx++] = hole;
-            }
-#ifdef DEBUG
-			if (trace_level >= TRACE_DUMP) {
-				fprintf(OUT, "index :");
-				for (int idx = 0; idx < pickup; ) fprintf(OUT, " %s", dump_data(index[idx++]));
-				fprintf(OUT, "\nsort to find a pivot\n");
-			}
-            search_pivot++;
-#endif
-            (*pivot_sort)(index, pickup, comp_idx);
-            hole = index[pickup >> 1];      // get address of address of middle element
-            break;
-    	default:
-    		break;
-    	}
-#ifdef  DEBUG
-        ispointer = FALSE;
-        if (trace_level >= TRACE_DUMP) {
-            fprintf(OUT, "pivot = %s\n", dump_data(*hole));
-        }
-#endif
-        void    **last = &base[nmemb - 1];
+    	size_t distance = ((size_t)log2(nmemb) - 1) | 1;
+		void **hole = pivot_pointer(base, nmemb, distance, comp);
+        void **last = &base[nmemb - 1];
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- last = %s\n", dump_data(*hole), dump_data(*last));
 #endif
@@ -146,31 +82,27 @@ static void sort(void *base[], size_t nmemb) {
 #endif
 }
 
-void pointer_sort(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
+void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
 {
     if (nmemb <= 1) return;
     if (idxtbl != NULL) {
         comp = compare;
         set_random();
-#ifdef DEBUG
-        search_pivot = comp_idx_count = 0;
-#endif
         sort(idxtbl, nmemb);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
-            fprintf(OUT, "count of comp_idx = %ld\n", comp_idx_count);
             fprintf(OUT, "search pivot %ld times\n", search_pivot);
         }
 #endif
     }
 }
 
-void index_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+void hybrid_index(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb <= 1) return;
     void **idxtbl = make_index(base, nmemb, size);
     if (idxtbl != NULL) {
-        pointer_sort(idxtbl, nmemb, compare);
+        hybrid_pointer(idxtbl, nmemb, compare);
         unindex(base, idxtbl, nmemb, size);
         free(idxtbl);
     }
@@ -212,7 +144,7 @@ void stable_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     if (nmemb <= 1) return;
     void **idxtbl = make_index(base, nmemb, size);
     if (idxtbl != NULL) {
-        pointer_sort(idxtbl, nmemb, compare);
+        hybrid_pointer(idxtbl, nmemb, compare);
         address_sort(idxtbl, nmemb, compare);
         unindex(base, idxtbl, nmemb, size);
         free(idxtbl);
