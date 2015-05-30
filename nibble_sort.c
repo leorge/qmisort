@@ -89,7 +89,7 @@ void nibble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
 #endif
 	void **idxtbl = make_index(base, nmemb, size);
 	if (idxtbl != NULL) {
-		mi_psort(idxtbl, nmemb, compare);
+		nibble_pointer(idxtbl, nmemb, compare);
 		unindex(base, idxtbl, nmemb, size);
 		free(idxtbl);
 	}
