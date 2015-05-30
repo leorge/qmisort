@@ -106,7 +106,7 @@ void mi_psort(void **base, size_t nmemb, int (*compare)(const void *, const void
 }
 
 // index sort
-void mi_isort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb > 1) {
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT,

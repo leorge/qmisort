@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 #endif
             {'j', MERGE_INSERT_POINTER, "mi_psort(*)", mi_psort, TRUE,
                 "hybrid sorting of merge sort : pointer sorting."},
-			{'J', MERGE_INSERT_INDEX, "mi_isort()", mi_isort, FALSE,
+			{'J', MERGE_INSERT_INDEX, "mi_isort()", merge_hybrid, FALSE,
 				"hybrid sorting of merge sort : index sorting."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
                 small_pointer = merge_sort;
                 break;
             case 'l':
-                small_pointer = mi_isort;
+                small_pointer = merge_hybrid;
                 break;
             case 'm':
                 small_pointer = imerge_sort;

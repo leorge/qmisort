@@ -82,6 +82,7 @@ void    cocktail_sort   (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    merge_hybrid	(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -95,7 +96,7 @@ void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    imerge_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    index_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    iqsort          (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    mi_isort        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    merge_hybrid        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sorting
 void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
