@@ -20,7 +20,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
     void **first = store;
 #endif
     if (nmemb <= small_boundary) {    /* Insertion sort */
-        insert_pointer(store, nmemb, comp);
+        small_func(store, nmemb, comp);
     }
     else {
         size_t n_lo = nmemb >> 1;   // = nmemb / 2
