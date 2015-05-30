@@ -15,13 +15,13 @@
 
 #define OUT     stdout
 
-typedef	enum {	// Scheme in hybrid sorting while N is large.
-	MIDDLE,
-	RANDOM,
-	RANDOM3,
-	VARIOUS,
-	LOG2,
-} QsortAlogrithm;
+typedef enum {  // Pivot choice
+    MIDDLE,
+    RANDOM,
+    RANDOM3,
+    VARIOUS,
+    LOG2,
+} PivotChoice;
 
 typedef enum {  // trace lelve
     TRACE_NONE,
@@ -53,16 +53,16 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 
 /***** variables *****/
 
-extern size_t   INS;                // main.c
-extern double   random_number;      // main.c
-extern size_t   medium_boundary;    // main.c
-extern size_t   small_boundary;     // main.c
-extern int      pivot_number;       // main.c
-extern QsortAlogrithm	QA;			// main.c
-extern bool     ispointer;          // index_sort.c
-extern double   usec, esd;          // timer.c
-extern long     *microsec;          // timer.c
-extern int      peak;               // timer.c
+extern size_t       INS;                // main.c
+extern double       random_number;      // main.c
+extern size_t       medium_boundary;    // main.c
+extern size_t       small_boundary;     // main.c
+extern int          pivot_number;       // main.c
+extern PivotChoice  pivot_scheme;       // main.c
+extern bool         ispointer;          // index_sort.c
+extern double       usec, esd;          // timer.c
+extern long         *microsec;          // timer.c
+extern int          peak;               // timer.c
 
 #ifdef DEBUG
 extern long qsort_moved, qsort_called;  // main.c
@@ -81,7 +81,7 @@ void    cocktail_sort   (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    merge_hybrid	(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -107,8 +107,8 @@ void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 
 // search pivot
-void	*pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *));
-void	*pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *));
+void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *));
+void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *));
 
 // others
 const char  *dump_data(const void *data);

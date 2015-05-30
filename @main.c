@@ -29,16 +29,16 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-QsortAlogrithm  QA = LOG2;
+PivotChoice  pivot_scheme = LOG2;
 Trace   trace_level = TRACE_NONE;   // to debug
-size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
-size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 int     pivot_number = 5;
 double  random_number;
 
-void    (*small_func)() = merge_index;
-void    (*medium_func)() = merge_pointer;
+size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
+void    (*medium_func)() = merge_hybrid;
+size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
+void    (*small_func)() = insert_pointer;
 
 void set_random(void) {
     if (random_number == 0.0) {
@@ -333,13 +333,13 @@ int main(int argc, char *argv[])
         case 'A':   // Algorithm when nmemb is medium for Array sort
             switch(*optarg) {
             case 'm':
-                small_func = merge_sort;
+                medium_func = merge_sort;
                 break;
             case 'M':
-                small_func = merge_index;
+            	medium_func = merge_index;
                 break;
             case 'h':
-                small_func = merge_hybrid;
+            	medium_func = merge_hybrid;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
@@ -350,16 +350,16 @@ int main(int argc, char *argv[])
         case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
             switch(*optarg) {
             case '2':
-                QA = LOG2;
+                pivot_scheme = LOG2;
                 break;
             case '3':
-                QA = RANDOM3;
+                pivot_scheme = RANDOM3;
                 break;
             case 'r':
-                QA = RANDOM;
+                pivot_scheme = RANDOM;
                 break;
             case 'v':
-                QA = VARIOUS;
+                pivot_scheme = VARIOUS;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
