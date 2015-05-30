@@ -29,9 +29,8 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-PivotChoice  pivot_scheme = LOG2;
+PivotChoice  pivot_scheme = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
-long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 int     pivot_number = 5;
 double  random_number;
 
@@ -48,6 +47,8 @@ void set_random(void) {
 #endif
     }
 }
+
+long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 
 /****   Private ****/
 
@@ -262,26 +263,30 @@ int main(int argc, char *argv[])
             }
             puts(
                 "\n"
-                "\t-A : Algorithm when nmemb is medium for hybrid sorting of quick sort.\n"
-                "\t       G - GNU library qsort(3).\n"
-                "\t       b - Merge and bubble sort.\n"
-                "\t       l - Merge and insertion sort with linear search.\n"
-                "\t       m - Index sorting of merge sort. (default)\n"
-                "\t       a - Array sorting of merge sort.\n"
-                "\t-l : nmemb to change algorithm when N is smaLL. (default is 8)\n"
-                "\t-L : nmemb to change algorithm from N is Large. (default is 1000)\n"
+                "\t-A : Algorithm when N is medium.\n"
+                "\t       M - index sorting of Merge sort.\n"
+                "\t       m - array sorting of Merge sort.\n"
+				"\t       h - Hybrid merge sort (default).\n"
+                "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
+                "\t-L : boundary to change algorithm from N is Large (default is 1000).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-o : print Out the last result.\n"
-                "\t-R : Repeat count of sampling to calculate estimated standard deviation.\n"
+                "\t-R : Repeat count of sampling to calculate Stdev "
+#ifndef DEBUG
+            	"(default is 12).\n"
+#else
+               	"(default is 1).\n"
+#endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
-                "\t-V : algorithm to decide a piVot. default is a middle element\n"
+                "\t-V : algorithm to decide a piVot in quick sort.\n"
+				"\t       d - miDDle element.\n"
                 "\t       r - Random element.\n"
-                "\t       3 - median of random 3 elements.\n"
+                "\t       3 - median of random 3 elements (default).\n"
                 "\t       2 - median of random log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
                 "\t-Y : cYclic work buffer length.\n"
@@ -349,6 +354,9 @@ int main(int argc, char *argv[])
             break;
         case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
             switch(*optarg) {
+            case 'd':
+                pivot_scheme = MIDDLE;
+                break;
             case '2':
                 pivot_scheme = LOG2;
                 break;
