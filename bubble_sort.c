@@ -14,10 +14,10 @@ static size_t   length;
 /* pointer sorting */
 void bubble_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
-    void *pivot;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer() start in " __FILE__, base, nmemb);
 #endif
+    void *pivot;
     void **first = base;
     void **last = first + nmemb - 1;
     do {
