@@ -95,7 +95,6 @@ void hybrid_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     if (nmemb > 1) {
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
-        set_random();
 #ifdef DEBUG
         search_pivot = 0;
 #endif
@@ -143,7 +142,6 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
         comp = acomp;       // sort() calls comp()
         comp_p = compare;   // comp() calls compare()
         length = sizeof(POINTER_INDEX);
-        set_random();
         sort(tbl, nmemb);   // sort array
         /*  sort to be stable and reoder idxtbl */
         comp = icomp;
