@@ -19,7 +19,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
     if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, revert ? dst : src, nmemb);
     void **first = store;
 #endif
-    if (nmemb <= MAX_SIZE) {    /* Insertion sort */
+    if (nmemb <= small_boundary) {    /* Insertion sort */
         for (size_t idx = 1; idx < nmemb; idx++) {
             void *pivot = store[idx];	// save an address
 #ifdef DEBUG

@@ -34,7 +34,7 @@ static void sort(void *base, size_t nmemb) {
 #define first   ((char *)base)
     char *last = first + (nmemb - 1) * length;
     char *middle = first + length * (nmemb >> 1);
-    char *pivot = nmemb <= medium_boundary ? middle :
+    char *pivot = nmemb <= small_boundary ? middle :
     			 (comp(first, last) < 0 ?
                  (comp(middle, first) < 0 ? first: (comp(middle,  last) < 0 ? middle : last)) :
                  (comp(middle, last ) < 0 ? last : (comp(middle, first) < 0 ? middle : first)));
