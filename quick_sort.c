@@ -32,10 +32,10 @@ static void sort(void *base, size_t nmemb) {
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
 #define first   ((char *)base)
-    char    *hole = first + length * (nmemb >> 1);  // middle element
+    char    *hole;
     if (nmemb > small_boundary) {
         size_t  distance;
-        switch (QA) {   // Quicksort Algorithm
+        switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:
             hole = base + (size_t)(random_number * nmemb) * length;     // pick up one element at random
             break;
@@ -60,11 +60,12 @@ static void sort(void *base, size_t nmemb) {
             hole = pivot_array(base, nmemb, length, distance, comp);
             break;
         default:
+        	hole = first + length * (nmemb >> 1);  // middle element
             break;
         }
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot = %s\n", dump_data(hole));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "hole = %s\n", dump_data(hole));
 #endif
     char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
