@@ -74,7 +74,7 @@ void merge_phybrid(void **base, size_t nmemb, int (*compare)(const void *, const
     if (nmemb > 1) {
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                "mi_isort(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
+                "merge_phybrid(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
 #endif
         void **idxtbl = calloc(nmemb, sizeof(void *));  // double buffer
         if (idxtbl == NULL) perror(NULL);
@@ -85,7 +85,7 @@ void merge_phybrid(void **base, size_t nmemb, int (*compare)(const void *, const
             free(idxtbl);
         }
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "mi_isort() done.\n");
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_phybrid() done.\n");
 #endif
     }
 }
@@ -95,7 +95,7 @@ void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     if (nmemb > 1) {
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                "mi_sort(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
+                "merge_hybrid(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
 #endif
         void **idxtbl = make_index(base, nmemb, size);
         if (idxtbl != NULL) {
@@ -104,7 +104,7 @@ void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const vo
             free(idxtbl);
         }
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "mi_sort() done.\n");
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_hybrid() done.\n");
 #endif
     }
 }
