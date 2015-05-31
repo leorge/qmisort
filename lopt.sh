@@ -3,10 +3,10 @@
 # Search the best small_boundary.
 #
 N=100000
-for Z in 16 64 256; do
-    for l in `seq 2 32`; do 
+for Z in 16 64 256; do          # size of an element
+    for l in `seq 2 32`; do     # small_boundary
         echo $Z $l
-        for i in `seq 1 10`; do
+        for i in `seq 1 10`; do # Repeat 10 times
             src/random.awk $N | Release/Sort -N $N -Z $Z -l $l -E
         done
         echo ""
