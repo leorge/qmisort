@@ -80,7 +80,6 @@ void    cocktail_sort   (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -91,6 +90,7 @@ void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // index sorting
+void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    hybrid_index    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort3_index    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
