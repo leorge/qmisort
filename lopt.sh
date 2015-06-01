@@ -3,7 +3,7 @@
 # Search the best small_boundary.
 #
 N=100000
-for Z in 16 64 256; do          # size of an element
+for Z in 16 64 256; do          # size of element
     for l in `seq 2 32`; do     # small_boundary
         echo $Z $l
         for i in `seq 1 10`; do # Repeat 10 times
