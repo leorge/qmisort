@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
             puts(
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
-                "\t       d - quick sort. pivot is the miDDle element (default).\n"
+                "\t       d - quick sort (default).\n"
                 "\t       M - index sorting of Merge sort.\n"
                 "\t       m - array sorting of Merge sort.\n"
 				"\t       h - Hybrid merge sort.\n"
