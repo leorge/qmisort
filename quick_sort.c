@@ -33,7 +33,7 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
     char    *hole;
-    if (nmemb > small_boundary) {
+    if (nmemb > medium_boundary) {
         hole = first + length * (nmemb >> 1);	// middle
     }
     else {
