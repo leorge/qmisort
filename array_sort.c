@@ -31,7 +31,7 @@ static void sort(void *base, size_t nmemb) {
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-    if (nmemb <= medium_boundary && medium_func != NULL) {
+    if (nmemb <= medium_boundary) {
         medium_func(base, nmemb, length, comp);
     }
     else {  // N is large
@@ -39,9 +39,6 @@ static void sort(void *base, size_t nmemb) {
         char *hole;
         size_t  distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
-        case MIDDLE:
-        	hole = first + (nmemb >> 1) * length;	// middle element (not at random)
-        	break;
         case RANDOM:
             hole = first + (size_t)(random_number * nmemb) * length;     // pick up one element at random
             break;
