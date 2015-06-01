@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
                 "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
-                "\t-V : algorithm to decide a piVot in quick sort.\n"
+                "\t-V : algorithm to choose a piVot in quick sort.\n"
                 "\t       d - miDDle element (default).\n"
                 "\t       r - Random element.\n"
                 "\t       3 - median of random 3 elements.\n"
