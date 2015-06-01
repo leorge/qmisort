@@ -29,13 +29,13 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-PivotChoice  pivot_scheme = RANDOM3;
+PivotChoice  pivot_scheme = MIDDLE;
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
 double  random_number;
 
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
-void    (*medium_func)() = merge_hybrid;
+void    (*medium_func)() = NULL;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
@@ -74,7 +74,6 @@ typedef enum {
     SWAP_KR,
     SWAP_MED3,
     HOLE_LAST,
-    QUICK_SORT,
     HEAP_SORT,
     TREE_SORT,
     INSERT_SORT,
@@ -199,8 +198,6 @@ int main(int argc, char *argv[])
                 "Pointer sorting of qsort(3) to measure sorting time in index sorting."},
             {'p', POINTER_SORT, "pointer_sort(*)", hybrid_pointer, TRUE,
                 "hybrid sorting of quick sort : Pointer sorting."},
-            {'q', QUICK_SORT, "quick_sort()", quick_sort, FALSE,
-                "Quick sort : to test pivot selection. cf. -V option."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
                 "Stable hybrid sorting of quick sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
@@ -260,9 +257,10 @@ int main(int argc, char *argv[])
             puts(
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
+                "\t       d - quick sort. pivot is the miDDle element (default).\n"
                 "\t       M - index sorting of Merge sort.\n"
                 "\t       m - array sorting of Merge sort.\n"
-				"\t       h - Hybrid merge sort (default).\n"
+				"\t       h - Hybrid merge sort.\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is 1000).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
@@ -280,8 +278,9 @@ int main(int argc, char *argv[])
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
                 "\t-V : algorithm to decide a piVot in quick sort.\n"
+                "\t       d - miDDle element (default).\n"
                 "\t       r - Random element.\n"
-                "\t       3 - median of random 3 elements (default).\n"
+                "\t       3 - median of random 3 elements.\n"
                 "\t       2 - median of random log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
                 "\t-Y : cYclic work buffer length.\n"
@@ -332,6 +331,9 @@ int main(int argc, char *argv[])
             break;
         case 'A':   // Algorithm when nmemb is medium for Array sort
             switch(*optarg) {
+            case 'd':
+            	medium_func = qsort_middle;	// with swaps
+                break;
             case 'm':
                 medium_func = merge_sort;
                 break;

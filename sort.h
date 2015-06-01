@@ -16,6 +16,7 @@
 #define OUT     stdout
 
 typedef enum {  // Pivot choice
+	MIDDLE,
     RANDOM,
     RANDOM3,
     VARIOUS,
