@@ -31,12 +31,46 @@ static void sort(void *base, size_t nmemb) {
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-    if (nmemb <= medium_boundary) {
+    if (nmemb <= medium_boundary && medium_func != NULL) {
         medium_func(base, nmemb, length, comp);
     }
     else {  // N is large
 #define first   ((char *)base)
-        char *hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1,comp);
+        char *hole;
+        size_t  distance;
+        switch (pivot_scheme) {   // Quicksort Algorithm
+        case MIDDLE:
+        	hole = first + (nmemb >> 1) * length;	// middle element (not at random)
+        	break;
+        case RANDOM:
+            hole = first + (size_t)(random_number * nmemb) * length;     // pick up one element at random
+            break;
+        case RANDOM3:
+            distance = nmemb / 3;    // distance between elements
+            char    *p1, *p2, *p3;
+            p1 = first + (size_t)(random_number * distance) * length;        // pick up median of random 3 elements
+            p3 = (p2 = p1 + distance * length) + distance * length;
+#ifdef  DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT,
+                    "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
+#endif
+            hole = (comp(p1, p3) < 0 ?
+                   (comp(p2, p1) < 0 ? p1: (comp(p2,  p3) < 0 ? p2 : p3)) :
+                   (comp(p2, p3) < 0 ? p3 : (comp(p2, p1) < 0 ? p2 : p1)));
+            break;
+        case VARIOUS:
+            hole = pivot_array(base, nmemb, length, pivot_number, comp);
+            break;
+        case LOG2:
+            distance = ((size_t)log2(nmemb) - 1) | 1;
+            hole = pivot_array(base, nmemb, length, distance, comp);
+            break;
+        default:
+#ifdef DEBUG
+        	assert(FALSE);
+#endif
+            break;
+        }
         char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
