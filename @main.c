@@ -29,13 +29,13 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-PivotChoice  pivot_scheme = MIDDLE;
+PivotChoice  pivot_scheme = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
 double  random_number;
 
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
-void    (*medium_func)() = NULL;
+void    (*medium_func)() = hybrid_array;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
@@ -257,10 +257,10 @@ int main(int argc, char *argv[])
             puts(
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
-                "\t       d - quick sort (default).\n"
+                "\t       d - quick sort with swaps. pivot is the middle element.\n"
                 "\t       M - index sorting of Merge sort.\n"
                 "\t       m - array sorting of Merge sort.\n"
-				"\t       h - Hybrid merge sort.\n"
+				"\t       h - Hybrid merge sort (default).\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is 1000).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
@@ -278,10 +278,9 @@ int main(int argc, char *argv[])
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
                 "\t-V : algorithm to choose a piVot in quick sort.\n"
-                "\t       d - miDDle element (default).\n"
                 "\t       r - Random element.\n"
-                "\t       3 - median of random 3 elements.\n"
-                "\t       2 - median of random log2(n) elements.\n"
+                "\t       3 - median of random 3 elements (default).\n"
+                "\t       l - median of random Log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-Z : siZe of an array element.\n"
@@ -351,11 +350,11 @@ int main(int argc, char *argv[])
             break;
         case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
             switch(*optarg) {
-            case '2':
-                pivot_scheme = LOG2;
-                break;
             case '3':
                 pivot_scheme = RANDOM3;
+                break;
+            case 'l':
+                pivot_scheme = LOG2;
                 break;
             case 'r':
                 pivot_scheme = RANDOM;
