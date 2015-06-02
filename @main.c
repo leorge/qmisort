@@ -500,7 +500,7 @@ QSORT:
     long *cache, *clear;
     srand((unsigned)time(NULL));
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
-//    	set_random();
+    	set_random();
         if (index & idx) {
             index &= ~idx;  // clear bit
 #ifdef DEBUG
