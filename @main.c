@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
             // simple in-place sort.
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "quick sort : pivot is median of 3 elements with swaps."},
-            {'a', HYBRID_ARRAY, "array_sort()", hybrid_array, FALSE,
+            {'a', HYBRID_ARRAY, "hybrid_array()", hybrid_array, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
 #ifdef  DEBUG
             {'b', BUBBLE_ARRAY, "bubble_sort()", bubble_sort, FALSE,
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 #endif
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "quick sort : pivot is the miDDle element with swaps."},
-            {'e', MERGE_HYBRID_POINTER, "mi_psort(*)", merge_phybrid, TRUE,
+            {'e', MERGE_HYBRID_POINTER, "merge_phybrid(*)", merge_phybrid, TRUE,
                 "hybrid sorting of mErgE sort : pointer sorting."},
             {'E', MERGE_HYBRID_INDEX, "merge_hybrid()", merge_hybrid, FALSE,
                 "hybrid sorting of mErgE sort : index sorting."},
@@ -192,11 +192,11 @@ int main(int argc, char *argv[])
 #endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
                 "Merge sort : array sorting."},
-            {'M', MERGE_INDEX, "imerge_sort()", merge_index, FALSE,
+            {'M', MERGE_INDEX, "merge_index()", merge_index, FALSE,
                 "Merge sort : index sorting."},
-            {'P', POINTER_QSORT3, "pqsort()", qsort3_pointer, TRUE,
+            {'P', POINTER_QSORT3, "qsort3_pointer()", qsort3_pointer, TRUE,
                 "Pointer sorting of qsort(3) to measure sorting time in index sorting."},
-            {'p', POINTER_SORT, "pointer_sort(*)", hybrid_pointer, TRUE,
+            {'p', POINTER_SORT, "hybrid_pointer(*)", hybrid_pointer, TRUE,
                 "hybrid sorting of quick sort : Pointer sorting."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
                 "Stable hybrid sorting of quick sort : array sorting."},
@@ -208,9 +208,9 @@ int main(int argc, char *argv[])
 #endif
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
-            {'X', INDEX_QSORT3, "iqsort()", qsort3_index, FALSE,
+            {'X', INDEX_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
-            {'x', HYBRID_INDEX, "index_sort()", hybrid_index, FALSE,
+            {'x', HYBRID_INDEX, "hybrid_index()", hybrid_index, FALSE,
                 "hybrid sorting of quick sort : indeX sorting."},
     };
 
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
             puts(
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
-                "\t       d - quick sort with swaps. pivot is the middle element.\n"
+                "\t       3 - quick sort with swaps. pivot is median of first, middle and last elements.\n"
                 "\t       M - index sorting of Merge sort.\n"
                 "\t       m - array sorting of Merge sort.\n"
 				"\t       h - Hybrid merge sort (default).\n"
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
                 "\t-Z : siZe of an array element.\n"
 #ifdef DEBUG
                 "\n"
-                "\t-D : trace level for Debug.\n"
+                "\t-D : trace level for Debugging.\n"
                 "\t       1 - Counts.\n"
                 "\t       2 - and actions.\n"
                 "\t       3 - and copies.\n"
@@ -330,8 +330,8 @@ int main(int argc, char *argv[])
             break;
         case 'A':   // Algorithm when nmemb is medium for Array sort
             switch(*optarg) {
-            case 'd':
-            	medium_func = qsort_middle;	// with swaps
+            case '3':
+            	medium_func = qsort_med3;	// with swaps
                 break;
             case 'm':
                 medium_func = merge_sort;
