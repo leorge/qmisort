@@ -40,12 +40,12 @@ static void sort(void *base, size_t nmemb) {
         size_t  distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:
-            hole = first + (size_t)(random_number * nmemb) * length;     // pick up one element at random
+            hole = first + nmemb * random_number / RAND_BASE * length;  // pick up one element at random
             break;
         case RANDOM3:
             distance = nmemb / 3;    // distance between elements
             char    *p1, *p2, *p3;
-            p1 = first + (size_t)(random_number * distance) * length;        // pick up median of random 3 elements
+            p1 = first + distance * random_number / RAND_BASE * length;  // pick up median of random 3 elements
             p3 = (p2 = p1 + distance * length) + distance * length;
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,

@@ -35,6 +35,7 @@ typedef enum {  // trace lelve
 #define FALSE   0
 #define TRUE    (! FALSE)
 #define MAX_BIT     (8 * sizeof(size_t))    // bit size of nmemb
+#define RAND_BASE   ((size_t)RAND_MAX+1)
 
 #define DIGIT_WIDTH 4       // nibble
 
@@ -53,7 +54,7 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 /***** variables *****/
 
 extern size_t       INS;                // main.c
-extern double       random_number;      // main.c
+extern size_t       random_number;      // main.c
 extern size_t       medium_boundary;    // main.c
 extern size_t       small_boundary;     // main.c
 extern int          pivot_number;       // main.c

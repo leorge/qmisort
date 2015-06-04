@@ -83,7 +83,7 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
 #endif
     distance *= size;     // size in byte
 #define first   ((char *)base)
-    char *p = first + (size_t)(random_number * nmemb / pickup) * size;  // 1st pick up point
+    char *p = first + (nmemb * random_number / RAND_BASE / pickup) * size;  // 1st pick up point
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "first data = %s\n", dump_data(p));
 #endif
@@ -103,7 +103,7 @@ void *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(con
     assert(pickup != 0);
 #endif
     size_t distance = (size_t)(nmemb / pickup);    // distance between elements
-    void **p = &base[(size_t)(random_number * nmemb / pickup)];  // 1st pick up point
+    void **p = &base[nmemb * random_number / RAND_BASE / pickup];  // 1st pick up point
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "distance = %ld\tfirst data = %s\n" , distance, dump_data(p));
 #endif

@@ -32,7 +32,7 @@
 PivotChoice  pivot_scheme = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
-double  random_number;
+size_t  random_number;
 
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
 void    (*medium_func)() = qsort_middle;
@@ -40,9 +40,9 @@ size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
 void set_random(void) {
-	random_number = rand()/(double)(RAND_MAX - 1);  // 0 <= random_number < 1
+	random_number = rand();	// size_t
 #ifdef  DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %f\n", random_number);
+	if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld\n", random_number);
 #endif
 }
 
