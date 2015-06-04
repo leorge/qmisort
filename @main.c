@@ -35,7 +35,7 @@ int     pivot_number = 5;
 double  random_number;
 
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
-void    (*medium_func)() = hybrid_array;
+void    (*medium_func)() = qsort_middle;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
