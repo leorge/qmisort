@@ -20,7 +20,12 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
     while (top < bottom) {
         void **hole = &top[(bottom - top) >> 1];    // middle
         void *pivot = *hole;    // store middle data
-        *hole = *bottom; hole = bottom; // last data --> middle
+        *hole = *bottom;
+#ifdef  DEBUG
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s <-- %s\n"
+                , dump_data(pivot), dump_data(*hole));
+#endif
+        hole = bottom; // last data --> middle
         void **lo = top, **hi = bottom, **eq = NULL;
         for (; lo < hole; lo++) {
             if (compare(*lo, pivot) >= 0) {
@@ -65,7 +70,7 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
     return  *middle;
 }
 
-/* array sorting */
+/* search a pivot in an array	*/
 void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *))
 {
 #ifdef  DEBUG
@@ -92,7 +97,7 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
     return search_median(index, pickup, compare);
 }
 
-/* pointer sorting */
+/* search apivotin in an index	*/
 void *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *))
 {
 #ifdef  DEBUG
