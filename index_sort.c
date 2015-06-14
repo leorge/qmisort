@@ -9,7 +9,16 @@
 #include    <math.h>
 #include "sort.h"
 
-static int      (*comp)(const void *, const void *);
+static int  (*comp)(const void *, const void *);
+static int  comp_idx(const void *p1, const void *p2) {
+#ifdef DEBUG
+    if (trace_level >= TRACE_COMPARE) fprintf(OUT, "comp_idx(%s, %s)\n",
+        dump_data(*(char * const *)p1), dump_data(*(char * const *)p2));
+#endif
+    return  comp(*(char * const *)p1, *(char * const *)p2);
+}
+
+
 #ifdef  DEBUG
 static  size_t  search_pivot;
 #endif
@@ -21,7 +30,7 @@ static void sort(void *base[], size_t nmemb) {
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
     if (nmemb <= medium_boundary) {
-        (*medium_func)(base, nmemb, comp);
+        (*medium_func)(base, nmemb, sizeof(void *), comp_idx);
     }
     else {
         size_t distance = ((size_t)log2(nmemb) - 1) | 1;
