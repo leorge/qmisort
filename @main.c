@@ -32,7 +32,8 @@
 PivotChoice  pivot_scheme = RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
-size_t  random_number;
+size_t  random_number;				// same to nmemb
+RANDOM_DEPTH random_depth = 3;
 
 size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
 void    (*medium_func)() = qsort_middle;
@@ -220,7 +221,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:L:l:N:oR:T:V:v:Y:Z:");
+    strcat(optstring, "?A:D:L:l:N:op:R:T:V:v:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -308,13 +309,17 @@ int main(int argc, char *argv[])
             small_boundary = (int)strtoul(optarg, NULL, 0);
             break;
         case 'N':
-            nmemb = strtoul(optarg, NULL, 0);           // Check a definition of size_t
+            nmemb = strtoul(optarg, NULL, 0);
             break;
         case 'o':
             print_out = TRUE;
             break;
+        case 'p':
+            random_depth = strtol(optarg, NULL, 0);
+            if (random_depth <= 0) random_depth = 1;
+            break;
         case 'R':
-            repeat_count = strtoul(optarg, NULL, 0);    // Check a definition of size_t
+            repeat_count = strtoul(optarg, NULL, 0);
             break;
         case 'T':
             limit = atoi(optarg);
