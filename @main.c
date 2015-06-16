@@ -523,8 +523,13 @@ REDO:
             clear = cache;  // really enough?
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
+#ifndef DEBUG
             begin_timer(repeat_count);
+#endif
             for (int i = 0; i < repeat_count; i++) {
+#ifdef DEBUG
+            	begin_timer(1);
+#endif
                 qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
