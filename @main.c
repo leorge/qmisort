@@ -505,8 +505,8 @@ QSORT:
     void **idxtbl;
     long *cache, *clear;
     srand((unsigned)time(NULL));
+    random_number = set_random();
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
-    	set_random();
         if (index & idx) {
             index &= ~idx;  // clear bit
 #ifdef DEBUG
@@ -526,17 +526,6 @@ REDO:
             begin_timer(repeat_count);
             for (int i = 0; i < repeat_count; i++) {
                 qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
-#ifdef  DEBUG
-                if (trace_level != TRACE_NONE) {
-                    if (repeat_count > 1) {
-                    	sleep(1);	// to generate another random number
-                        set_random();
-                    }
-                	begin_timer(1);
-                }
-#else
-                set_random();
-#endif
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
                 if (info->pointer_sort) {
