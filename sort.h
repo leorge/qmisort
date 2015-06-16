@@ -72,7 +72,7 @@ extern Trace    trace_level;            // main.c
 #endif
 
 /***** Functions *****/
-extern void set_random(void);
+extern size_t set_random(void);
 extern void (*small_func)();
 extern void (*medium_func)();
 

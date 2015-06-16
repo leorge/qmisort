@@ -40,11 +40,12 @@ void    (*medium_func)() = qsort_middle;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
-void set_random(void) {
-	random_number = rand();	// size_t
+size_t set_random(void) {
+	size_t	rtn = rand();
 #ifdef  DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld\n", random_number);
+	if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld\n", rtn);
 #endif
+	return	rtn;
 }
 
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
