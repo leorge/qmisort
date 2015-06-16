@@ -42,7 +42,7 @@ typedef enum {  // trace lelve
 #define MAX_SIZE    (1 << DIGIT_WIDTH)
 #define MASK_DIGIT  (MAX_SIZE - 1)
 
-typedef	long		RANDOM_DEPTH;
+typedef long RANDOM_DEPTH;
 typedef unsigned long long INSERT_INDEX;    // 4 bits/element * 16 elements = 64 bits = bit width of long long
 
 typedef unsigned char       byte;
@@ -60,7 +60,7 @@ extern size_t       medium_boundary;    // main.c
 extern size_t       small_boundary;     // main.c
 extern int          pivot_number;       // main.c
 extern PivotChoice  pivot_scheme;       // main.c
-extern RANDOM_DEPTH random_depth;		// main.c
+extern RANDOM_DEPTH random_depth;       // main.c
 extern bool         ispointer;          // index_sort.c
 extern double       usec, esd;          // timer.c
 extern long         *microsec;          // timer.c
