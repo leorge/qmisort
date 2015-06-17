@@ -14,7 +14,6 @@
  Link option
      -lm
  */
-
 #include    <ctype.h>
 #include    <math.h>
 #include    <sys/time.h>
@@ -504,7 +503,20 @@ QSORT:
 
     void **idxtbl;
     long *cache, *clear;
-    srand((unsigned)time(NULL));
+    unsigned seed;
+//    struct timespec tp;
+//    int rtn = clock_gettime(CLOCK_BOOTTIME,&tp);
+    FILE *clk;
+    if ((clk = fopen("/proc/uptime", "r")) != NULL) {
+        float f1, f2;
+        if (fscanf(clk, "%f %f", &f1, &f2)) seed = (unsigned)(f2*100.);    // 10 nano seconds
+        fclose(clk);
+    }
+    else seed = (unsigned)time(NULL);   // fail safe
+#ifdef DEBUG
+    if (trace_level == TRACE_DEBUG) fprintf(OUT, "random seed = %d\n", seed);
+#endif
+    srand(seed);
     random_number = set_random();
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
         if (index & idx) {
