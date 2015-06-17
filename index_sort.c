@@ -43,9 +43,9 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
         void **p1 = base + distance * random / RAND_BASE;
         void **p2 = p1 + distance;
         void **p3 = p2 + distance;
-        void **hole = (comp_idx(*p1, *p3) < 0 ?
-               (comp_idx(*p2, *p1) < 0 ? p1: (comp_idx(*p2,  *p3) < 0 ? p2 : p3)) :
-               (comp_idx(*p2, *p3) < 0 ? p3 : (comp_idx(*p2, *p1) < 0 ? p2 : p1)));
+        void **hole = (comp_idx(p1, p3) < 0 ?
+               (comp_idx(p2, p1) < 0 ? p1: (comp_idx(p2,  p3) < 0 ? p2 : p3)) :
+               (comp_idx(p2, p3) < 0 ? p3 : (comp_idx(p2, p1) < 0 ? p2 : p1)));
 #ifdef  DEBUG
 		if (trace_level >= TRACE_DUMP) fprintf(OUT,
 				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s) --> hole = %s\n", nmemb, distance,
