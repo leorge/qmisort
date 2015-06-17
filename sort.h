@@ -109,8 +109,8 @@ void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 
 // search pivot
-void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *));
-void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *));
+void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random);
+void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 
 // others
 const char  *dump_data(const void *data);
