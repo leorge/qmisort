@@ -514,7 +514,7 @@ QSORT:
     }
     else seed = (unsigned)time(NULL);   // fail safe
 #ifdef DEBUG
-    if (trace_level == TRACE_DEBUG) fprintf(OUT, "random seed = %d\n", seed);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "random seed = %d\n", seed);
 #endif
     srand(seed);
     random_number = set_random();
