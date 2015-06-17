@@ -11,6 +11,7 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
+static size_t	random = 0;
 static char     *pivot;
 #ifdef  DEBUG
 static  size_t  search_pivot;
@@ -25,7 +26,7 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-static void sort(void *base, size_t nmemb) {
+static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
@@ -36,17 +37,21 @@ static void sort(void *base, size_t nmemb) {
     }
     else {  // N is large
 #define first   ((char *)base)
+    	if (depth > 0) {
+    		random = set_random();
+    		depth--;
+    	}
         char *hole;
         size_t  distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:
-            hole = first + nmemb * random_number / RAND_BASE * length;  // pick up one element at random
+            hole = first + nmemb * random / RAND_BASE * length;  // pick up one element at random
             break;
         case RANDOM3:
             distance = nmemb / 3;    // distance between elements
-            char    *p1, *p2, *p3;
-            p1 = first + distance * random_number / RAND_BASE * length;  // pick up median of random 3 elements
-            p3 = (p2 = p1 + distance * length) + distance * length;
+            char *p1 = first + distance * random / RAND_BASE * length;  // pick up median of random 3 elements
+            char *p2 = p1 + distance * length;
+            char *p3 = p2 + distance * length;
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
                     "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
@@ -56,11 +61,11 @@ static void sort(void *base, size_t nmemb) {
                    (comp(p2, p3) < 0 ? p3 : (comp(p2, p1) < 0 ? p2 : p1)));
             break;
         case VARIOUS:
-            hole = pivot_array(base, nmemb, length, pivot_number, comp);
+            hole = pivot_array(base, nmemb, length, pivot_number, comp, random);
             break;
         case LOG2:
             distance = ((size_t)log2(nmemb) - 1) | 1;
-            hole = pivot_array(base, nmemb, length, distance, comp);
+            hole = pivot_array(base, nmemb, length, distance, comp, random);
             break;
         default:
 #ifdef DEBUG
@@ -113,8 +118,8 @@ static void sort(void *base, size_t nmemb) {
 #ifdef DEBUG
         dump_rate(n_lo, n_hi);
 #endif
-        sort(first, n_lo);
-        sort(eq + length, n_hi);
+        sort(first, n_lo, depth);
+        sort(eq + length, n_hi, depth);
     }
 #ifdef DEBUG
     dump_array("sort() done.", base, nmemb, length);
@@ -129,7 +134,7 @@ void hybrid_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 #ifdef DEBUG
         search_pivot = 0;
 #endif
-        sort(base, nmemb);
+        sort(base, nmemb, random_depth);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "search_pivot = %ld\n", search_pivot);
 #endif
@@ -173,7 +178,7 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
         comp = acomp;       // sort() calls comp()
         comp_p = compare;   // comp() calls compare()
         length = sizeof(POINTER_INDEX);
-        sort(tbl, nmemb);   // sort array
+        sort(tbl, nmemb, random_depth);   // sort array
         /*  sort to be stable and reoder idxtbl */
         comp = icomp;
         t = (POINTER_INDEX *)tbl;
@@ -186,11 +191,11 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld] = %ld, %p %s\n", i, t->index, t->address, (char *)(t->address));
 #endif
             if (compare(t->address, from->address)) {
-                sort(from, t - from);
+                sort(from, t - from, random_depth);
                 from = t;
             }
         }
-        sort(from, t - from);
+        sort(from, t - from, 0);
         /* reorder idxtbl   */
         p = idxtbl;
         t = (POINTER_INDEX *)tbl;

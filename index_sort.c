@@ -9,6 +9,8 @@
 #include    <math.h>
 #include "sort.h"
 
+static size_t	random = 0;
+
 static int  (*comp)(const void *, const void *);
 static int  comp_idx(const void *p1, const void *p2) {
 #ifdef DEBUG
@@ -23,7 +25,7 @@ static int  comp_idx(const void *p1, const void *p2) {
 static  size_t  search_pivot;
 #endif
 
-static void sort(void *base[], size_t nmemb) {
+static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++; // Counted in middle_index() or pivot_sort()
@@ -33,12 +35,23 @@ static void sort(void *base[], size_t nmemb) {
         (*medium_func)(base, nmemb, sizeof(void *), comp_idx);
     }
     else {
-        size_t distance = ((size_t)log2(nmemb) - 1) | 1;
-        void **hole = pivot_pointer(base, nmemb, distance, comp);
-        void **last = &base[nmemb - 1];
+    	if (depth > 0) {
+    		random = set_random();
+    		depth--;
+    	}
+        size_t distance = nmemb / 3;	// median of random 3
+        void **p1 = base + distance * random / RAND_BASE;
+        void **p2 = p1 + distance;
+        void **p3 = p2 + distance;
+        void **hole = (comp_idx(*p1, *p3) < 0 ?
+               (comp_idx(*p2, *p1) < 0 ? p1: (comp_idx(*p2,  *p3) < 0 ? p2 : p3)) :
+               (comp_idx(*p2, *p3) < 0 ? p3 : (comp_idx(*p2, *p1) < 0 ? p2 : p1)));
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "\npivot <-- pivot = %s <-- last = %s\n", dump_data(*hole), dump_data(*last));
+		if (trace_level >= TRACE_DUMP) fprintf(OUT,
+				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s) --> hole = %s\n", nmemb, distance,
+				dump_data(*p1), dump_data(*p2), dump_data(*p3), dump_data(*hole));
 #endif
+        void **last = &base[nmemb - 1];
         void    *pivot = *hole; *hole = *last;  // *pivot <-- *hole <-- *last  cf. sort() in array_sort.c
         void    **lo, **hi = hole = last, **eq = NULL;
         for (hi--, lo = base; lo < hole; lo++) {
@@ -83,8 +96,8 @@ static void sort(void *base[], size_t nmemb) {
 #ifdef DEBUG
         dump_rate(n_lo, n_hi);
 #endif
-        sort(base, n_lo);
-        sort(eq + 1, n_hi);
+        sort(base, n_lo, depth);
+        sort(eq + 1, n_hi, depth);
     }
 #ifdef DEBUG
     dump_pointer("sort() done.", base, nmemb);
@@ -96,7 +109,7 @@ void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
     if (nmemb <= 1) return;
     if (idxtbl != NULL) {
         comp = compare;
-        sort(idxtbl, nmemb);
+        sort(idxtbl, nmemb, random_depth);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
             fprintf(OUT, "search pivot %ld times\n", search_pivot);
@@ -134,11 +147,11 @@ static void address_sort(void **idxtbl, size_t nmemb, int (*compare)(const void 
     void    **from = p++;
     for (int i = 1; i < nmemb; i++, p++) {
         if (compare(*p, *from)) {
-            sort(from, p - from);
+            sort(from, p - from, random_depth);
             from = p;
         }
     }
-    sort(from, p - from);
+    sort(from, p - from, 0);
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) {
 //      for (int i = 0; i < nmemb; i++) fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
