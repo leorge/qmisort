@@ -268,11 +268,12 @@ int main(int argc, char *argv[])
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-o : print Out the last result.\n"
-                "\t-R : Repeat count of sampling to calculate Stdev "
+                "\t-r : Random depth in recusion (default is 3)\n"
+                "\t-R : Repeat count of "
 #ifndef DEBUG
-            	"(default is 12).\n"
+            	"sampling to calculate Stdev (default is 12).\n"
 #else
-               	"(default is 1).\n"
+               	"test (default is 1).\n"
 #endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
@@ -560,15 +561,11 @@ REDO:
                     stop_timer();
                 }
 #ifdef  DEBUG
-                if (trace_level != TRACE_NONE) {
-        			fprintf(OUT, "%s", info->name);
-                    elapsed_time(info->description, skip);
-                }
+                if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
+                elapsed_time(info->description, 0);
 #endif
             }
-#ifdef  DEBUG
-            if (trace_level == TRACE_NONE) elapsed_time(info->description, skip);
-#else
+#ifndef DEBUG
             if (elapsed_time(info->description, skip) > limit) goto REDO;
 #endif
             if (check_result(info->name, workbuff)) {   // error
