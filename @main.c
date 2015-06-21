@@ -243,25 +243,25 @@ int main(int argc, char *argv[])
     while ((opt = getopt(argc, argv, optstring)) != -1) {
         switch (opt) {
         case '?':
-            printf("Usage : %s [options]"
-                " [-Z element_size] [-R repeat_count] [-NL nmemb] [-AV func] [-v choice]"
-#ifdef  DEBUG
-                    " [-D trace_level]"
-#endif
-                    " [filename]\nOptions :\n"
-                    "\t-? : show this help.\n"
-                    "\n"
-                    , prg);
+            printf("Usage : %s [options] [filename]\n", prg);
             for (idx = 1, info = test, i = 0; i++ < sizeof(test) / sizeof(INFO); idx <<= 1, info++) {
                 printf("\t-%c : %s\n", info->option, info->description);
             }
             puts(
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
-                "\t       3 - quick sort with swaps. pivot is median of first, middle and last elements.\n"
+                "\t       3 - conventional median-of-3 quick sort.\n"
                 "\t       M - index sorting of Merge sort.\n"
                 "\t       m - array sorting of Merge sort.\n"
 				"\t       h - Hybrid merge sort (default).\n"
+#ifdef DEBUG
+                "\t-D : trace level for Debugging.\n"
+                "\t       1 - Counts.\n"
+                "\t       2 - and actions.\n"
+                "\t       3 - and copies.\n"
+                "\t       4 - and comparisons.\n"
+                "\t       5 - and Others.\n"
+#endif
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is 1000).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
@@ -269,14 +269,14 @@ int main(int argc, char *argv[])
                 "\t-N : Number of members (default is 31).\n"
                 "\t-o : print Out the last result.\n"
                 "\t-r : Random depth in recusion (default is 3)\n"
-                "\t-R : Repeat count of "
+                "\t-R : Repeat count "
 #ifndef DEBUG
-            	"sampling to calculate Stdev (default is 12).\n"
+            	"of sampling to calculate Stdev (default is 12).\n"
 #else
-               	"test (default is 1).\n"
+               	"to test (default is 1).\n"
 #endif
 #ifndef DEBUG
-                "\t-T : uncerTainTy percenT to pass a test (default is 2 [%]).\n"
+                "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
                 "\t-V : algorithm to choose a piVot in quick sort.\n"
@@ -285,16 +285,7 @@ int main(int argc, char *argv[])
                 "\t       l - median of random Log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
                 "\t-Y : cYclic work buffer length.\n"
-                "\t-Z : siZe of an array element.\n"
-#ifdef DEBUG
-                "\n"
-                "\t-D : trace level for Debugging.\n"
-                "\t       1 - Counts.\n"
-                "\t       2 - and actions.\n"
-                "\t       3 - and copies.\n"
-                "\t       4 - and comparisons.\n"
-                "\t       5 - and Others."
-#endif
+                "\t-Z : siZe of an array element."
             );
             return EXIT_SUCCESS;
             break;
