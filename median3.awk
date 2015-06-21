@@ -1,4 +1,7 @@
 #!/usr/bin/awk -f
+#
+# Generate data for the worst case of median-of-3.
+#
 BEGIN {
     if (ARGC <= 1) {
         print "median-3-killer : n-1, 0, 1, 2, ..., n-2"
@@ -7,7 +10,7 @@ BEGIN {
     else num = ARGV[1];
     fmt = sprintf("%d", num -1);
     fmt = sprintf("%%0%dd\n", length(fmt));
-    printf(fmt, num - 1);
-    for (i = 0; i < num - 1; ) printf(fmt, i++);
+    for (i = 0; i < num - 1; ) printf(fmt, ++i);
+    printf(fmt, 0);
     exit;
 }
