@@ -34,7 +34,7 @@ int     pivot_number = 5;
 size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
 
-size_t  medium_boundary = 1000;     //  nmemb to alternate to merge sort.
+size_t  medium_boundary = 0;     //  nmemb to alternate to merge sort.
 void    (*medium_func)() = qsort_middle;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
     bool    print_out = FALSE;
     bool    IsPercentB = FALSE;
     int     opt, repeat_count, buffer_length = 1;
-    double  Loption = 0.0;
+    double  Loption = 0.0;	// temporary variable for medium_boundary
     size_t  nmemb = 31, size = 0;
     int     limit = 2;      // boundary precent to pass
 
@@ -263,7 +263,7 @@ int main(int argc, char *argv[])
                 "\t       5 - and Others.\n"
 #endif
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
-                "\t-L : boundary to change algorithm from N is Large (default is 1000).\n"
+                "\t-L : boundary to change algorithm from N is Large (default is auto).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
