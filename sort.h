@@ -61,6 +61,7 @@ extern size_t       small_boundary;     // main.c
 extern int          pivot_number;       // main.c
 extern PivotChoice  pivot_scheme;       // main.c
 extern RANDOM_DEPTH random_depth;       // main.c
+extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
 extern double       usec, esd;          // timer.c
 extern long         *microsec;          // timer.c
