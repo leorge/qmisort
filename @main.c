@@ -33,8 +33,9 @@ Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
 size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
+bool    reuse_random = FALSE;       // reuse random number or not
 
-size_t  medium_boundary = 0;     //  nmemb to alternate to merge sort.
+size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = qsort_middle;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
@@ -221,7 +222,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:L:l:N:oR:r:T:V:v:Y:Z:");
+    strcat(optstring, "?A:D:L:l:N:oR:r:T:uV:v:Y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -277,6 +278,7 @@ int main(int argc, char *argv[])
 #endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
+                "\t-u : reUse random number (default is FALSE).\n"
 #endif
                 "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
                 "\t-V : algorithm to choose a piVot in quick sort.\n"
@@ -316,6 +318,9 @@ int main(int argc, char *argv[])
         case 'T':
             limit = atoi(optarg);
             break;
+        case 'u':
+            reuse_random = TRUE;
+        	break;
         case 'v':
             pivot_number = (int)strtoul(optarg, NULL, 0) | 1;   // make an odd number
             break;
