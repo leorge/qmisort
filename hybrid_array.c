@@ -11,8 +11,9 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
-static size_t   boundary = 0;     //  nmemb to alternate to merge sort.
+static size_t   boundary = 0;   // nmemb to alternate to merge sort.
 static char     *pivot;
+static size_t   random;         // random number
 #ifdef  DEBUG
 static  size_t  search_pivot;
 #endif
@@ -37,12 +38,15 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     }
 //    else if (nmemb <= 8) qsort_middle(base, nmemb, length, comp);	// for the case of entire quick sort
     else {  // N is large
-        size_t	random = (size_t)RAND_MAX >> 1;
 #define first   ((char *)base)
     	if (depth > 0) {
     		random = set_random();
     		depth--;
     	}
+#ifdef DEBUG
+    	else if (reuse_random) {}   // no change
+#endif
+    	else random = (size_t)RAND_MAX >> 1;
         char *hole;
         size_t  distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
