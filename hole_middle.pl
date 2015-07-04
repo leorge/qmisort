@@ -11,8 +11,8 @@ my $fmt = sprintf("%%0%dd\n", length($n - 1));
 #warn "\$n = $n\t\$fmt = $fmt\n";
 my @list = (--$n);
 while ($n--) {
-    my @center = splice(@list, ($#list - 1) / 2, 1, $n);
-    my @last = splice(@list, $#list, 1, @center);
+    my @middle = splice(@list, ($#list - 1) / 2, 1, $n);
+    my @last = splice(@list, $#list, 1, @middle);
     unshift @list, @last;
 }
 foreach my $i (@list) {
