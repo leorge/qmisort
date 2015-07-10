@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
                 "\t-u : reUse random number (default is FALSE).\n"
 #endif
-                "\t-v : number of elements to select a pivot for -V v option (default is 5).\n"
+                "\t-v : number of elements to choose a pivot for -V v option (default is 5).\n"
                 "\t-V : algorithm to choose a piVot in quick sort.\n"
                 "\t       r - Random element.\n"
                 "\t       3 - median of random 3 elements (default).\n"
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
             reuse_random = TRUE;
         	break;
         case 'v':
-            pivot_number = (int)strtoul(optarg, NULL, 0) | 1;   // make an odd number
+            pivot_number = ((int)strtoul(optarg, NULL, 0) - 1) | 1; // decrease to odd number
             break;
         case 'Y':
             buffer_length = (int)strtoul(optarg, NULL, 0);
