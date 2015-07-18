@@ -63,8 +63,8 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
                     "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
 #endif
             hole = (comp(p1, p3) < 0 ?
-                   (comp(p2, p1) < 0 ? p1: (comp(p2,  p3) < 0 ? p2 : p3)) :
-                   (comp(p2, p3) < 0 ? p3 : (comp(p2, p1) < 0 ? p2 : p1)));
+                   (comp(p2, p1) < 0 ? p1: (comp(p2, p3) < 0 ? p2 : p3)) :
+                   (comp(p2, p3) < 0 ? p3: (comp(p2, p1) < 0 ? p2 : p1)));
             break;
         case VARIOUS:
             hole = pivot_array(base, nmemb, length, pivot_number, comp, random);
