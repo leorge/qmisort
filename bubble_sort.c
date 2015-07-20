@@ -11,7 +11,7 @@
 
 static size_t   length;
 
-/* pointer sorting */
+/* pointer sorting  */
 void bubble_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
@@ -25,14 +25,14 @@ void bubble_pointer(void **base, size_t nmemb, int (*compare)(const void *, cons
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) dump_pointer("bubble_pointer()", base, last - first + 1);
 #endif
-        for (p1 = first; (p2 = p1 + 1) <= last; p1++) { // search a reverse order pair
-            if (compare(*p1, *p2) > 0) {    // found
-                pivot = *p1; *p1 = *p2;     // save and shift first
-                for (p1 = p2; (p2 = p1 + 1) <= last; p1++) {    // search a greater element
-                    if (compare(*p2, pivot) > 0) break; // found
-                    *p1 = *p2;  // shift first
+        for (p1 = first; (p2 = p1 + 1) <= last; p1++) {
+            if (compare(*p1, *p2) > 0) {
+                pivot = *p1; *p1 = *p2;
+                for (p1 = p2; (p2 = p1 + 1) <= last; p1++) {
+                    if (compare(*p2, pivot) > 0) break;
+                    *p1 = *p2;
                 }
-                *(anchor = p1) = pivot; // restore
+                *(anchor = p1) = pivot;
             }
         }
         last = anchor - 1;
@@ -72,15 +72,17 @@ void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
 #ifdef DEBUG
                 if (trace_level >= TRACE_DUMP) fprintf(OUT, "revese order %s --> %s\n", p1, p2);
 #endif
-                copy(pivot, p1); copy(p1, p2);      // save and shift first
-                for (p1 = p2; (p2 = p1 + size) <= last; p1 += size) {   // search a greater element
+                copy(pivot, p1);     // pick up the greater element
+                copy(p1, p2);        // shift the lesser element left
+                for (p1 = p2; (p2 = p1 + size) <= last; p1 += size) {   // search a more greater element
                     if (compare(p2, pivot) > 0) break;  // found
-                    copy(p1, p2);   // shift first
+                    copy(p1, p2);   // shift left
                 }
-                copy(anchor = p1, pivot);   // restore
+                copy(anchor = p1, pivot);   // insert before the more greater element
             }
         }
-        last = anchor - size;
+        // array[anchor..last] are sorted
+        last = anchor - size;   // array[first..last] are not sorted
     } while (first < last);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) dump_array("bubble_sort() done.", base, nmemb, size);
