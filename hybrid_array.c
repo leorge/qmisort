@@ -140,7 +140,7 @@ void hybrid_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 #ifdef DEBUG
         search_pivot = 0;
 #endif
-        if (medium_boundary) boundary = medium_boundary; else boundary = log2(nmemb) / 3;
+        if (medium_boundary) boundary = medium_boundary; else boundary = 8192;
         sort(base, nmemb, random_depth);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "search_pivot = %ld\n", search_pivot);
