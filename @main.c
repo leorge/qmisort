@@ -84,6 +84,8 @@ typedef enum {
     BUBBLE_POINTER,
     COCKTAIL_ARRAY,
     COCKTAIL_POINTER,
+    PENDULUM_ARRAY,
+    PENDULUM_POINTER,
     MERGE_HYBRID_INDEX,
     MERGE_HYBRID_POINTER,
     HYBRID_ARRAY,
@@ -207,6 +209,8 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
             "Tree sort : median node tree."},
+            {'n', PENDULUM_ARRAY, "pendulum_sort()", pendulum_sort, FALSE,
+            "Pendulum sort."},
 #endif
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
