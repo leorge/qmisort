@@ -79,12 +79,10 @@ extern void (*medium_func)();
 
 // array sorting
 void    bubble_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    cocktail_sort   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    hybrid_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    pendulum_sort   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -92,6 +90,8 @@ void    qsort_med3      (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    quick_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    step_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    stepup_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // index sorting
@@ -102,14 +102,13 @@ void    qsort3_index    (void *base, size_t nmemb, size_t size, int (*compare)(c
 
 // pointer sorting
 void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    cocktail_pointer(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    pendulum_pointer(void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    qsort3_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    step_pointer    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 
 // search pivot
 void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random);
