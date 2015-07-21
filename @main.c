@@ -179,8 +179,6 @@ int main(int argc, char *argv[])
                 "Heap sort."},
             {'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
             "Insertion sort : linear search."},
-            {'j', STEP_SORT, "step_sort()", step_sort, FALSE,
-                "stepup sort : bidirectional stepup sort."},
 			{'k', STEPUP_SORT, "stepup_sort()", stepup_sort, FALSE,
 				"stepup sort : improved bubble sort."},
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
@@ -204,6 +202,10 @@ int main(int argc, char *argv[])
 #endif
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
+#ifdef  DEBUG
+			{'w', STEP_SORT, "step_sort()", step_sort, FALSE,
+				"step up_doWn sort : bidirectional stepup sort."},
+#endif
             {'X', INDEX_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
             {'x', HYBRID_INDEX, "hybrid_index()", hybrid_index, FALSE,
