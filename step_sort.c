@@ -26,11 +26,11 @@ void step_pointer(void **base, size_t nmemb, int (*compare)(const void *, const 
         char **anchor = first + 1;
         for (pivot = p1 = first; p1 < last; p1 = p2) {
             if (compare(*pivot, *(p2 = p1 + 1)) > 0) {
-            	if (p2 < last) continue; else p1 = p2;
+                if (p2 < last) continue; else p1 = p2;
             }
             else if (p1 == pivot) {
-            	pivot =p2;
-            	continue;
+                pivot =p2;
+                continue;
             }
             tmp = *pivot; *pivot = *p1; *p1 = tmp;  // swap
             anchor = p1; pivot = p2;
@@ -43,13 +43,13 @@ void step_pointer(void **base, size_t nmemb, int (*compare)(const void *, const 
 #endif
         anchor = last - 1;
         for (pivot = p2 = last; p2 > first; p2 = p1) {
-        	if (compare(*(p1 = p2 - 1), *pivot) > 0) {
-        		if (p1 > first) continue; else p2 = p1;
-        	}
-        	else if (p2 == pivot) {
-        		pivot = p1;
-        		continue;
-        	}
+            if (compare(*(p1 = p2 - 1), *pivot) > 0) {
+                if (p1 > first) continue; else p2 = p1;
+            }
+            else if (p2 == pivot) {
+                pivot = p1;
+                continue;
+            }
             tmp = *pivot; *pivot = *p2; *p2 = tmp;  // swap
             anchor = p2; pivot = p1;
         }
@@ -66,7 +66,7 @@ void step_pointer(void **base, size_t nmemb, int (*compare)(const void *, const 
 void step_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
     char tmp[size+1]; tmp[0] = '\0';
-	char *first = base, *last = first + (nmemb - 1) * size;
+    char *first = base, *last = first + (nmemb - 1) * size;
     do {
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) dump_array("Step up", first, (last - first) / size + 1, size);
@@ -77,24 +77,24 @@ void step_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void 
             if (compare(pivot, p2 = p1 + size) > 0) {
 #ifdef DEBUG
                 if (p1 > pivot) { /* searching a greater element */ }
-                else if (trace_level >= TRACE_DUMP)	// p1 == pivot
-                	fprintf(OUT, "revese order (%s , %s)\n", dump_data(p1), dump_data(p2));
+                else if (trace_level >= TRACE_DUMP) // p1 == pivot
+                    fprintf(OUT, "revese order (%s , %s)\n", dump_data(p1), dump_data(p2));
 #endif
                 if (p2 < last) continue;
                 else p1 = p2;   // the last element is smaller than the pivot
             }
-            else if (p1 == pivot) {	// increasing
-            	pivot = p2; // step up
-            	continue;
+            else if (p1 == pivot) { // increasing
+                pivot = p2; // step up
+                continue;
             }
 #ifdef DEBUG
-			if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(pivot), dump_data(p1));
-			qsort_moved += 3;
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(pivot), dump_data(p1));
+            qsort_moved += 3;
 #endif
-			memcpy(tmp, pivot, size);
-			memcpy(pivot, p1, size);
-			memcpy(anchor = p1, tmp, size);
-			pivot = p2;	// step up
+            memcpy(tmp, pivot, size);
+            memcpy(pivot, p1, size);
+            memcpy(anchor = p1, tmp, size);
+            pivot = p2; // step up
         }
         last = anchor - size;   // array[first..last] are not sorted
 #ifdef DEBUG
@@ -106,24 +106,24 @@ void step_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void 
             if (compare(p1 = p2 - size, pivot) > 0) {
 #ifdef DEBUG
                 if (p2 < pivot) { /* searching a lesser element */ }
-                else if (trace_level >= TRACE_DUMP)	// p1 == pivot
-                	fprintf(OUT, "revese order (%s , %s)\n", dump_data(p1), dump_data(p2));
+                else if (trace_level >= TRACE_DUMP) // p1 == pivot
+                    fprintf(OUT, "revese order (%s , %s)\n", dump_data(p1), dump_data(p2));
 #endif
                 if (p1 > first) continue;
                 else p2 = p1;   // the last element is greater than the pivot
             }
-            else if (p2 == pivot) {	// decreasing
-            	pivot = p1; // step down
-            	continue;
+            else if (p2 == pivot) { // decreasing
+                pivot = p1; // step down
+                continue;
             }
 #ifdef DEBUG
-			if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(pivot), dump_data(p2));
-			qsort_moved += 3;
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(pivot), dump_data(p2));
+            qsort_moved += 3;
 #endif
-			memcpy(tmp, pivot, size);
-			memcpy(pivot, p2, size);
-			memcpy(anchor = p2, tmp, size);
-			pivot = p1;	// step down
+            memcpy(tmp, pivot, size);
+            memcpy(pivot, p2, size);
+            memcpy(anchor = p2, tmp, size);
+            pivot = p1; // step down
         }
         first = anchor + size;   // array[first..last] are not sorted
     } while (first < last);
@@ -148,24 +148,24 @@ void stepup_sort(void *base, size_t nmemb, size_t size, int (*compare)(const voi
             if (compare(pivot, p2 = p1 + size) > 0) {
 #ifdef DEBUG
                 if (p1 > pivot) { /* searching a greater element */ }
-                else if (trace_level >= TRACE_DUMP)	// p1 == pivot
-                	fprintf(OUT, "revese order (%s , %s)\n", dump_data(p1), dump_data(p2));
+                else if (trace_level >= TRACE_DUMP) // p1 == pivot
+                    fprintf(OUT, "revese order (%s , %s)\n", dump_data(p1), dump_data(p2));
 #endif
                 if (p2 < last) continue;
                 else p1 = p2;   // the last element is smaller than the pivot
             }
-            else if (p1 == pivot) {	// increasing
-            	pivot = p2; // step up
-            	continue;
+            else if (p1 == pivot) { // increasing
+                pivot = p2; // step up
+                continue;
             }
 #ifdef DEBUG
-			if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(pivot), dump_data(p1));
-			qsort_moved += 3;
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap %s <--> %s\n", dump_data(pivot), dump_data(p1));
+            qsort_moved += 3;
 #endif
-			memcpy(tmp, pivot, size);
-			memcpy(pivot, p1, size);
-			memcpy(anchor = p1, tmp, size);
-			pivot = p2;	// step up
+            memcpy(tmp, pivot, size);
+            memcpy(pivot, p1, size);
+            memcpy(anchor = p1, tmp, size);
+            pivot = p2; // step up
         }
         last = anchor - size;   // array[first..last] are not sorted
     } while (first < last);
