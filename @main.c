@@ -41,11 +41,11 @@ size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
 size_t set_random(void) {
-	size_t	rtn = rand();
+    size_t  rtn = rand();
 #ifdef  DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld\n", rtn);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld\n", rtn);
 #endif
-	return	rtn;
+    return  rtn;
 }
 
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
@@ -79,6 +79,7 @@ typedef enum {
     HEAP_SORT,
     TREE_SORT,
     INSERT_SORT,
+    INSERT_BINARY,
     BUBBLE_SORT,
     STEPUP_SORT,
     STEP_SORT,
@@ -161,7 +162,9 @@ int main(int argc, char *argv[])
                 "hybrid sorting of quick sort : array sorting."},
 #ifdef  DEBUG
             {'b', BUBBLE_SORT, "bubble_sort()", bubble_sort, FALSE,
-                "Bubble sort : with no swaps."},
+                "Bubble sort : with anchor pointer."},
+            {'B', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
+                "Insertion sort : Binary search."},
 #endif
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "quick sort : pivot is the miDDle element with swaps."},
@@ -180,8 +183,8 @@ int main(int argc, char *argv[])
                 "Heap sort."},
             {'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
             "Insertion sort : linear search."},
-			{'k', STEPUP_SORT, "stepup_sort()", stepup_sort, FALSE,
-				"stepup sort : improved bubble sort."},
+            {'k', STEPUP_SORT, "stepup_sort()", stepup_sort, FALSE,
+                "stepup sort : improved bubble sort."},
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
                 "quick sort : pivot is the middle element with swaps in K&R style."},
 #endif
@@ -204,10 +207,10 @@ int main(int argc, char *argv[])
             {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
 #ifdef  DEBUG
-			{'w', STEP_SORT, "step_sort()", step_sort, FALSE,
-				"step up/doWn sort : bidirectional stepup sort."},
-			{'W', STEP_POINTER, "step_pointer()", step_pointer, TRUE,
-				"step up/doWn sort : pointer sorting of stepup sort."},
+            {'w', STEP_SORT, "step_sort()", step_sort, FALSE,
+                "step up/doWn sort : bidirectional stepup sort."},
+            {'W', STEP_POINTER, "step_pointer()", step_pointer, TRUE,
+                "step up/doWn sort : pointer sorting of stepup sort."},
 #endif
             {'X', INDEX_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
@@ -231,7 +234,7 @@ int main(int argc, char *argv[])
     bool    print_out = FALSE;
     bool    IsPercentB = FALSE;
     int     opt, repeat_count, buffer_length = 1;
-    double  Loption = 0.0;	// temporary variable for medium_boundary
+    double  Loption = 0.0;  // temporary variable for medium_boundary
     size_t  nmemb = 31, size = 0;
     int     limit = 2;      // boundary precent to pass
 
@@ -253,7 +256,7 @@ int main(int argc, char *argv[])
                 "\t       3 - conventional median-of-3 quick sort.\n"
                 "\t       M - index sorting of Merge sort.\n"
                 "\t       m - array sorting of Merge sort.\n"
-				"\t       h - Hybrid merge sort (default).\n"
+                "\t       h - Hybrid merge sort (default).\n"
 #ifdef DEBUG
                 "\t-D : trace level for Debugging.\n"
                 "\t       1 - Counts.\n"
@@ -271,9 +274,9 @@ int main(int argc, char *argv[])
                 "\t-r : Random depth in recusion (default is 3)\n"
                 "\t-R : Repeat count "
 #ifndef DEBUG
-            	"of sampling to calculate Stdev (default is 12).\n"
+                "of sampling to calculate Stdev (default is 12).\n"
 #else
-               	"to test (default is 1).\n"
+                "to test (default is 1).\n"
 #endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
@@ -319,7 +322,7 @@ int main(int argc, char *argv[])
             break;
         case 'u':
             reuse_random = TRUE;
-        	break;
+            break;
         case 'v':
             pivot_number = ((int)strtoul(optarg, NULL, 0) - 1) | 1; // decrease to odd number
             break;
@@ -332,16 +335,16 @@ int main(int argc, char *argv[])
         case 'A':   // Algorithm when nmemb is medium for Array sort
             switch(*optarg) {
             case '3':
-            	medium_func = qsort_med3;	// with swaps
+                medium_func = qsort_med3;   // with swaps
                 break;
             case 'm':
                 medium_func = merge_sort;
                 break;
             case 'M':
-            	medium_func = merge_index;
+                medium_func = merge_index;
                 break;
             case 'h':
-            	medium_func = merge_hybrid;
+                medium_func = merge_hybrid;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
@@ -523,9 +526,9 @@ QSORT:
 REDO:
 #endif
 #ifdef DEBUG
-			if (trace_level == TRACE_NONE)	// don't add a semicolon ";"
+            if (trace_level == TRACE_NONE)  // don't add a semicolon ";"
 #endif
-			fprintf(OUT, "%s", info->name);
+            fprintf(OUT, "%s", info->name);
 #define ENOUGH  4000000L
             cache = calloc(sizeof(long), ENOUGH);
             clear = cache;  // really enough?
@@ -536,7 +539,7 @@ REDO:
 #endif
             for (int i = 0; i < repeat_count; i++) {
 #ifdef DEBUG
-            	begin_timer(1);
+                begin_timer(1);
 #endif
                 qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
                 workbuff = NextBuffer;
