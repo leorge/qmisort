@@ -65,7 +65,8 @@ static int cmpstring(const void *p1, const void *p2)    // Function to compare
 }
 
 typedef enum {
-    DUMMY,
+	DEBUG_SORT,
+    DUMMY_SORT,
     INDEX_QSORT3,
     POINTER_QSORT3,
     MERGE_ARRAY,
@@ -83,7 +84,6 @@ typedef enum {
     BUBBLE_SORT,
     STEPUP_SORT,
     STEP_SORT,
-    STEP_POINTER,
     MERGE_HYBRID_INDEX,
     MERGE_HYBRID_POINTER,
     HYBRID_ARRAY,
@@ -155,6 +155,12 @@ int main(int argc, char *argv[])
     extern  int optind;
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
+#ifdef  DEBUG	// temporary option for debugging
+//            {'0', DEBUG_SORT, "bins_pointer()", bins_pointer, TRUE,
+//                "debugging : pointer sorting of isertion sort with binary search."},
+//			  {'0', DEBUG_SORT, "insert_pointer()", insert_pointer, TRUE,
+//				  "debugging : pointer sorting of isertion sort with linear search."},
+#endif
             // simple in-place sort.
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "quick sort : pivot is median of 3 elements with swaps."},
@@ -204,13 +210,11 @@ int main(int argc, char *argv[])
             {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
             "Tree sort : median node tree."},
 #endif
-            {'U', DUMMY, "dummy_sort()", dummy_sort, FALSE,
+            {'U', DUMMY_SORT, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
 #ifdef  DEBUG
             {'w', STEP_SORT, "step_sort()", step_sort, FALSE,
                 "step up/doWn sort : bidirectional stepup sort."},
-            {'W', STEP_POINTER, "step_pointer()", step_pointer, TRUE,
-                "step up/doWn sort : pointer sorting of stepup sort."},
 #endif
             {'X', INDEX_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
