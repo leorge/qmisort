@@ -80,8 +80,9 @@ typedef enum {
     TREE_SORT,
     INSERT_SORT,
     BUBBLE_SORT,
-    STEP_SORT,
     STEPUP_SORT,
+    STEP_SORT,
+    STEP_POINTER,
     MERGE_HYBRID_INDEX,
     MERGE_HYBRID_POINTER,
     HYBRID_ARRAY,
@@ -204,7 +205,9 @@ int main(int argc, char *argv[])
                 "dUmmy sort : do nothing to cause error."},
 #ifdef  DEBUG
 			{'w', STEP_SORT, "step_sort()", step_sort, FALSE,
-				"step up_doWn sort : bidirectional stepup sort."},
+				"step up/doWn sort : bidirectional stepup sort."},
+			{'W', STEP_POINTER, "step_pointer()", step_pointer, TRUE,
+				"step up/doWn sort : pointer sorting of stepup sort."},
 #endif
             {'X', INDEX_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
