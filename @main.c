@@ -65,7 +65,7 @@ static int cmpstring(const void *p1, const void *p2)    // Function to compare
 }
 
 typedef enum {
-	DEBUG_SORT,
+    DEBUG_SORT,
     DUMMY_SORT,
     INDEX_QSORT3,
     POINTER_QSORT3,
@@ -155,11 +155,11 @@ int main(int argc, char *argv[])
     extern  int optind;
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
-#ifdef  DEBUG	// temporary option for debugging
+#ifdef  DEBUG   // temporary option for debugging
 //            {'0', DEBUG_SORT, "bins_pointer()", bins_pointer, TRUE,
 //                "debugging : pointer sorting of isertion sort with binary search."},
-//			  {'0', DEBUG_SORT, "insert_pointer()", insert_pointer, TRUE,
-//				  "debugging : pointer sorting of isertion sort with linear search."},
+//            {'0', DEBUG_SORT, "insert_pointer()", insert_pointer, TRUE,
+//                "debugging : pointer sorting of isertion sort with linear search."},
 #endif
             // simple in-place sort.
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
