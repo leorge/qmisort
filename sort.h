@@ -101,7 +101,6 @@ void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort3_index    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sorting
-void    bubble_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    qsort3_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
