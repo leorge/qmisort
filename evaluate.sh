@@ -6,7 +6,7 @@ if [ $# -eq 0 ] ; then
     echo "$0  max_size  max_nmemb  [options]"
     echo "    max_size  : size of element in byte begin with 2^4 up to 2^max_size."
     echo "    max_nmemb : number of element begin with 2^12 up to 2^max_nmemb."
-    exit -1
+    exit 1
 else
     Result=evaluate.tmp
     rm -f $Result

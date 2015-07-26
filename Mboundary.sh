@@ -2,7 +2,7 @@
 if [ $# -eq 0 ] ; then
     echo "$0 - Get elapsed time with various -L option"
     echo "   usage : $0  max_power_of_N  options"
-    exit;
+    exit 1;
 fi
 
 # execution

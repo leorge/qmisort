@@ -5,7 +5,7 @@
 if [ $# -eq 0 ] ; then	# with no parameter
     echo "$0 - Get elapsed time with various -L option"
     echo "   usage : $0  max_power_of_N  options"
-    exit 255	# aborted
+    exit 1	# aborted
 fi
 
 # execution
