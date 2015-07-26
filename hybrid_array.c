@@ -11,7 +11,6 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
-static size_t   boundary = 0;   // nmemb to alternate to merge sort.
 static char     *pivot;
 static size_t   random;         // random number
 #ifdef  DEBUG
@@ -33,7 +32,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
 #endif
-    if (nmemb <= boundary) {
+    if (nmemb <= medium_boundary) {
         medium_func(base, nmemb, length, comp);
     }
 //    else if (nmemb <= 8) qsort_middle(base, nmemb, length, comp);	// for the case of entire quick sort
@@ -140,7 +139,6 @@ void hybrid_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 #ifdef DEBUG
         search_pivot = 0;
 #endif
-        if (medium_boundary) boundary = medium_boundary; else boundary = 8192;
         sort(base, nmemb, random_depth);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "search_pivot = %ld\n", search_pivot);

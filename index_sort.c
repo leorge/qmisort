@@ -9,7 +9,6 @@
 #include    <math.h>
 #include "sort.h"
 
-static size_t   boundary = 0;     //  nmemb to alternate to merge sort.
 static int  (*comp)(const void *, const void *);
 static int  comp_idx(const void *p1, const void *p2) {
 #ifdef DEBUG
@@ -109,7 +108,6 @@ void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
     if (nmemb <= 1) return;
     if (idxtbl != NULL) {
         comp = compare;
-        if (medium_boundary) boundary = medium_boundary; else boundary = log2(nmemb) / 3;
         sort(idxtbl, nmemb, random_depth);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
