@@ -36,7 +36,7 @@ RANDOM_DEPTH random_depth = 3;
 bool    reuse_random = FALSE;       // reuse random number or not
 
 size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
-void    (*medium_func)() = qsort_middle;
+void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:L:l:N:oR:r:T:uV:v:Y:Z:");
+    strcat(optstring, "?A:D:L:l:N:oR:r:T:uV:v:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -293,6 +293,10 @@ int main(int argc, char *argv[])
                 "\t       l - median of random Log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
                 "\t-Y : cYclic work buffer length.\n"
+                "\t-y : algorithm when N is small in hybrid merge sort.\n"
+                "\t       b - Insertion sort with binary search.\n"
+                "\t       i - Insertion sort with linear search(default).\n"
+                "\t       s - Step sort.\n"
                 "\t-Z : siZe of an array element."
             );
             return EXIT_SUCCESS;
@@ -376,6 +380,23 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
+            case 'y':   // Algorithm when N is small
+                switch(*optarg) {
+                case 'b':
+                    small_func = bins_pointer;
+                    break;
+                case 'i':
+                    small_func = bins_pointer;
+                    break;
+                case 's':
+                    small_func = step_pointer;
+                    break;
+                default:
+                    fprintf(stderr, "Illegal value \"%s\" for -y option.\n", optarg);
+                    return EXIT_FAILURE;
+                    break;
+                }
+                break;
         default:    // select sorting algorithm
             for (info = test, i = idx = 0; idx < sizeof(test) / sizeof(INFO); idx++, info++) {
                 if (info->option == opt) {
@@ -456,6 +477,7 @@ int main(int argc, char *argv[])
     else if (Loption > 0) { // size
         medium_boundary = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
+    if (medium_boundary == 0) medium_boundary = 8192;   // default
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
 #endif
