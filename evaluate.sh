@@ -34,12 +34,12 @@ else
                     awk -v sz=$size -v nmemb=$nmemb -v OFS="\t" '{print $1, nmemb, sz, $4}'
             fi
         done
-    done > tmp$$
+    done > tmp.evaluate
 fi
 
 # formatting
 
-awk -f - tmp$$ << 'EOF'
+awk -f - tmp.evaluate << 'EOF'
 BEGIN {name = num = size = delm = ":"; OFS="\t"}
 NF != 4 {next}  # skip an echo of command line or vacant line
 {sub(/[(].*[)]/, "", $1);}  # delete (3) or () in a function name
