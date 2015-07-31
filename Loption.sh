@@ -4,26 +4,36 @@
 
 if [ $# -eq 0 ] ; then	# with no parameter
     echo "$0 - Get elapsed time with various -L option"
-    echo "   usage : $0  max_power_of_N  options"
+    echo "   usage : $0  max_power_of_N log2(N)"
     exit 255	# aborted
 fi
 
 # execution
 
-maxP=$1; shift # get the first parameter
+maxP=$1; shift
+Z=$1; shift
 if [ $maxP -le 3 ]; then maxP=4; fi
 N=`echo 2^$maxP | bc`
-src/random.awk $N > random.$maxP   	# generate a data file
+src/random.awk $N > random.$maxP    # generate a data file
 for power in `seq 3 $maxP`; do
-    B=`echo 2^$power | bc`			# boundary
-    cmd="Release/Sort -N $N $* -L $B"
+    B=`echo 2^$power | bc`          # boundary
+    cmd="Release/Sort -N $N -hMaV r -r 3 -A M -Z $Z -L $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP
-done > Boption.tmp
+    $cmd random.$maxP | sed s/hybrid_array/random/
+    cmd="Release/Sort -N $N -aV 3 -r 3 -A M -Z $Z -L $B"
+    echo $cmd | tee /dev/stderr
+    $cmd random.$maxP | sed s/hybrid_array/median3/
+    cmd="Release/Sort -N $N -aV v -r 3 -A M -Z $Z -L $B"
+    echo $cmd | tee /dev/stderr
+    $cmd random.$maxP | sed s/hybrid_array/various/
+    cmd="Release/Sort -N $N -aV l -r 3 -A M -Z $Z -L $B"
+    echo $cmd | tee /dev/stderr
+    $cmd random.$maxP | sed s/hybrid_array/log2N/
+done > tmp.Loption
 
 # edit output
 
-awk -f - Boption.tmp << 'EOF'
+awk -f - tmp.Loption << 'EOF'
 BEGIN {name = delm = ":"; OFS="\t"; log2 = log(2)}
 /-L/ {
     B = log($NF) / log2
