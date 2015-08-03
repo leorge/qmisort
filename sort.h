@@ -89,7 +89,7 @@ void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_med3      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    quick_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    qsort_random3   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    step_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stepup_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));

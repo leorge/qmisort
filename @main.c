@@ -43,7 +43,7 @@ void    (*small_func)() = insert_pointer;
 size_t set_random(void) {
     size_t  rtn = rand();
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld\n", rtn);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld  (%lf)\n", rtn, (double)rtn / RAND_BASE);
 #endif
     return  rtn;
 }
@@ -77,6 +77,7 @@ typedef enum {
     SWAP_KR,
     SWAP_MED3,
     HOLE_LAST,
+    RANOM3,
     HEAP_SORT,
     TREE_SORT,
     INSERT_SORT,
@@ -202,6 +203,8 @@ int main(int argc, char *argv[])
                 "Pointer sorting of qsort(3) to measure sorting time in index sorting."},
             {'p', POINTER_SORT, "hybrid_pointer(*)", hybrid_pointer, TRUE,
                 "hybrid sorting of quick sort : Pointer sorting."},
+			{'q', RANDOM3, "random3()", qsort_random3, FALSE,
+				"Quick sort : Pivot is median of random 3 elements with hole scheme."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
                 "Stable hybrid sorting of quick sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,

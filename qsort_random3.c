@@ -1,7 +1,7 @@
 /*
  * qsort_random3.c
  *
- *  Quick sort - Quick sort with a hole. Pivot is median of random 3 elements.
+ *  Entire quick sort with a hole. Pivot is median of random 3 elements.
  *
  *  Created on: 2015/03/20
  *      Author: leo
@@ -22,7 +22,7 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-static void sort(void *base, size_t nmemb) {
+static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
@@ -30,17 +30,22 @@ static void sort(void *base, size_t nmemb) {
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    if (nmemb <= medium_boundary) {
+    if (nmemb <= small_boundary) {
         hole = first + length * (nmemb >> 1);  // middle element
     }
     else {
+        size_t   random;
+    	if (depth > 0) {
+    		random = set_random();
+    		depth--;
+    	}
+    	else random = (size_t)RAND_MAX >> 1;
         size_t  distance = (size_t)(nmemb / 3);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
 #endif
-        char *p1 = first + (size_t)(random_number * distance) * length;  // 1st pick up point
-        distance *= length;     // size in byte
-        char *p2 = p1 + distance;
+        char *p1 = first + (distance * random / RAND_BASE) * length;  // 1st pick up point
+        char *p2 = p1 + (distance *= length);
         char *p3 = p2 + distance;
 #ifdef DEBUG
 #endif
@@ -55,10 +60,8 @@ static void sort(void *base, size_t nmemb) {
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
 #endif
-    copy(pivot, hole);
-    copy(hole, last);   // pivot <-- hole <-- last
-    hole = last;
-    char *lo = first, *hi = last - length, *eq = NULL;
+    copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
+    char *lo = first, *hi = (hole = last) - length, *eq = NULL;
     for (; lo < hole; lo += length) {
         if (comp(lo, pivot) >= 0) {
 #ifdef  DEBUG
@@ -98,8 +101,8 @@ static void sort(void *base, size_t nmemb) {
 #ifdef DEBUG
     dump_rate(n_lo, n_hi);
 #endif
-    sort(first, n_lo);
-    sort(eq + length, n_hi);
+    sort(first, n_lo, depth);
+    sort(eq + length, n_hi, depth);
 #ifdef DEBUG
     dump_array("sort() done.", base, nmemb, length);
 #endif
@@ -111,6 +114,6 @@ void qsort_random3(void *base, size_t nmemb, size_t size, int (*compare)(const v
 		char a[size]; pivot = a; *a = '\0';
 		length = size; comp = compare;
 		set_random();
-		sort(base, nmemb);
+		sort(base, nmemb, random_depth);
     }
 }
