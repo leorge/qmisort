@@ -35,7 +35,6 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     if (nmemb <= medium_boundary) {
         medium_func(base, nmemb, length, comp);
     }
-//    else if (nmemb <= 8) qsort_middle(base, nmemb, length, comp);	// for the case of entire quick sort
     else {  // N is large
 #define first   ((char *)base)
     	if (depth > 0) {
@@ -47,16 +46,16 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #endif
     	else random = (size_t)RAND_MAX >> 1;
         char *hole;
-        size_t  distance;
+        size_t distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:
-            hole = first + nmemb * random / RAND_BASE * length;  // pick up one element at random
+            hole = first + (nmemb * random / RAND_BASE) * length;  // pick up one element at random
             break;
         case RANDOM3:
-            distance = nmemb / 3;    // distance between elements
-            char *p1 = first + distance * random / RAND_BASE * length;  // pick up median of random 3 elements
-            char *p2 = p1 + distance * length;
-            char *p3 = p2 + distance * length;
+        	distance = nmemb / 3;    // distance between elements
+            char *p1 = first + (distance * random / RAND_BASE) * length;  // pick up median of random 3 elements
+            char *p2 = p1 + (distance *= length);
+            char *p3 = p2 + distance;
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
                     "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
@@ -69,8 +68,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
             hole = pivot_array(base, nmemb, length, pivot_number, comp, random);
             break;
         case LOG2:
-            distance = ((size_t)log2(nmemb) - 1) | 1;
-            hole = pivot_array(base, nmemb, length, distance, comp, random);
+            hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
             break;
         default:
 #ifdef DEBUG
