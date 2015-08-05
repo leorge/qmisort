@@ -28,7 +28,7 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-PivotChoice  pivot_scheme = PIVOT_RANDOM3;
+PivotChoice  pivot_type = PIVOT_RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
 size_t  random_number;              // variable type is same to nmemb
@@ -77,7 +77,8 @@ typedef enum {
     SWAP_KR,
     SWAP_MED3,
     HOLE_LAST,
-    MEDIAN3,
+    RANDOM,
+    RANDOM3,
     HEAP_SORT,
     TREE_SORT,
     INSERT_SORT,
@@ -163,8 +164,10 @@ int main(int argc, char *argv[])
 //                "debugging : pointer sorting of isertion sort with linear search."},
 #endif
             // simple in-place sort.
-            {'3', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
-                "quick sort : pivot is median of 3 elements with swaps."},
+			{'1', RANDOM, "random()", qsort_random, FALSE,
+				"Quick sort : Pivot is a random element with hole."},
+			{'3', RANDOM3, "random3()", qsort_random3, FALSE,
+				"Quick sort : Pivot is median of random 3 elements with hole."},
             {'a', HYBRID_ARRAY, "hybrid_array()", hybrid_array, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
 #ifdef  DEBUG
@@ -173,6 +176,8 @@ int main(int argc, char *argv[])
             {'B', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
                 "Insertion sort : Binary search."},
 #endif
+			{'c', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
+				"quick sort : pivot is Conventional median of 3 elements with swaps."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "quick sort : pivot is the miDDle element with swaps."},
             {'e', MERGE_HYBRID_POINTER, "merge_phybrid(*)", merge_phybrid, TRUE,
@@ -203,8 +208,6 @@ int main(int argc, char *argv[])
                 "Pointer sorting of qsort(3) to measure sorting time in index sorting."},
             {'p', POINTER_SORT, "hybrid_pointer(*)", hybrid_pointer, TRUE,
                 "hybrid sorting of quick sort : Pointer sorting."},
-			{'q', MEDIAN3, "random3()", qsort_random3, FALSE,
-				"Quick sort : Pivot is median of random 3 elements with hole scheme."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
                 "Stable hybrid sorting of quick sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
@@ -366,16 +369,16 @@ int main(int argc, char *argv[])
         case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
             switch(*optarg) {
             case '3':
-                pivot_scheme = PIVOT_RANDOM3;
+                pivot_type = PIVOT_RANDOM3;
                 break;
             case 'l':
-                pivot_scheme = PIVOT_LOG2;
+                pivot_type = PIVOT_LOG2;
                 break;
             case 'r':
-                pivot_scheme = PIVOT_RANDOM;
+                pivot_type = PIVOT_RANDOM;
                 break;
             case 'v':
-                pivot_scheme = PIVOT_VARIOUS;
+                pivot_type = PIVOT_VARIOUS;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
