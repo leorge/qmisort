@@ -164,9 +164,9 @@ int main(int argc, char *argv[])
 //                "debugging : pointer sorting of isertion sort with linear search."},
 #endif
             // simple in-place sort.
-			{'1', RANDOM, "random()", qsort_random, FALSE,
+			{'1', RANDOM, "qsort_random()", qsort_random, FALSE,
 				"Quick sort : Pivot is a random element with hole."},
-			{'3', RANDOM3, "random3()", qsort_random3, FALSE,
+			{'3', RANDOM3, "qsort_random3()", qsort_random3, FALSE,
 				"Quick sort : Pivot is median of random 3 elements with hole."},
             {'a', HYBRID_ARRAY, "hybrid_array()", hybrid_array, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
