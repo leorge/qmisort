@@ -8,7 +8,6 @@
  *      Author: leo
  */
 #include "sort.h"
-#include <math.h>
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
@@ -40,7 +39,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     		random = set_random();
     		depth--;
     	}
-    	else random = (size_t)RAND_MAX >> 1;
+    	else random = RAND_BASE >> 1;
         size_t  distance = (size_t)(nmemb / 3);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
