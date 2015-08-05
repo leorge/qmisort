@@ -51,7 +51,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #endif
     	else random = RAND_BASE >> 1;
         size_t distance;
-        switch (pivot_scheme) {   // Quicksort Algorithm
+        switch (pivot_type) {   // Quicksort Algorithm
         case PIVOT_RANDOM:
             hole = first + (nmemb * random / RAND_BASE) * length;  // pick up one element at random
             break;
