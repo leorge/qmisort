@@ -41,7 +41,7 @@ size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
 size_t set_random(void) {
-    size_t  rtn = rand();
+    size_t  rtn = rand();	// [0..RAND_MAX]
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld  (%lf)\n", rtn, (double)rtn / RAND_BASE);
 #endif
@@ -67,7 +67,7 @@ static int cmpstring(const void *p1, const void *p2)    // Function to compare
 typedef enum {
     DEBUG_SORT,
     DUMMY_SORT,
-    INDEX_QSORT3,
+    INDIRECT_QSORT3,
     POINTER_QSORT3,
     MERGE_ARRAY,
     MERGE_INDEX,
@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
             {'w', STEP_SORT, "step_sort()", step_sort, FALSE,
                 "step up/doWn sort : bidirectional stepup sort."},
 #endif
-            {'X', INDEX_QSORT3, "qsort3_index()", qsort3_index, FALSE,
+            {'X', INDIRECT_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
             {'x', HYBRID_INDEX, "hybrid_index()", hybrid_index, FALSE,
                 "hybrid sorting of quick sort : indeX sorting."},
