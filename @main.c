@@ -28,7 +28,7 @@
 //#define   INSERTION_SORT 1
 
 /****   Public  ****/
-PivotChoice  pivot_scheme = RANDOM3;
+PivotChoice  pivot_scheme = PIVOT_RANDOM3;
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;
 size_t  random_number;              // variable type is same to nmemb
@@ -366,16 +366,16 @@ int main(int argc, char *argv[])
         case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
             switch(*optarg) {
             case '3':
-                pivot_scheme = RANDOM3;
+                pivot_scheme = PIVOT_RANDOM3;
                 break;
             case 'l':
-                pivot_scheme = LOG2;
+                pivot_scheme = PIVOT_LOG2;
                 break;
             case 'r':
-                pivot_scheme = RANDOM;
+                pivot_scheme = PIVOT_RANDOM;
                 break;
             case 'v':
-                pivot_scheme = VARIOUS;
+                pivot_scheme = PIVOT_VARIOUS;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);

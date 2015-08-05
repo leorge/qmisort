@@ -16,10 +16,10 @@
 #define OUT     stdout
 
 typedef enum {  // Pivot choice
-    RANDOM,
-    RANDOM3,
-    VARIOUS,
-    LOG2,
+    PIVOT_RANDOM,
+    PIVOT_RANDOM3,
+    PIVOT_VARIOUS,
+    PIVOT_LOG2,
 } PivotChoice;
 
 typedef enum {  // trace lelve
