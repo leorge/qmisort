@@ -49,7 +49,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #ifdef DEBUG
     	else if (reuse_random) {}   // no change
 #endif
-    	else random = (size_t)RAND_MAX >> 1;
+    	else random = RAND_BASE >> 1;
         size_t distance;
         switch (pivot_scheme) {   // Quicksort Algorithm
         case RANDOM:

@@ -33,7 +33,7 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
         (*medium_func)(base, nmemb, sizeof(void *), comp_idx);
     }
     else {
-        size_t	random = (size_t)RAND_MAX >> 1;
+        size_t	random = RAND_BASE >> 1;
     	if (depth > 0) {
     		random = set_random();
     		depth--;
