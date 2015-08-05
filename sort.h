@@ -59,7 +59,7 @@ extern size_t       random_number;      // main.c
 extern size_t       medium_boundary;    // main.c
 extern size_t       small_boundary;     // main.c
 extern int          pivot_number;       // main.c
-extern PivotChoice  pivot_scheme;       // main.c
+extern PivotChoice  pivot_type;       // main.c
 extern RANDOM_DEPTH random_depth;       // main.c
 extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
@@ -89,6 +89,7 @@ void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_med3      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    qsort_random    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_random3   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    step_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
