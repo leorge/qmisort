@@ -1,7 +1,7 @@
 /*
  * qsort_random3.c
  *
- *  Final entire quick sort with hole scheme.
+ *  Final entire quick sort with hole.
  *  Pivot is the median of random 3 elements.
  *
  *  Created on: 2015/03/20
