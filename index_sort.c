@@ -19,10 +19,6 @@ static int  comp_idx(const void *p1, const void *p2) {
 }
 
 
-#ifdef  DEBUG
-static  size_t  search_pivot;
-#endif
-
 static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
@@ -33,12 +29,12 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
         (*medium_func)(base, nmemb, sizeof(void *), comp_idx);
     }
     else {
-        size_t	random = RAND_BASE >> 1;
-    	if (depth > 0) {
-    		random = set_random();
-    		depth--;
-    	}
-        size_t distance = nmemb / 3;	// median of random 3
+        size_t  random = RAND_BASE >> 1;
+        if (depth > 0) {
+            depth--;
+            random = set_random();
+        }
+        size_t distance = nmemb / 3;    // median of random 3
         void **p1 = base + distance * random / RAND_BASE;
         void **p2 = p1 + distance;
         void **p3 = p2 + distance;
@@ -46,9 +42,9 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
                (comp_idx(p2, p1) < 0 ? p1: (comp_idx(p2,  p3) < 0 ? p2 : p3)) :
                (comp_idx(p2, p3) < 0 ? p3 : (comp_idx(p2, p1) < 0 ? p2 : p1)));
 #ifdef  DEBUG
-		if (trace_level >= TRACE_DUMP) fprintf(OUT,
-				"nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s) --> hole = %s\n", nmemb, distance,
-				dump_data(*p1), dump_data(*p2), dump_data(*p3), dump_data(*hole));
+        if (trace_level >= TRACE_DUMP) fprintf(OUT,
+                "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s) --> hole = %s\n", nmemb, distance,
+                dump_data(*p1), dump_data(*p2), dump_data(*p3), dump_data(*hole));
 #endif
         void **last = &base[nmemb - 1];
         void    *pivot = *hole; *hole = *last;  // *pivot <-- *hole <-- *last  cf. sort() in array_sort.c
@@ -110,9 +106,8 @@ void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
         comp = compare;
         sort(idxtbl, nmemb, random_depth);
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) {
-            fprintf(OUT, "search pivot %ld times\n", search_pivot);
-        }
+        if (search_pivot && trace_level >= TRACE_DUMP)
+            fprintf(OUT, "search_pivot = %ld times\n", search_pivot);
 #endif
     }
 }
