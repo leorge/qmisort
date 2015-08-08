@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:g:L:l:N:oR:T:uV:v:Y:y:Z:");
+    strcat(optstring, "?A:C:D:L:l:N:oR:T:uV:v:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -268,14 +268,13 @@ int main(int argc, char *argv[])
                 "\t       m - array sorting of Merge sort.\n"
                 "\t       h - Hybrid merge sort (default).\n"
 #ifdef DEBUG
-                "\t-D : trace level for Debugging.\n"
-                "\t       1 - Counts.\n"
-                "\t       2 - and actions.\n"
-                "\t       3 - and copies.\n"
-                "\t       4 - and comparisons.\n"
-                "\t       5 - and Others.\n"
+                "\t-C : algorithm to Choose a pivot in quick sort.\n"
+                "\t       r - Random element.\n"
+                "\t       3 - median of random 3 elements (default).\n"
+                "\t       l - median of random Log2(n) elements.\n"
+                "\t       v - median of various elements. cf. -v option\n"
 #endif
-                "\t-g : Random depth in recusion (default is 3)\n"
+                "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is auto).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
@@ -293,12 +292,13 @@ int main(int argc, char *argv[])
 #else
                 "\t-u : reUse random number (default is FALSE).\n"
 #endif
-                "\t-v : number of elements to choose a pivot for -V v option (default is 5).\n"
-                "\t-V : algorithm to choose a piVot in quick sort.\n"
-                "\t       r - Random element.\n"
-                "\t       3 - median of random 3 elements (default).\n"
-                "\t       l - median of random Log2(n) elements.\n"
-                "\t       v - median of various elements. cf. -v option\n"
+                "\t-V : trace level for Debugging.\n"
+                "\t       1 - Counts.\n"
+                "\t       2 - and actions.\n"
+                "\t       3 - and copies.\n"
+                "\t       4 - and comparisons.\n"
+                "\t       5 - and Others.\n"
+                "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
                 "\t       b - Insertion sort with binary search.\n"
@@ -308,10 +308,47 @@ int main(int argc, char *argv[])
             );
             return EXIT_SUCCESS;
             break;
-        case 'D':   // ignored in Release
-            trace_level = strtoul(optarg, NULL, 0);
+        case 'A':   // Algorithm when nmemb is medium for Array sort
+            switch(*optarg) {
+            case '3':
+                medium_func = qsort_med3;   // with swaps
+                break;
+            case 'm':
+                medium_func = merge_sort;
+                break;
+            case 'M':
+                medium_func = merge_index;
+                break;
+            case 'h':
+                medium_func = merge_hybrid;
+                break;
+            default:
+                fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
+                return EXIT_FAILURE;
+                break;
+            }
             break;
-        case 'g':
+        case 'C':   // Algorithm to Choose a pivot while N is large in quick_sort()
+            switch(*optarg) {
+            case '3':
+                pivot_type = PIVOT_RANDOM3;
+                break;
+            case 'l':
+                pivot_type = PIVOT_LOG2;
+                break;
+            case 'r':
+                pivot_type = PIVOT_RANDOM;
+                break;
+            case 'v':
+                pivot_type = PIVOT_VARIOUS;
+                break;
+            default:
+                fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
+                return EXIT_FAILURE;
+                break;
+            }
+            break;
+        case 'D':
             random_depth = strtol(optarg, NULL, 0);
             if (random_depth < 0) random_depth = 0;
             break;
@@ -338,72 +375,35 @@ int main(int argc, char *argv[])
         case 'u':
             reuse_random = TRUE;
             break;
+        case 'V':   // ignored in Release
+            trace_level = strtoul(optarg, NULL, 0);
+            break;
         case 'v':
             pivot_number = ((int)strtoul(optarg, NULL, 0) - 1) | 1; // decrease to odd number
             break;
         case 'Y':
             buffer_length = (int)strtoul(optarg, NULL, 0);
             break;
+        case 'y':   // Algorithm when N is small
+            switch(*optarg) {
+            case 'b':
+                small_func = bins_pointer;
+                break;
+            case 'i':
+                small_func = bins_pointer;
+                break;
+            case 's':
+                small_func = step_pointer;
+                break;
+            default:
+                fprintf(stderr, "Illegal value \"%s\" for -y option.\n", optarg);
+                return EXIT_FAILURE;
+                break;
+            }
+            break;
         case 'Z':
             size = (size_t)strtoul(optarg, NULL, 0);
             break;
-        case 'A':   // Algorithm when nmemb is medium for Array sort
-            switch(*optarg) {
-            case '3':
-                medium_func = qsort_med3;   // with swaps
-                break;
-            case 'm':
-                medium_func = merge_sort;
-                break;
-            case 'M':
-                medium_func = merge_index;
-                break;
-            case 'h':
-                medium_func = merge_hybrid;
-                break;
-            default:
-                fprintf(stderr, "Illegal value \"%s\" for -A option.\n", optarg);
-                return EXIT_FAILURE;
-                break;
-            }
-            break;
-        case 'V':   // Algorithm to Find a pivot while N is large in quick_sort()
-            switch(*optarg) {
-            case '3':
-                pivot_type = PIVOT_RANDOM3;
-                break;
-            case 'l':
-                pivot_type = PIVOT_LOG2;
-                break;
-            case 'r':
-                pivot_type = PIVOT_RANDOM;
-                break;
-            case 'v':
-                pivot_type = PIVOT_VARIOUS;
-                break;
-            default:
-                fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
-                return EXIT_FAILURE;
-                break;
-            }
-            break;
-            case 'y':   // Algorithm when N is small
-                switch(*optarg) {
-                case 'b':
-                    small_func = bins_pointer;
-                    break;
-                case 'i':
-                    small_func = bins_pointer;
-                    break;
-                case 's':
-                    small_func = step_pointer;
-                    break;
-                default:
-                    fprintf(stderr, "Illegal value \"%s\" for -y option.\n", optarg);
-                    return EXIT_FAILURE;
-                    break;
-                }
-                break;
         default:    // select sorting algorithm
             for (info = test, i = idx = 0; idx < sizeof(test) / sizeof(INFO); idx++, info++) {
                 if (info->option == opt) {
