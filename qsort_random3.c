@@ -36,8 +36,8 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     else {
         size_t   random;
     	if (depth > 0) {
-    		random = set_random();
     		depth--;
+    		random = set_random();
     	}
     	else random = RAND_BASE >> 1;
         size_t  distance = (size_t)(nmemb / 3);      // distance of elements
