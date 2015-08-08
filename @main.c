@@ -41,7 +41,7 @@ size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_pointer;
 
 size_t set_random(void) {
-    size_t  rtn = rand();	// [0..RAND_MAX]
+    size_t  rtn = rand();   // [0..RAND_MAX]
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld  (%lf)\n", rtn, (double)rtn / RAND_BASE);
 #endif
@@ -164,10 +164,10 @@ int main(int argc, char *argv[])
 //                "debugging : pointer sorting of isertion sort with linear search."},
 #endif
             // simple in-place sort.
-			{'1', RANDOM, "qsort_random()", qsort_random, FALSE,
-				"Quick sort : Pivot is a random element with hole."},
-			{'3', RANDOM3, "qsort_random3()", qsort_random3, FALSE,
-				"Quick sort : Pivot is median of random 3 elements with hole."},
+            {'r', RANDOM, "qsort_random()", qsort_random, FALSE,
+                "Quick sort : Pivot is a random element with hole."},
+            {'3', RANDOM3, "qsort_random3()", qsort_random3, FALSE,
+                "Quick sort : Pivot is median of random 3 elements with hole."},
             {'a', HYBRID_ARRAY, "hybrid_array()", hybrid_array, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
 #ifdef  DEBUG
@@ -176,8 +176,8 @@ int main(int argc, char *argv[])
             {'B', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
                 "Insertion sort : Binary search."},
 #endif
-			{'c', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
-				"quick sort : pivot is Conventional median of 3 elements with swaps."},
+            {'c', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
+                "quick sort : pivot is Conventional median of 3 elements with swaps."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "quick sort : pivot is the miDDle element with swaps."},
             {'e', MERGE_HYBRID_POINTER, "merge_phybrid(*)", merge_phybrid, TRUE,
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:L:l:N:oR:r:T:uV:v:Y:y:Z:");
+    strcat(optstring, "?A:D:g:L:l:N:oR:T:uV:v:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     if (prg == NULL) prg = argv[0];
@@ -275,13 +275,13 @@ int main(int argc, char *argv[])
                 "\t       4 - and comparisons.\n"
                 "\t       5 - and Others.\n"
 #endif
+                "\t-g : Random depth in recusion (default is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is auto).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-o : print Out the last result.\n"
-                "\t-r : Random depth in recusion (default is 3)\n"
                 "\t-R : Repeat count "
 #ifndef DEBUG
                 "of sampling to calculate Stdev (default is 12).\n"
@@ -290,6 +290,7 @@ int main(int argc, char *argv[])
 #endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
+#else
                 "\t-u : reUse random number (default is FALSE).\n"
 #endif
                 "\t-v : number of elements to choose a pivot for -V v option (default is 5).\n"
@@ -310,6 +311,10 @@ int main(int argc, char *argv[])
         case 'D':   // ignored in Release
             trace_level = strtoul(optarg, NULL, 0);
             break;
+        case 'g':
+            random_depth = strtol(optarg, NULL, 0);
+            if (random_depth < 0) random_depth = 0;
+            break;
         case 'L':
             p = &optarg[strlen(optarg) - 1];
             if (*p == '%') IsPercentB = TRUE;
@@ -326,10 +331,6 @@ int main(int argc, char *argv[])
             break;
         case 'R':
             repeat_count = strtoul(optarg, NULL, 0);
-            break;
-        case 'r':
-            random_depth = strtol(optarg, NULL, 0);
-            if (random_depth < 0) random_depth = 0;
             break;
         case 'T':
             limit = atoi(optarg);
@@ -572,7 +573,7 @@ REDO:
 #ifdef DEBUG
                 begin_timer(1);
 #endif
-                qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
+                qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
                 if (info->pointer_sort) {
