@@ -11,6 +11,7 @@
 static void *search_median(void **base, size_t nmemb, int (*compare)(const void *, const void *))
 {
 #ifdef DEBUG
+	search_pivot++;
     if (trace_level >= TRACE_DUMP) dump_pointer("search_median()", base, nmemb);
     assert(base != NULL);
     assert(nmemb != 0);
