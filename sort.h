@@ -68,7 +68,7 @@ extern long         *microsec;          // timer.c
 extern int          peak;               // timer.c
 
 #ifdef DEBUG
-extern long qsort_moved, qsort_called;  // main.c
+extern long qsort_moved, qsort_called, search_pivot;	// main.c
 extern Trace    trace_level;            // main.c
 #endif
 
