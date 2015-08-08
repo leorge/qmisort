@@ -35,11 +35,11 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     }
     else {
         size_t   random;
-    	if (depth > 0) {
-    		depth--;
-    		random = set_random();
-    	}
-    	else random = RAND_BASE >> 1;
+        if (depth > 0) {
+            depth--;
+            random = set_random();
+        }
+        else random = RAND_BASE >> 1;
         size_t  distance = (size_t)(nmemb / 3);      // distance of elements
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "nmemb = %ld\tdistance = %ld\n" , nmemb, distance);
@@ -49,12 +49,12 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
         char *p3 = p2 + distance;
 #ifdef DEBUG
 #endif
-		hole = (comp(p1, p3) < 0
+        hole = (comp(p1, p3) < 0
              ? (comp(p2, p1) < 0 ? p1: (comp(p2,  p3) < 0 ? p2 : p3))
              : (comp(p2, p3 ) < 0 ? p3 : (comp(p2, p1) < 0 ? p2 : p1)));
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "p1 = %s  p2 = %s  p3 = %s --> hole = %s\n",
-        		dump_data(p1), dump_data(p2), dump_data(p3), dump_data(hole));
+                dump_data(p1), dump_data(p2), dump_data(p3), dump_data(hole));
 #endif
     }
 #ifdef  DEBUG
@@ -111,9 +111,9 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 void qsort_random3(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
-		char a[size]; pivot = a; *a = '\0';
-		length = size; comp = compare;
-		set_random();
-		sort(base, nmemb, random_depth);
+        char a[size]; pivot = a; *a = '\0';
+        length = size; comp = compare;
+        set_random();
+        sort(base, nmemb, random_depth);
     }
 }
