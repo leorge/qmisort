@@ -12,6 +12,9 @@
 static int      (*comp)(const void *, const void *);
 static size_t   length;
 static char *pivot;
+#ifdef  DEBUG
+static size_t   random;         // random number
+#endif
 
 static void copy(void *dst, const void *src)
 {
@@ -27,15 +30,19 @@ static void sort(void *base, size_t nmemb, int depth) {
 #ifdef DEBUG
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
+#else
+    size_t   random;
 #endif
 #define first   ((char *)base)
     char    *hole, *last = first + length * (nmemb - 1);    // point a last element
-    size_t   random;
     if (depth > 0) {
-		random = set_random();
         depth--;
+        random = set_random();
     }
-	else random = RAND_BASE >> 1;
+#ifdef DEBUG
+    else if (reuse_random) {}   // no change
+#endif
+    else random = RAND_BASE >> 1;
     hole = first + (nmemb * random / RAND_BASE) * length;    // 0 .. (nmemb - 1)
     copy(pivot, hole);
 #ifdef DEBUG
