@@ -93,11 +93,11 @@ typedef enum {
     POINTER_SORT,
     STABLE_ARRAY,
     STABLE_POINTER,
-} TEST_TYPE;
+} SORT_TYPE;
 
 typedef struct {
     int         option;             // command option
-    TEST_TYPE   type;               // see above.
+    SORT_TYPE   type;               // see above.
     const char *name;               // function name to display
     void        (*sort_function)();
     bool        pointer_sort;       // True : pointer sort      False : array sort or index sort
@@ -164,12 +164,6 @@ int main(int argc, char *argv[])
                 "Quick sort : Pivot is median of random 3 elements with hole."},
             {'a', HYBRID_ARRAY, "hybrid_array()", hybrid_array, FALSE,
                 "hybrid sorting of quick sort : array sorting."},
-#ifdef  DEBUG
-            {'b', BUBBLE_SORT, "bubble_sort()", bubble_sort, FALSE,
-                "Bubble sort : with anchor pointer."},
-//            {'B', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
-//                "Insertion sort : Binary search."},
-#endif
             {'c', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "quick sort : pivot is Conventional median of 3 elements with swaps."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
@@ -185,10 +179,6 @@ int main(int argc, char *argv[])
             {'h', HOLE_LAST, "qsort_hole()", qsort_hole, FALSE,
                 "quick sort : prototype of Hole scheme."},
 #ifdef  DEBUG
-            {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
-                "Heap sort."},
-            {'k', STEPUP_SORT, "stepup_sort()", stepup_sort, FALSE,
-                "stepup sort : improved bubble sort."},
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
                 "quick sort : pivot is the middle element with swaps in K&R style."},
 #endif
@@ -204,16 +194,8 @@ int main(int argc, char *argv[])
                 "Stable hybrid sorting of quick sort : array sorting."},
             {'S', STABLE_POINTER, "stable_pointer(*)", stable_pointer, TRUE,
                 "Stable hybrid sorting of quick sort : pointer sorting."},
-#ifdef  DEBUG
-            {'t', TREE_SORT, "tree_sort()", tree_sort, FALSE,
-            "Tree sort : median node tree."},
-#endif
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
-#ifdef  DEBUG
-            {'w', STEP_SORT, "step_sort()", step_sort, FALSE,
-                "step up/doWn sort : bidirectional stepup sort."},
-#endif
             {'X', INDIRECT_QSORT3, "qsort3_index()", qsort3_index, FALSE,
                 "indeX sorting of qsort(3) to reduce copies."},
             {'x', HYBRID_INDEX, "hybrid_index()", hybrid_index, FALSE,
