@@ -187,8 +187,6 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
-            {'i', INSERT_SORT, "insert_sort(*)", insert_sort, TRUE,
-            "Insertion sort : linear search."},
             {'k', STEPUP_SORT, "stepup_sort()", stepup_sort, FALSE,
                 "stepup sort : improved bubble sort."},
             {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
