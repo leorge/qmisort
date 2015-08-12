@@ -38,7 +38,7 @@ bool    reuse_random = FALSE;       // reuse random number or not
 size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
-void    (*small_func)() = insert_pointer;
+void    (*small_func)() = insert_sort;
 
 size_t set_random(void) {
     size_t  rtn = rand();   // [0..RAND_MAX]
@@ -157,12 +157,6 @@ int main(int argc, char *argv[])
     extern  int optind;
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
-#ifdef  DEBUG   // temporary option for debugging
-//            {'0', DEBUG_SORT, "bins_pointer()", bins_pointer, TRUE,
-//                "debugging : pointer sorting of isertion sort with binary search."},
-//            {'0', DEBUG_SORT, "insert_pointer()", insert_pointer, TRUE,
-//                "debugging : pointer sorting of isertion sort with linear search."},
-#endif
             // simple in-place sort.
             {'r', RANDOM, "qsort_random()", qsort_random, FALSE,
                 "Quick sort : Pivot is a random element with hole."},
@@ -173,8 +167,8 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'b', BUBBLE_SORT, "bubble_sort()", bubble_sort, FALSE,
                 "Bubble sort : with anchor pointer."},
-            {'B', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
-                "Insertion sort : Binary search."},
+//            {'B', INSERT_BINARY, "insert_binary()", insert_binary, FALSE,
+//                "Insertion sort : Binary search."},
 #endif
             {'c', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
                 "quick sort : pivot is Conventional median of 3 elements with swaps."},
@@ -193,7 +187,7 @@ int main(int argc, char *argv[])
 #ifdef  DEBUG
             {'H', HEAP_SORT, "heap_sort()", heap_sort, FALSE,
                 "Heap sort."},
-            {'i', INSERT_SORT, "insert_sort()", insert_sort, FALSE,
+            {'i', INSERT_SORT, "insert_sort(*)", insert_sort, TRUE,
             "Insertion sort : linear search."},
             {'k', STEPUP_SORT, "stepup_sort()", stepup_sort, FALSE,
                 "stepup sort : improved bubble sort."},
@@ -387,10 +381,10 @@ int main(int argc, char *argv[])
         case 'y':   // Algorithm when N is small
             switch(*optarg) {
             case 'b':
-                small_func = bins_pointer;
+                small_func = insert_binary;
                 break;
             case 'i':
-                small_func = bins_pointer;
+                small_func = insert_sort;
                 break;
             case 's':
                 small_func = step_pointer;
