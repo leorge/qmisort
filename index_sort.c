@@ -112,17 +112,6 @@ void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
     }
 }
 
-void hybrid_index(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
-{
-    if (nmemb <= 1) return;
-    void **idxtbl = make_index(base, nmemb, size);
-    if (idxtbl != NULL) {
-        hybrid_pointer(idxtbl, nmemb, compare);
-        unindex(base, idxtbl, nmemb, size);
-        free(idxtbl);
-    }
-}
-
 /***    Stable sort for continuous array    ***/
 static int acomp(const void *p1, const void *p2) {
     return  p1 - p2;

@@ -94,7 +94,6 @@ void    stepup_sort     (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // index sorting
-void    hybrid_index    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 

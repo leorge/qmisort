@@ -77,10 +77,6 @@ typedef enum {
     HOLE_LAST,
     RANDOM,
     RANDOM3,
-//    HEAP_SORT,
-//    TREE_SORT,
-//    INSERT_SORT,
-//    INSERT_BINARY,
     MERGE_HYBRID_INDR,
     MERGE_HYBRID_POINTER,
     HYBRID_ARRAY,
@@ -231,8 +227,6 @@ int main(int argc, char *argv[])
                 "Stable hybrid sorting of quick sort : pointer sorting."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
-            {'x', HYBRID_INDR, "hybrid_index()", hybrid_index, FALSE,
-                "hybrid sorting of quick sort : indeX sorting."},
     };
 
     // prepare to analyze command arguments
