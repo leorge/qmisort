@@ -67,8 +67,6 @@ static int cmpstring(const void *p1, const void *p2)    // Function to compare
 typedef enum {
     DEBUG_SORT,
     DUMMY_SORT,
-    INDIRECT_QSORT3,
-    POINTER_QSORT3,
     MERGE_ARRAY,
     MERGE_INDEX,
     MERGE_POINTER,
@@ -228,8 +226,6 @@ int main(int argc, char *argv[])
                 "Merge sort : array sorting."},
             {'M', MERGE_INDEX, "merge_index()", merge_index, FALSE,
                 "Merge sort : index sorting."},
-            {'P', POINTER_QSORT3, "qsort3_pointer()", qsort3_pointer, TRUE,
-                "Pointer sorting of qsort(3) to measure sorting time in index sorting."},
             {'p', POINTER_SORT, "hybrid_pointer(*)", hybrid_pointer, TRUE,
                 "hybrid sorting of quick sort : Pointer sorting."},
             {'s', STABLE_ARRAY, "stable_array()", stable_array, FALSE,
@@ -238,8 +234,6 @@ int main(int argc, char *argv[])
                 "Stable hybrid sorting of quick sort : pointer sorting."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
-            {'X', INDIRECT_QSORT3, "qsort3_index()", qsort3_index, FALSE,
-                "indeX sorting of qsort(3) to reduce copies."},
             {'x', HYBRID_INDEX, "hybrid_index()", hybrid_index, FALSE,
                 "hybrid sorting of quick sort : indeX sorting."},
     };

@@ -76,7 +76,7 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
     }
 }
 
-/***** Pointer sort of qsort(3) *****/
+/***** Indirect sorting of qsort(3) *****/
 static int      (*comp)(const void *, const void *);
 
 static int  comp_idx(const void *p1, const void *p2) {
@@ -90,14 +90,4 @@ static int  comp_idx(const void *p1, const void *p2) {
 void qsort3_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     comp = compare;
     qsort((void *)base, nmemb, sizeof(void *), comp_idx);
-}
-
-void qsort3_index(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
-    if (nmemb <= 1) return;
-    void **idxtbl = make_index(base, nmemb, size);
-    if (idxtbl != NULL) {
-        qsort3_pointer(idxtbl, nmemb, compare);
-        unindex(base, idxtbl, nmemb, size);
-        free(idxtbl);
-    }
 }
