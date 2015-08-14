@@ -125,7 +125,7 @@ static long stop_timer(struct timeval *from) {
 static long end_timer(const char *comment, int size, int skip) {
 	int	percent = 0;
 #ifdef  DEBUG
-    fprintf(OUT, "\tusec = %.0f", *usec);
+    fprintf(OUT, "\tusec = %ld", *usec);
     if (trace_level >= TRACE_COUNT) {
     	fprintf(OUT, "\tcall = %ld\tcompare = %ld\tcopy = %ld"
     	        , qsort_called, qsort_comp_str, qsort_moved);
