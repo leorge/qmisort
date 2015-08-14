@@ -103,7 +103,7 @@ void    bins_pointer    (void *base[], size_t nmemb, int (*compare)(const void *
 void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_binary   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    qsort3_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    qsort3_indr     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

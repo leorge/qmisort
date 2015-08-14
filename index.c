@@ -87,7 +87,7 @@ static int  comp_idx(const void *p1, const void *p2) {
     return  comp(*(char * const *)p1, *(char * const *)p2);
 }
 
-void qsort3_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void qsort3_indr(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     comp = compare;
     qsort((void *)base, nmemb, sizeof(void *), comp_idx);
 }
