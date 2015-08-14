@@ -104,34 +104,76 @@ typedef struct {
     const char  *description;
 } INFO;
 
-// Estimate time
-static long elapsed_time(const char *comment, int skip)
-{
-    int percent = 0;    // return value
-    int datacount = end_timer(skip);
-    fprintf(OUT, "\tusec = %.0f", usec);
+// Estimate time in microseconds
+
+static struct timeval	start_time, core_time;	// time stamp
+static long 			*usec, index_time = 0;	// elapsed time
+
+static void start_timer(struct timeval *from) {
+	assert(from!= NULL);
+    gettimeofday(from, NULL);
+}
+
+static long stop_timer(struct timeval *from) {
+	assert(from != NULL);
+	struct timeval to;
+	gettimeofday(&to, NULL);
+    long rtn = (to.tv_sec - from->tv_sec) * 1000000. + to.tv_usec - from->tv_usec;
+	return	rtn;
+}
+
+static long end_timer(const char *comment, int size, int skip) {
+	int	percent = 0;
 #ifdef  DEBUG
-    if (trace_level >= TRACE_COUNT) fprintf(OUT, "\tcall = %ld\tcompare = %ld\tcopy = %ld"
-        , qsort_called, qsort_comp_str, qsort_moved);
-    if (datacount) {}   // dummy statement to avoid warning
+    fprintf(OUT, "\tusec = %.0f", *usec);
+    if (trace_level >= TRACE_COUNT) {
+    	fprintf(OUT, "\tcall = %ld\tcompare = %ld\tcopy = %ld"
+    	        , qsort_called, qsort_comp_str, qsort_moved);
+    }
 #else
-    if (datacount > 1) {
-        percent = 100. * esd / usec + .5;
+    int 	peak = 0;
+	double	esd = 0.0, mean = 0.0;
+    if (size > skip) {
+        long    y, max_y = 0, n = 0;
+        double	sum = 0., delta;
+        for (int i = skip; i < size; n++, i++) {
+            sum += (y = usec[i]);
+            if (y > max_y) {
+                max_y = y;
+                peak = i;
+            }
+        }
+        if (n > 1) {
+            mean = (sum -= max_y) / --n;
+            for (int i = skip; i < size; i++) {
+                if (i != peak) {
+                    delta = (double)usec[i] - mean;
+                    esd += delta * delta;
+                }
+            }
+            esd = --n ? sqrt(esd / n) : 0;
+        }
+        else mean = sum;	// m == 1
+    }
+
+    fprintf(OUT, "\tusec = %.0f", mean);
+    if (size > 1) {
+        percent = 100. * esd / mean + .5;
         fprintf(OUT, "\tspread = %.0f\t%3d %%", esd, percent);
         int     i;
-        long    *tlen = microsec;
+        long    *tlen = usec;
         fprintf(OUT, " [%ld]", *tlen++);
-        for (i = 0; i < skip - 1; i++) fprintf(OUT, " [%ld]", *tlen++);
-        for (; i <= datacount; i++, tlen++) {
-            if (i == peak - 1) fprintf(OUT, " (%ld)", *tlen);
+        for (i = 1; i < skip; i++) fprintf(OUT, " [%ld]", *tlen++);
+        for (; i < size; i++, tlen++) {
+            if (i == peak) fprintf(OUT, " (%ld)", *tlen);
             else fprintf(OUT, " %ld", *tlen);
         }
     }
 #endif
+    if (index_time && trace_level) fprintf(OUT, " %.1f", (double)index_time / size);
     fprintf(OUT, "\n");
-    return  percent;
+    return percent;
 }
-
 // examine
 char *sorted_array;
 size_t memsize;
@@ -263,15 +305,18 @@ int main(int argc, char *argv[])
 #endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
+				"\t-V : trace level for indexing time.\n"
+				"\t       1 - average of indexing time.\n"
+				"\t       2 - show every indexing time.\n"
 #else
                 "\t-u : reUse random number (default is FALSE).\n"
-#endif
                 "\t-V : trace level for Debugging.\n"
                 "\t       1 - Counts.\n"
                 "\t       2 - and actions.\n"
                 "\t       3 - and copies.\n"
                 "\t       4 - and comparisons.\n"
                 "\t       5 - and Others.\n"
+#endif
                 "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
@@ -490,18 +535,21 @@ int main(int argc, char *argv[])
 QSORT:
         fprintf(OUT, "%s", name);
 #ifdef DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // for nmemb.awk
-#endif
-        begin_timer(repeat_count);
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // for nmemb.awk
+        usec = malloc(sizeof(long));
+        for (int i = 0; i < 1; i++) {	// once
+#else
+        usec = calloc(sizeof(long),repeat_count);
         for (int i = 0; i < repeat_count; i++) {
+#endif
             workbuff = NextBuffer;
             memcpy(workbuff, srcbuf, memsize);      // memory copy : sorted_array <-- srcbuf
             qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
-            start_timer();
+            start_timer(&start_time);
             qsort(workbuff, nmemb, size, cmpstring);
-            stop_timer();
+            usec[i] = stop_timer(&start_time);
         }
-        if (elapsed_time(description, skip) > limit) goto QSORT;
+        if (end_timer(description, repeat_count, skip) > limit) goto QSORT;
     }
     memcpy(sorted_array, workbuff, memsize);
 
@@ -540,37 +588,50 @@ REDO:
             clear = cache;  // really enough?
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
-#ifndef DEBUG
-            begin_timer(repeat_count);
-#endif
+            long elapsed_time = 0, timer1;
+            index_time = 0;
             for (int i = 0; i < repeat_count; i++) {
-#ifdef DEBUG
-                begin_timer(1);
-#endif
-                qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
+            	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
                 if (info->pointer_sort) {
+                    start_timer(&start_time);
                     idxtbl = make_index(workbuff, nmemb, size); // make an index table from srcbuf
                     if (idxtbl == NULL) return EXIT_FAILURE;
-                    start_timer();
+                    start_timer(&core_time);
                     (*info->sort_function)(idxtbl, nmemb, cmpstring);
-                    stop_timer();
+                    timer1 = stop_timer(&core_time);
                     unindex(workbuff, idxtbl, nmemb, size);     // restore index table to workbuff
+                    elapsed_time = stop_timer(&start_time);
+#ifdef  DEBUG
+                    usec[0] = elapsed_time;
+#else
+                    long	timer2 = (usec[i] = elapsed_time) - timer1;
+                    index_time += timer2;
+                    if (trace_level >= TRACE_DUMP) {
+                    	if (i == 0) fprintf(OUT, "\n");
+                    	fprintf(OUT, "indexing time = %ld\n", timer2);
+                    }
+#endif
                     free(idxtbl);
                 }
                 else {  // array sort or index sort.
-                    start_timer();
+                    start_timer(&start_time);
                     (*info->sort_function)(workbuff, nmemb, size, cmpstring);
-                    stop_timer();
+                    elapsed_time = stop_timer(&start_time);
+#ifdef  DEBUG
+                    usec[0] = elapsed_time;
+#else
+                    usec[i] = elapsed_time;
+#endif
                 }
 #ifdef  DEBUG
                 if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
-                elapsed_time(info->description, 0);
+                end_timer(info->description, 1, 0);
 #endif
             }
 #ifndef DEBUG
-            if (elapsed_time(info->description, skip) > limit) goto REDO;
+            if (end_timer(info->description, repeat_count, skip) > limit) goto REDO;
 #endif
             if (check_result(info->name, workbuff)) {   // error
                 print_out = TRUE;
@@ -578,8 +639,6 @@ REDO:
             }
         }
     }
-
     if (print_out) for (p = workbuff, i = 0; i++ < nmemb; p += size) fprintf(OUT, "%s\n", p);
-
     return EXIT_SUCCESS;
 }

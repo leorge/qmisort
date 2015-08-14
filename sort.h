@@ -63,9 +63,6 @@ extern PivotChoice  pivot_type;       // main.c
 extern RANDOM_DEPTH random_depth;       // main.c
 extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
-extern double       usec, esd;          // timer.c
-extern long         *microsec;          // timer.c
-extern int          peak;               // timer.c
 
 #ifdef DEBUG
 extern long qsort_moved, qsort_called, search_pivot;	// main.c
@@ -121,12 +118,6 @@ void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(
 const char  *dump_data(const void *data);
 void    **make_index(void *array1d, size_t nmemb, size_t size);
 void    unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size);
-
-// timer
-bool    begin_timer(int count);
-void    start_timer();
-long    stop_timer();
-int     end_timer(int skip);
 
 // for debug
 #ifdef DEBUG
