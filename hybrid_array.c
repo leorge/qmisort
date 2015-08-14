@@ -165,7 +165,7 @@ static int icomp(const void *p1, const void *p2) {
 }
 
 void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
-{   // like index_sort()
+{
     if (nmemb <= 1) return;
     void *tbl = calloc(nmemb, sizeof(POINTER_INDEX));
     if (tbl != NULL) {
