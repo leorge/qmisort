@@ -14,10 +14,12 @@ void insert_binary(void **base, size_t nmemb, int (*compare)(const void *, const
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_pointer("bins_pointer() start in " __FILE__, base, nmemb);
-    qsort_called++;
 #endif
     void **hole = base;
     for (size_t idx = 1; idx < nmemb; idx++) {
+#ifdef DEBUG
+        qsort_called++;
+#endif
         void *pivot = *++hole;
         // binary search
         int     chk;
@@ -45,10 +47,12 @@ void insert_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) dump_pointer("insert_sort() start in " __FILE__, base, nmemb);
-    qsort_called++;
 #endif
     void **last = &base[nmemb - 1];     // point the last element
     for (void **hole = base + 1; hole <= last; hole++) {
+#ifdef DEBUG
+        qsort_called++;
+#endif
     	void **p1, **p2, *pivot = *hole;	// make a hole
     	for (p2 = hole; p2 > base; p2 = p1) {
     		if (compare(*(p1 = p2 - 1), pivot) <= 0) break;
