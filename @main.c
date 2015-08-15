@@ -215,15 +215,15 @@ int main(int argc, char *argv[])
 				"quick sort : pivot is median of 3 elements with sWaps."},
     };
     INFO	test_indirect[] = {
-			{'M', MERGE_INDR, "merge_pointer(*)", merge_pointer,
+			{'M', 0, "merge_pointer(*)", merge_pointer,
 				"Merge sort."},
-			{'E', MERGE_HYBRID, "merge_phybrid(*)", merge_phybrid,
+			{'E', 0, "merge_phybrid(*)", merge_phybrid,
 				"hybrid sorting of mErgE sort."},
-			{'h', QSORT_HOLE, "qsort_phole(*)", qsort_phole,
+			{'h', 0, "qsort_phole(*)", qsort_phole,
 				"quick sort with hole."},
-			{'q', QSORT_HYBRID, "hybrid_pointer(*)", hybrid_pointer,
+			{'q', 0, "hybrid_pointer(*)", hybrid_pointer,
 				"hybrid sorting of quick sort."},
-			{'s', QSORT_STABLE, "stable_pointer(*)", stable_pointer,
+			{'s', 0, "stable_pointer(*)", stable_pointer,
 				"Stable hybrid sorting of quick sort."},
     };
     // prepare to analyze command arguments
