@@ -89,7 +89,6 @@ void    qsort_random3   (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    step_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stepup_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    tree_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // index sorting
 void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
