@@ -214,10 +214,10 @@ int main(int argc, char *argv[])
 			{'w', SWAP_MED3, "qsort_med3()", qsort_med3,
 				"quick sort : pivot is median of 3 elements with sWaps."},
     };
-    INFO	test_indirect[] = {
-			{'M', 0, "merge_pointer(*)", merge_pointer,
+    INFO	test_indirect[] = {	// order to show help
+			{'m', 0, "merge_pointer(*)", merge_pointer,
 				"Merge sort."},
-			{'E', 0, "merge_phybrid(*)", merge_phybrid,
+			{'M', 0, "merge_phybrid(*)", merge_phybrid,
 				"hybrid sorting of mErgE sort."},
 			{'h', 0, "qsort_phole(*)", qsort_phole,
 				"quick sort with hole."},
@@ -225,6 +225,10 @@ int main(int argc, char *argv[])
 				"hybrid sorting of quick sort."},
 			{'s', 0, "stable_pointer(*)", stable_pointer,
 				"Stable hybrid sorting of quick sort."},
+			{'i', 0, "insert_sort(*)", insert_sort,
+				"insertion sort with linear search."},
+			{'b', 0, "insert_binary(*)", insert_binary,
+				"insertion sort with binary search."},
     };
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to the SORT_TYPE.
