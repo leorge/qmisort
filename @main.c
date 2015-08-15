@@ -186,12 +186,8 @@ int main(int argc, char *argv[])
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
             // simple in-place sort.
-            {'r', QSORT_RANDOM, "qsort_random()", qsort_random, FALSE,
-                "Quick sort : Pivot is a random element with hole."},
             {'3', QSORT_RANDOM3, "qsort_random3()", qsort_random3, FALSE,
-                "Quick sort : Pivot is median of random 3 elements with hole."},
-            {'c', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
-                "quick sort : pivot is Conventional median of 3 elements with swaps."},
+                "quick sort : pivot is median of random 3 elements with hole."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
                 "quick sort : pivot is the miDDle element with swaps."},
             {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid, FALSE,
@@ -209,11 +205,15 @@ int main(int argc, char *argv[])
             {'M', MERGE_INDR, "merge_index()", merge_index, FALSE,
                 "Merge sort : indirect sorting."},
 			{'q', QSORT_HYBRID, "hybrid_array()", hybrid_array, FALSE,
-				"hybrid sorting of quick sort : array sorting."},
+				"Quick sort : hybrid sorting."},
+			{'r', QSORT_RANDOM, "qsort_random()", qsort_random, FALSE,
+				"quick sort : pivot is a Random element with hole."},
             {'s', QSORT_STABLE, "stable_array()", stable_array, FALSE,
-                "Stable hybrid sorting of quick sort."},
+                "quick sort : Stable hybrid sorting."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort, FALSE,
                 "dUmmy sort : do nothing to cause error."},
+			{'w', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
+				"quick sort : pivot is median of 3 elements with sWaps."},
     };
     INFO	test_indirect[] = {
 			{'M', MERGE_INDR, "merge_pointer(*)", merge_pointer, TRUE,
