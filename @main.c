@@ -220,6 +220,8 @@ int main(int argc, char *argv[])
 				"Merge sort."},
 			{'E', MERGE_HYBRID, "merge_phybrid(*)", merge_phybrid, TRUE,
 				"hybrid sorting of mErgE sort."},
+			{'h', QSORT_HOLE, "qsort_phole(*)", qsort_phole, TRUE,
+				"quick sort with hole."},
 			{'q', QSORT_HYBRID, "hybrid_pointer(*)", hybrid_pointer, TRUE,
 				"hybrid sorting of quick sort."},
 			{'s', QSORT_STABLE, "stable_pointer(*)", stable_pointer, TRUE,

@@ -78,8 +78,6 @@ extern void (*medium_func)();
 void    bubble_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    hybrid_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-//void    insert_binary   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-//void    insert_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -103,6 +101,7 @@ void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *
 void    insert_binary   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    qsort3_indr     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    qsort_phole     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
