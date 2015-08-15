@@ -86,7 +86,6 @@ typedef struct {
     SORT_TYPE   type;               // see above.
     const char *name;               // function name to display
     void        (*sort_function)();
-    bool        pointer_sort;       // True : pointer sort      False : array sort or index sort
     const char  *description;
 } INFO;
 
@@ -186,45 +185,45 @@ int main(int argc, char *argv[])
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
             // simple in-place sort.
-            {'3', QSORT_RANDOM3, "qsort_random3()", qsort_random3, FALSE,
+            {'3', QSORT_RANDOM3, "qsort_random3()", qsort_random3,
                 "quick sort : pivot is median of random 3 elements with hole."},
-            {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle, FALSE,
+            {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quick sort : pivot is the miDDle element with swaps."},
-            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid, FALSE,
+            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
                 "hybrid sorting of mErgE sort : indirect sorting."},
-            {'f', SWAP_FIRST, "qsort_first()", qsort_first, FALSE,
+            {'f', SWAP_FIRST, "qsort_first()", qsort_first,
                 "quick sort : pivot is the First element with swaps."},
-            {'h', QSORT_HOLE, "qsort_hole()", qsort_hole, FALSE,
+            {'h', QSORT_HOLE, "qsort_hole()", qsort_hole,
                 "quick sort : prototype of Hole scheme."},
 #ifdef  DEBUG
-            {'K', SWAP_KR, "qsort_kr()", qsort_kr, FALSE,
+            {'K', SWAP_KR, "qsort_kr()", qsort_kr,
                 "quick sort : pivot is the middle element with swaps in K&R style."},
 #endif
-            {'m', MERGE_ARRAY, "merge_sort()", merge_sort, FALSE,
+            {'m', MERGE_ARRAY, "merge_sort()", merge_sort,
                 "Merge sort : array sorting."},
-            {'M', MERGE_INDR, "merge_index()", merge_index, FALSE,
+            {'M', MERGE_INDR, "merge_index()", merge_index,
                 "Merge sort : indirect sorting."},
-			{'q', QSORT_HYBRID, "hybrid_array()", hybrid_array, FALSE,
+			{'q', QSORT_HYBRID, "hybrid_array()", hybrid_array,
 				"Quick sort : hybrid sorting."},
-			{'r', QSORT_RANDOM, "qsort_random()", qsort_random, FALSE,
+			{'r', QSORT_RANDOM, "qsort_random()", qsort_random,
 				"quick sort : pivot is a Random element with hole."},
-            {'s', QSORT_STABLE, "stable_array()", stable_array, FALSE,
+            {'s', QSORT_STABLE, "stable_array()", stable_array,
                 "quick sort : Stable hybrid sorting."},
-            {'U', DUMMY_SORT, "dummy_sort()", dummy_sort, FALSE,
+            {'U', DUMMY_SORT, "dummy_sort()", dummy_sort,
                 "dUmmy sort : do nothing to cause error."},
-			{'w', SWAP_MED3, "qsort_med3()", qsort_med3, FALSE,
+			{'w', SWAP_MED3, "qsort_med3()", qsort_med3,
 				"quick sort : pivot is median of 3 elements with sWaps."},
     };
     INFO	test_indirect[] = {
-			{'M', MERGE_INDR, "merge_pointer(*)", merge_pointer, TRUE,
+			{'M', MERGE_INDR, "merge_pointer(*)", merge_pointer,
 				"Merge sort."},
-			{'E', MERGE_HYBRID, "merge_phybrid(*)", merge_phybrid, TRUE,
+			{'E', MERGE_HYBRID, "merge_phybrid(*)", merge_phybrid,
 				"hybrid sorting of mErgE sort."},
-			{'h', QSORT_HOLE, "qsort_phole(*)", qsort_phole, TRUE,
+			{'h', QSORT_HOLE, "qsort_phole(*)", qsort_phole,
 				"quick sort with hole."},
-			{'q', QSORT_HYBRID, "hybrid_pointer(*)", hybrid_pointer, TRUE,
+			{'q', QSORT_HYBRID, "hybrid_pointer(*)", hybrid_pointer,
 				"hybrid sorting of quick sort."},
-			{'s', QSORT_STABLE, "stable_pointer(*)", stable_pointer, TRUE,
+			{'s', QSORT_STABLE, "stable_pointer(*)", stable_pointer,
 				"Stable hybrid sorting of quick sort."},
     };
     // prepare to analyze command arguments
