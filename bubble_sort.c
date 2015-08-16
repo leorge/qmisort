@@ -9,31 +9,29 @@
 
 #include "sort.h"
 
-void bubble_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
+void bubble_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
-    char tmp[size];
-#define first   ((char *)base)
-    char *last = first + (nmemb - 1) * size;
+    void *tmp;
+    void **first = base;
+    void **last = first + (nmemb - 1);
     do {
-        char *p1, *p2, *anchor = first + size;
+        char **p1, **p2, **anchor = first + 1;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_array("search", first, (last - first) / size + 1, size);
+        if (trace_level >= TRACE_DUMP) dump_pointer("search", first, last - first + 1);
         qsort_called++; // loop count
 #endif
         for (p1 = first; p1 < last; p1 = p2) {   // search a reverse order pair
-            if (compare(p1, p2 = p1 + size) > 0) {  // found
+            if (compare(*p1, *(p2 = p1 + 1)) > 0) {  // found
 #ifdef DEBUG
-				qsort_moved += 3;
-				if (trace_level >= TRACE_MOVE) fprintf(OUT, "%s <--> %s\n", dump_data(p1), dump_data(p2));
+				if (trace_level >= TRACE_MOVE) fprintf(OUT, "%s <--> %s\n", dump_data(*p1), dump_data(*p2));
 #endif
-            	memcpy(tmp, p1, size);
-            	memcpy(p1, p2, size);
-            	memcpy(anchor = p2, tmp, size);
+				tmp = *p1; *p1 = *p2; *p2 = tmp;	// swap
+				anchor = p2;
             }
         }
-        last = anchor - size;
+        last = anchor - 1;
     } while (first < last);
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_array("bubble_sort() done.", base, nmemb, size);
+        if (trace_level >= TRACE_DUMP) dump_pointer("bubble_sort() done.", base, nmemb);
 #endif
 }

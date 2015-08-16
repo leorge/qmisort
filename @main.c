@@ -221,6 +221,9 @@ int main(int argc, char *argv[])
 			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
 			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
 			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort."},
+			{'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
+			{'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
+			{'p', 0, "step_sort(*)", step_sort, "steP sort."},
     };
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to the SORT_TYPE.
@@ -396,7 +399,7 @@ int main(int argc, char *argv[])
                 small_func = insert_sort;
                 break;
             case 's':
-                small_func = step_pointer;
+                small_func = step_sort;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -y option.\n", optarg);
