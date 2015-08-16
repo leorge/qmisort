@@ -11,7 +11,7 @@
 
 static int  (*comp)(const void *, const void *);
 
-static char **first, **last, *key;
+static void **first, **last, *key;
 //size_t  anchor;
 
 static void heap(size_t nmemb, size_t node)
@@ -20,7 +20,7 @@ static void heap(size_t nmemb, size_t node)
     dump_pointer("heap start", first, nmemb);
     qsort_called++;
 #endif
-    char    **child, **start = first + node, **parent = start;
+    void    **child, **start = first + node, **parent = start;
     size_t  leaf;
     while(TRUE) {
         leaf = (node << 1) + 1;         // 2n + 1
