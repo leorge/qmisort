@@ -65,7 +65,7 @@ extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
 
 #ifdef DEBUG
-extern long qsort_moved, qsort_called, search_pivot;	// main.c
+extern long qsort_moved, qsort_comp_str, qsort_called, search_pivot;	// main.c
 extern Trace    trace_level;            // main.c
 #endif
 
@@ -76,7 +76,6 @@ extern void (*medium_func)();
 
 // array sorting
 void    bubble_sort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    heap_sort       (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    hybrid_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -96,6 +95,7 @@ void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(c
 
 // pointer sorting
 void    bins_pointer    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    heap_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_binary   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

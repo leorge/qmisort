@@ -24,8 +24,6 @@
 /*
  * Uncomment or define symbols to examine algorithm.
  */
-//#define   HEAP_SORT 1
-//#define   INSERTION_SORT 1
 
 /****   Public  ****/
 PivotChoice  pivot_type = PIVOT_RANDOM3;
@@ -215,20 +213,14 @@ int main(int argc, char *argv[])
 				"quick sort : pivot is median of 3 elements with sWaps."},
     };
     INFO	test_indirect[] = {	// order to show help
-			{'m', 0, "merge_pointer(*)", merge_pointer,
-				"Merge sort."},
-			{'M', 1, "merge_phybrid(*)", merge_phybrid,
-				"hybrid sorting of mErgE sort."},
-			{'q', 0, "qsort_phole(*)", qsort_phole,
-				"quick sort with hole."},
-			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer,
-				"hybrid sorting of quick sort."},
-			{'s', 0, "stable_pointer(*)", stable_pointer,
-				"Stable hybrid sorting of quick sort."},
-			{'i', 0, "insert_sort(*)", insert_sort,
-				"insertion sort with linear search."},
-			{'b', 0, "insert_binary(*)", insert_binary,
-				"insertion sort with binary search."},
+			{'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
+			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid sorting of mErgE sort."},
+			{'q', 0, "qsort_phole(*)", qsort_phole, "quick sort with hole."},
+			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer, "hybrid sorting of quick sort."},
+			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid sorting of quick sort."},
+			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
+			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
+			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort."},
     };
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to the SORT_TYPE.
