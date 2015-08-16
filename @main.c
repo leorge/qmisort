@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
             {'f', SWAP_FIRST, "qsort_first()", qsort_first,
                 "quick sort : pivot is the First element with swaps."},
             {'h', QSORT_HOLE, "qsort_hole()", qsort_hole,
-                "quick sort : prototype of Hole scheme."},
+                "quick sort : prototype with Hole."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr,
                 "quick sort : pivot is the middle element with swaps in K&R style."},
