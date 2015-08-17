@@ -11,16 +11,20 @@
 
 static int  (*comp)(const void *, const void *);
 
-static void **root, *key;
+static void **root;
 //size_t  anchor;
 
 static void heap(size_t nmemb, size_t node)
 {
 #ifdef DEBUG
-    dump_pointer("heap start", root, nmemb);
+    dump_pointer("heap() start", root, nmemb);
     qsort_called++;
 #endif
     void    **child, **start = root + node, **parent = start;
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "node = %ld\tstart = %s\n", node, dump_data(*start));
+#endif
+    void 	*key = *start;	// save
     size_t  leaf;
     while(TRUE) {
         leaf = (node << 1) + 1;         // 2n + 1
@@ -48,10 +52,7 @@ static void sort(size_t nmemb) {
 	size_t  n = nmemb;
 	void **last = root + n - 1;  	// next element of the last element
     do {    // sort
-    	key = *last; *last = *root; *root = key;	// swap first <--> last
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "key = %s\n", dump_data(key));
-#endif
+    	void *tmp = *last; *last = *root; *root = tmp;	// swap first <--> last
         last--; heap(--n, 0);     // shrink and re-build the heap
     } while (n);
 }
@@ -99,10 +100,6 @@ void heap_sort2(void **base, size_t nmemb, int (*compare)(const void *, const vo
     root = base;
     size_t node = (nmemb - 1) >> 1;  	// lowest parent node
     do {
-        key = *(root + node);
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "key = %s\n", dump_data(key));
-#endif
         heap(nmemb, node);
     } while (node--);
 #ifdef DEBUG
