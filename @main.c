@@ -223,6 +223,7 @@ int main(int argc, char *argv[])
 			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort."},
 			{'H', 0, "heap_sort2(*)", heap_sort2, "Heap sort 2."},
 			{'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
+			{'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
 			{'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
 			{'p', 0, "step_sort(*)", step_sort, "steP sort."},
     };
