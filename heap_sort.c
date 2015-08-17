@@ -11,7 +11,7 @@
 
 static int  (*comp)(const void *, const void *);
 
-static void **first, **last, *key;
+static void **first, *key;
 //size_t  anchor;
 
 static void heap(size_t nmemb, size_t node)
@@ -65,7 +65,7 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 	size_t  n = nmemb;
 	comp = compare;
 	first = base;
-	last = first + n - 1;  			// next element of the last element
+	void **last = first + n - 1;  	// next element of the last element
     do {    // sort
     	key = *last; *last = *first; *first = key;	// swap first <--> last
 #ifdef DEBUG
@@ -84,7 +84,7 @@ void heap_sort2(void **base, size_t nmemb, int (*compare)(const void *, const vo
     size_t  n = nmemb;
     comp = compare;
     first = base;
-    last = first + n - 1;  			// next element of the last element
+    void **last = first + n - 1;  	// next element of the last element
     size_t node = (n - 1) >> 1;  	// lowest parent node
     do {
         key = *(first + node);
