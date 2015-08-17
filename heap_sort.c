@@ -40,25 +40,33 @@ static void heap(size_t nmemb, size_t node)
 #endif
 }
 
+// bulld a heap by shift up
 void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
-    size_t  n = nmemb;
-    comp = compare;
-    first = base;
-    last = first + n - 1;  			// next element of the last element
-    size_t node = (n - 1) >> 1;  	// lowest parent node
-    do {    // build up a heap
-        key = *(first + node);
+    for (size_t node = 1; node < nmemb; node++) {
+    	size_t	child = node;
+        size_t	parent = (child - 1) >> 1;
+        while (compare(base[parent], base[child]) < 0) {
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "key = %s\n", dump_data(key));
+        	if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap : %s [%ld] <--> %s [%ld]\n"
+        			, dump_data(base[parent]), parent, dump_data(base[child]), child);
 #endif
-        heap(n, node);
-    } while (node--);
+        	void *tmp = base[parent]; base[parent] = base[child]; base[child] = tmp;
+        	if (! parent) break;	// root
+        	child = parent; parent = (child - 1) >> 1;
+        }
+    }
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "A heap is built. compare = %ld\n", qsort_comp_str);
+    if (trace_level >= TRACE_DUMP) {
+        dump_pointer("heap is built", base, nmemb);
+    	fprintf(OUT, "A heap is built. compare = %ld\n", qsort_comp_str);
+    }
 #endif
+	size_t  n = nmemb;
+	comp = compare;
+	first = base;
+	last = first + n - 1;  			// next element of the last element
     do {    // sort
-//        copy(key, last); copy(last, first); copy(first, key);   // *key <-- *last <-- *first <-- *key
     	key = *last; *last = *first; *first = key;	// swap first <--> last
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "key = %s\n", dump_data(key));
@@ -69,3 +77,37 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
     dump_pointer("heap_sort done", first, nmemb);
 #endif
 }
+
+// build a heap by shift down
+void heap_sort2(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+    if (nmemb <= 1) return;
+    size_t  n = nmemb;
+    comp = compare;
+    first = base;
+    last = first + n - 1;  			// next element of the last element
+    size_t node = (n - 1) >> 1;  	// lowest parent node
+    do {
+        key = *(first + node);
+#ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "key = %s\n", dump_data(key));
+#endif
+        heap(n, node);
+    } while (node--);
+#ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) {
+            dump_pointer("heap is built", first, nmemb);
+        	fprintf(OUT, "A heap is built. compare = %ld\n", qsort_comp_str);
+        }
+#endif
+    do {    // sort
+    	key = *last; *last = *first; *first = key;	// swap first <--> last
+#ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "key = %s\n", dump_data(key));
+#endif
+        last--; heap(--n, 0);     // shrink and re-build the heap
+    } while (n);
+#ifdef DEBUG
+    dump_pointer("heap_sort done", first, nmemb);
+#endif
+}
+

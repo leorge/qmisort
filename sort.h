@@ -94,6 +94,7 @@ void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    bins_pointer    (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    bubble_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    heap_sort2      (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    hybrid_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_binary   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

@@ -221,6 +221,7 @@ int main(int argc, char *argv[])
 			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
 			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
 			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort."},
+			{'H', 0, "heap_sort2(*)", heap_sort2, "Heap sort 2."},
 			{'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
 			{'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
 			{'p', 0, "step_sort(*)", step_sort, "steP sort."},
