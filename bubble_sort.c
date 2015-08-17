@@ -17,7 +17,7 @@ void bubble_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     do {
         void **p1, **p2, **anchor = first + 1;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("search", first, last - first + 1);
+    dump_pointer("search", first, last - first + 1);
         qsort_called++; // loop count
 #endif
         for (p1 = first; p1 < last; p1 = p2) {   // search a reverse order pair
@@ -32,6 +32,6 @@ void bubble_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
         last = anchor - 1;
     } while (first < last);
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("bubble_sort() done.", base, nmemb);
+    dump_pointer("bubble_sort() done.", base, nmemb);
 #endif
 }

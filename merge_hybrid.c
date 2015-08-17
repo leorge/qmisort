@@ -16,7 +16,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
     void **store = revert ? src : dst;  // destination
 #ifdef DEBUG
     qsort_called++;
-    if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, revert ? dst : src, nmemb);
+    dump_pointer("sort() start in " __FILE__, revert ? dst : src, nmemb);
     void **first = store;
 #endif
     if (nmemb <= small_boundary) {    /* Insertion sort */
@@ -43,7 +43,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
                 *store++ = *left++;     // add one
                 if (--n_lo <= 0) {  // empty?
 #ifdef DEBUG
-                    if (trace_level >= TRACE_DUMP) dump_pointer("append", right, n_hi);
+                    dump_pointer("append", right, n_hi);
 #endif
                     memcpy(store, right, n_hi * sizeof(void *));    // append remained data
                     break;
@@ -56,7 +56,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
                 *store++ = *right++;
                 if (--n_hi <= 0) {
 #ifdef DEBUG
-                    if (trace_level >= TRACE_DUMP) dump_pointer("append", left, n_lo);
+                    dump_pointer("append", left, n_lo);
 #endif
                     memcpy(store, left, n_lo * sizeof(void *));
                     break;
@@ -65,7 +65,7 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
         }
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("sort() done.", first, nmemb);
+    dump_pointer("sort() done.", first, nmemb);
 #endif
 }
 

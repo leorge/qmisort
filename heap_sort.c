@@ -43,7 +43,7 @@ static void heap(size_t nmemb, size_t node)
 // sort
 static void sort(size_t nmemb) {
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("sort()", root, nmemb);
+    dump_pointer("sort()", root, nmemb);
 #endif
 	size_t  n = nmemb;
 	void **last = root + n - 1;  	// next element of the last element
@@ -60,7 +60,7 @@ static void sort(size_t nmemb) {
 void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, base, nmemb);
+    dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
     for (size_t node = 1; node < nmemb; node++) {
 #ifdef DEBUG
@@ -93,7 +93,7 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 void heap_sort2(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("heap_sort2() start in " __FILE__, base, nmemb);
+    dump_pointer("heap_sort2() start in " __FILE__, base, nmemb);
 #endif
     comp = compare;
     root = base;

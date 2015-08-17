@@ -13,12 +13,12 @@
 void step_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("step_sort() start in " __FILE__, base, nmemb);
+    dump_pointer("step_sort() start in " __FILE__, base, nmemb);
 #endif
     char **first = base, **last = first + nmemb - 1, *tmp;
     do {
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("Step up", first, last - first + 1);
+        dump_pointer("Step up", first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         char **p1, **p2, **pivot;
@@ -38,7 +38,7 @@ void step_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
         last = anchor - 1;
         // step down
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("Step down", first, last - first + 1);
+        dump_pointer("Step down", first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         anchor = last - 1;
@@ -56,19 +56,19 @@ void step_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
         first = anchor + 1;
     } while (first < last);
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("step_sort() done.", base, nmemb);
+    dump_pointer("step_sort() done.", base, nmemb);
 #endif
 }
 
 void stepup_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("stepup_sort() start in " __FILE__, base, nmemb);
+    dump_pointer("stepup_sort() start in " __FILE__, base, nmemb);
 #endif
     char **first = base, **last = first + nmemb - 1, *tmp;
     do {
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) dump_pointer("Step up", first, last - first + 1);
+        dump_pointer("Step up", first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         char **p1, **p2, **pivot;
@@ -87,7 +87,7 @@ void stepup_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
         last = anchor - 1;
     } while (first < last);
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("stepup_sort() done.", base, nmemb);
+    dump_pointer("stepup_sort() done.", base, nmemb);
 #endif
 }
 

@@ -136,7 +136,7 @@ static void psort(void **base, size_t nmemb) {
 void qsort_phole(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("qsort_phole() start in " __FILE__, base, nmemb);
+    dump_pointer("qsort_phole() start in " __FILE__, base, nmemb);
 #endif
     comp = compare;
     psort(base, nmemb);

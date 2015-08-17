@@ -92,7 +92,7 @@ static void psort(void **dst, void **src, bool revert, size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
-    if (trace_level >= TRACE_DUMP) dump_pointer("sort() start in " __FILE__, src, nmemb);
+    dump_pointer("sort() start in " __FILE__, src, nmemb);
 #endif
     size_t n_lo = nmemb >> 1;   // = nmemb / 2
     size_t n_hi = nmemb - n_lo;
@@ -115,7 +115,7 @@ static void psort(void **dst, void **src, bool revert, size_t nmemb) {
             *store++ = *left++;     // add one
             if (--n_lo <= 0) {  // empty?
 #ifdef DEBUG
-                if (trace_level >= TRACE_DUMP) dump_pointer("append right", right, n_hi);
+                dump_pointer("append right", right, n_hi);
 #endif
                 memcpy(store, right, n_hi * sizeof(void *));    // append remained data
                 break;
@@ -125,7 +125,7 @@ static void psort(void **dst, void **src, bool revert, size_t nmemb) {
             *store++ = *right++;
             if (--n_hi <= 0) {
 #ifdef DEBUG
-                if (trace_level >= TRACE_DUMP) dump_pointer("append left", left, n_lo);
+                dump_pointer("append left", left, n_lo);
 #endif
                 memcpy(store, left, n_lo * sizeof(void *));
                 break;
@@ -133,7 +133,7 @@ static void psort(void **dst, void **src, bool revert, size_t nmemb) {
         }
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("sort() done.", first, nmemb);
+    dump_pointer("sort() done.", first, nmemb);
 #endif
 }
 

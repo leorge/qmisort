@@ -13,7 +13,7 @@
 void insert_binary(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("bins_pointer() start in " __FILE__, base, nmemb);
+    dump_pointer("bins_pointer() start in " __FILE__, base, nmemb);
 #endif
     void **hole = base;
     for (size_t idx = 1; idx < nmemb; idx++) {
@@ -38,7 +38,7 @@ void insert_binary(void **base, size_t nmemb, int (*compare)(const void *, const
         *p2 = pivot;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("bins_pointer() done.", base, nmemb);
+    dump_pointer("bins_pointer() done.", base, nmemb);
 #endif
 }
 
@@ -46,7 +46,7 @@ void insert_binary(void **base, size_t nmemb, int (*compare)(const void *, const
 void insert_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("insert_sort() start in " __FILE__, base, nmemb);
+    dump_pointer("insert_sort() start in " __FILE__, base, nmemb);
 #endif
     void **last = &base[nmemb - 1];     // point the last element
     for (void **hole = base + 1; hole <= last; hole++) {
@@ -61,6 +61,6 @@ void insert_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     	*p2 = pivot;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_pointer("insert_sort() done.", base, nmemb);
+    dump_pointer("insert_sort() done.", base, nmemb);
 #endif
 }
