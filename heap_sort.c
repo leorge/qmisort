@@ -10,9 +10,7 @@
 #include "sort.h"
 
 static int  (*comp)(const void *, const void *);
-
 static void **root;
-//size_t  anchor;
 
 static void heap(size_t nmemb, size_t node)
 {
