@@ -15,7 +15,7 @@ void bubble_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     void **first = base;
     void **last = first + (nmemb - 1);
     do {
-        char **p1, **p2, **anchor = first + 1;
+        void **p1, **p2, **anchor = first + 1;
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) dump_pointer("search", first, last - first + 1);
         qsort_called++; // loop count
