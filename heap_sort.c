@@ -89,7 +89,7 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 }
 
 // build a heap by shift down
-void heap_sort2(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void heap2_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     dump_pointer("heap_sort2() start in " __FILE__, base, nmemb);
