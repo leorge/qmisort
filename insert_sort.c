@@ -52,15 +52,54 @@ void insert_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     for (void **hole = base + 1; hole <= last; hole++) {
 #ifdef DEBUG
         qsort_called++;
+        dump_pointer("", base, hole - base);
 #endif
     	void **p1, **p2, *pivot = *hole;	// make a hole
-    	for (p2 = hole; p2 > base; p2 = p1) {
-    		if (compare(*(p1 = p2 - 1), pivot) <= 0) break;
+    	for (p2 = hole; (p1 = p2 - 1) >= base; p2 = p1) {
+    		if (compare(*p1, pivot) <= 0) break;
     		*p2 = *p1;
     	}
     	*p2 = pivot;
     }
 #ifdef DEBUG
     dump_pointer("insert_sort() done.", base, nmemb);
+#endif
+}
+
+/* shellsort */
+void shellsort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+    if (nmemb <= 1) return;
+#ifdef DEBUG
+    dump_pointer("shellsort() start in " __FILE__, base, nmemb);
+    if (trace_level >= TRACE_DUMP) {
+    	fprintf(OUT, "gaplist =");
+        for (int gap = 0; gap < gap_count; gap++) fprintf(OUT, " %ld", gaplist[gap]);
+    	fprintf(OUT, "\n");
+    }
+#endif
+    void **last = &base[nmemb - 1];     // point the last element
+    size_t	*gap_pointer = gaplist;
+    for (int i = 0; i < gap_count; i++) {
+    	size_t	gap = *gap_pointer++;
+#ifdef DEBUG
+    	if (trace_level >= TRACE_DUMP) {
+    		fprintf(OUT, "gap = %ld", gap);
+    		dump_pointer("", base, nmemb);
+    	}
+#endif
+		for (void **hole = base + gap; hole <= last; hole++) {
+#ifdef DEBUG
+			qsort_called++;
+#endif
+			void **p1, **p2, *pivot = *hole;	// make a hole
+			for (p2 = hole; (p1 = p2 - gap) >= base; p2 = p1) {
+				if (compare(*p1, pivot) <= 0) break;
+				*p2 = *p1;
+			}
+			*p2 = pivot;
+		}
+    }
+#ifdef DEBUG
+    dump_pointer("shellsort() done.", base, nmemb);
 #endif
 }

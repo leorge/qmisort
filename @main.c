@@ -38,6 +38,9 @@ void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_sort;
 
+size_t	*gaplist = NULL;
+int		gap_count = 0;
+
 size_t set_random(void) {
     size_t  rtn = rand();   // [0..RAND_MAX]
 #ifdef  DEBUG
@@ -220,6 +223,7 @@ int main(int argc, char *argv[])
 			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid sorting of quick sort."},
 			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
 			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
+			{'L', 0, "shellsort(*)", shellsort, "shellsort."},
 			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort."},
 			{'H', 0, "heap_sort2(*)", heap_sort2, "Heap sort 2."},
 			{'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
@@ -485,6 +489,7 @@ int main(int argc, char *argv[])
 
     /***** Prepare *****/
 
+    // medium boundary
     int skip = repeat_count > 1 ? 1: 0;
     if (Loption < 0) {  // depth for hybrid sorting boundary
         medium_boundary = nmemb / pow(2.0, -Loption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
@@ -493,9 +498,28 @@ int main(int argc, char *argv[])
         medium_boundary = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
     if (medium_boundary == 0) medium_boundary = 8192;   // default
+    if (medium_boundary > nmemb) medium_boundary = nmemb;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
 #endif
+
+    // gap list
+    size_t	f1 = 1, f2 = 1, fib = 1;
+    gap_count = 1;
+    if (small_boundary > nmemb) small_boundary = nmemb;
+    while ((fib = f1 + f2) < small_boundary) {
+    	if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, fib);
+    	f1 = f2; f2 = fib;
+    	gap_count++;
+    }
+    if (trace_level >= TRACE_NONE) fprintf(OUT, "gap_count = %d\tfibonacci = %ld\tf2 = %ld\n", gap_count, fib, f2);
+    size_t G[gap_count]; gaplist = G;	// gap_count is not huge.
+    for (i = 0; i < gap_count; i++) {
+    	f1 = fib - f2;
+    	G[i] = fib = f2;
+    	f2 = f1;
+    	if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, G[i]);
+    }
 
 //#define   BUFCYCLE    2
     char    **workarea = (char **)malloc(sizeof(char *) * buffer_length);

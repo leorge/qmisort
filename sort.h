@@ -54,12 +54,14 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 
 /***** variables *****/
 
+extern size_t		*gaplist;			// main.c
 extern size_t       INS;                // main.c
 extern size_t       random_number;      // main.c
 extern size_t       medium_boundary;    // main.c
 extern size_t       small_boundary;     // main.c
+extern int			gap_count;			// main.c
 extern int          pivot_number;       // main.c
-extern PivotChoice  pivot_type;       // main.c
+extern PivotChoice  pivot_type;       	// main.c
 extern RANDOM_DEPTH random_depth;       // main.c
 extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
@@ -102,6 +104,7 @@ void    qsort3_indr     (void *base[], size_t nmemb, int (*compare)(const void *
 void    qsort_phole     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    shellsort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    step_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stepup_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
