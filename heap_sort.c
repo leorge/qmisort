@@ -92,7 +92,7 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 void heap2_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    dump_pointer("heap_sort2() start in " __FILE__, base, nmemb);
+    dump_pointer("heap2_sort() start in " __FILE__, base, nmemb);
 #endif
     comp = compare;
     root = base;
@@ -105,6 +105,6 @@ void heap2_sort(void **base, size_t nmemb, int (*compare)(const void *, const vo
 #endif
     sort(nmemb);
 #ifdef DEBUG
-    dump_pointer("heap_sort2 done", root, nmemb);
+    dump_pointer("heap2_sort done", root, nmemb);
 #endif
 }
