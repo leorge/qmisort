@@ -55,7 +55,7 @@ static void sort(size_t nmemb) {
     } while (n);
 }
 
-// bulld a heap by shift up
+// bulld a heap by sift up
 void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
@@ -88,7 +88,7 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 #endif
 }
 
-// build a heap by shift down
+// build a heap by sift down
 void heap2_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
