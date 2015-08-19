@@ -38,12 +38,12 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
         while (TRUE) {
             if (comp(*left, *right) <= 0) {
 #ifdef DEBUG
-                if (trace_level >= TRACE_DUMP) fprintf(OUT, "add %s\n", dump_data(*left));
+                if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*left));
 #endif
                 *store++ = *left++;     // add one
                 if (--n_lo <= 0) {  // empty?
 #ifdef DEBUG
-                    dump_pointer("append", right, n_hi);
+                	if (trace_level >= TRACE_MOVE) dump_pointer("append", right, n_hi);
 #endif
                     memcpy(store, right, n_hi * sizeof(void *));    // append remained data
                     break;
@@ -51,12 +51,12 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
             }
             else {
 #ifdef DEBUG
-                if (trace_level >= TRACE_DUMP) fprintf(OUT, "add %s\n", dump_data(*right));
+                if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*right));
 #endif
                 *store++ = *right++;
                 if (--n_hi <= 0) {
 #ifdef DEBUG
-                    dump_pointer("append", left, n_lo);
+                	if (trace_level >= TRACE_MOVE) dump_pointer("append", left, n_lo);
 #endif
                     memcpy(store, left, n_lo * sizeof(void *));
                     break;
