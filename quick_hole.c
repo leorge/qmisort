@@ -93,12 +93,13 @@ static void psort(void **base, size_t nmemb) {
 #endif
 	void **first = base;
     void **last = first + (nmemb - 1);  // point a last element
-    void **hole = last;
+    void **hole = first + (nmemb >> 1);	// meddle element
     pivot = *hole;
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [last]\n", dump_data(pivot));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [%ld]\n", dump_data(pivot), hole - first);
 #endif
-    void **lo = first, **hi = hole - 1;
+    *hole = *last; hole = last;	// move the last element to the middle positon.
+    void **lo = first, **hi = last - 1;
     for (; lo < hole; lo++) {
         if (comp(*lo, pivot) > 0) {
 #ifdef  DEBUG
