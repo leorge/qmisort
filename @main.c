@@ -218,18 +218,20 @@ int main(int argc, char *argv[])
     INFO	test_indirect[] = {	// order to show help
 			{'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
 			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid sorting of mErgE sort."},
-			{'q', 0, "qsort_phole(*)", qsort_phole, "quick sort with hole."},
+			{'q', 0, "qsort_phole(*)", qsort_phole, "Quicksort with hole. pivot is a middle element."},
 			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer, "hybrid sorting of quick sort."},
 			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid sorting of quick sort."},
 			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
 			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
 			{'L', 0, "shellsort(*)", shellsort, "shellsort."},
-			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort."},
-			{'H', 0, "heap2_sort(*)", heap2_sort, "Heap sort 2."},
+			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort. build a heap with sift up."},
+			{'H', 0, "heap2_sort(*)", heap2_sort, "Heap sort. build a heap with sift down."},
+#ifdef	DEBUG	// impractical below
 			{'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
 			{'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
 			{'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
 			{'p', 0, "step_sort(*)", step_sort, "steP sort."},
+#endif
     };
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to the SORT_TYPE.
@@ -512,7 +514,7 @@ int main(int argc, char *argv[])
     	f1 = f2; f2 = fib;
     	gap_count++;
     }
-    if (trace_level >= TRACE_NONE) fprintf(OUT, "gap_count = %d\tfibonacci = %ld\tf2 = %ld\n", gap_count, fib, f2);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "gap_count = %d\tfibonacci = %ld\tf2 = %ld\n", gap_count, fib, f2);
     size_t G[gap_count]; gaplist = G;	// gap_count is not huge.
     for (i = 0; i < gap_count; i++) {
     	f1 = fib - f2;
