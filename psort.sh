@@ -8,10 +8,10 @@ if [ $# -eq 0 ]; then
 fi
 for N in $*; do
     src/random.awk $N | Debug/Sort -N $N -l $N -P mqibLhHBCup -V 1
-done | tee tmp$$
+done > tmp$$
 
 awk -f - tmp$$ <<'EOF'
-BEGIN {N = "name"}
+BEGIN {N = "N"}
 /^arguments/ {N = N "\t" $4; next}
 {
 	name = $1; sub(/\(\*\)/, "", name);
