@@ -36,7 +36,7 @@ bool    reuse_random = FALSE;       // reuse random number or not
 size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
-void    (*small_func)() = insert_sort;
+void    (*small_func)() = insert_binary;
 
 size_t	*gaplist = NULL;
 int		gap_count = 0;
@@ -179,7 +179,6 @@ void dummy_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
 
 /*****************************************************************************/
 int main(int argc, char *argv[])
-
 {
     extern int getopt(int argc, char * const argv[], const char *optstring);
     extern  int optind;
@@ -235,7 +234,7 @@ int main(int argc, char *argv[])
     };
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to the SORT_TYPE.
-    char    *p, optstring[sizeof(test) / sizeof(INFO) + 100];   // enough long
+    char    c, *p, optstring[sizeof(test) / sizeof(INFO) + 100];   // enough long
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
@@ -268,7 +267,7 @@ int main(int argc, char *argv[])
             }
             puts("\t-P : Pointer sorting.");
             for (info = test_indirect, i = 0; i++ < sizeof(test_indirect) / sizeof(INFO); info++) {
-                printf("\t       %c - %s\n", info->option, info->description);
+                printf("\t       %c %c %s\n", info->option, info->type ? '*' : '-', info->description);
             }
 			puts(
                 "\n"
@@ -314,7 +313,7 @@ int main(int argc, char *argv[])
                 "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
-    			"\t       option is same to the -I option. Default is \"i\".\n"
+    			"\t       same to the value of -P option followed by \"-\". Default is \"b\".\n"
                 "\t-Z : siZe of an array element."
             );
             return EXIT_SUCCESS;
@@ -399,21 +398,13 @@ int main(int argc, char *argv[])
             buffer_length = (int)strtoul(optarg, NULL, 0);
             break;
         case 'y':   // Algorithm when N is small
-            switch(*optarg) {
-            case 'b':
-                small_func = insert_binary;
-                break;
-            case 'i':
-                small_func = insert_sort;
-                break;
-            case 's':
-                small_func = step_sort;
-                break;
-            default:
-                fprintf(stderr, "Illegal value \"%s\" for -y option.\n", optarg);
-                return EXIT_FAILURE;
-                break;
-            }
+        	c = *optarg;
+    	    for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
+    	    	if (c == info->option && ! info->type) {
+    	    		small_func = info->sort_function;
+    	    		break;
+    	    	}
+    	    }
             break;
         case 'Z':
             size = (size_t)strtoul(optarg, NULL, 0);
