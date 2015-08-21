@@ -93,7 +93,6 @@ typedef struct {
 // Estimate time in microseconds
 
 static struct timeval	start_time, core_time;	// time stamp
-static long 			*usec, index_time = 0;	// elapsed time
 
 static void start_timer(struct timeval *from) {
 	assert(from!= NULL);
@@ -108,7 +107,7 @@ static long stop_timer(struct timeval *from) {
 	return	rtn;
 }
 
-static long show_result(const char *comment, int size, int skip) {
+static long show_result(const char *comment, long *usec, int size, int skip, long index_time) {
 	int	percent = 0;
 #ifdef  DEBUG
     fprintf(OUT, "\tusec = %ld", *usec);
@@ -533,6 +532,8 @@ int main(int argc, char *argv[])
 
     /***** sort with built-in qsort(3) to get sorted array as a sorted_array result. *****/
 
+    long *usec = NULL;
+
     if ((sorted_array = calloc(nmemb, size)) == NULL)
     {   /* Can't get work area  */
         perror(NULL);
@@ -558,7 +559,7 @@ QSORT:
             qsort(workbuff, nmemb, size, cmpstring);
             usec[i] = stop_timer(&start_time);
         }
-        if (show_result(description, repeat_count, skip) > limit) goto QSORT;
+        if (show_result(description, usec, repeat_count, skip, 0) > limit) goto QSORT;
     }
     memcpy(sorted_array, workbuff, memsize);
 
@@ -599,7 +600,6 @@ REDO:
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
             elapsed_time = timer1 = 0;
-            index_time = 0;
             for (int i = 0; i < repeat_count; i++) {
             	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
@@ -610,13 +610,13 @@ REDO:
 #ifdef  DEBUG
 				usec[0] = elapsed_time;
                 if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
-                show_result(info->description, 1, 0);
+                show_result(info->description, usec, 1, 0, 0);
 #else
 				usec[i] = elapsed_time;
 #endif
             }
 #ifndef DEBUG
-            if (show_result(info->description, repeat_count, skip) > limit) goto REDO;
+            if (show_result(info->description, usec, repeat_count, skip, 0) > limit) goto REDO;
 #endif
             if (check_result(info->name, workbuff)) {   // error
                 print_out = TRUE;
@@ -626,6 +626,7 @@ REDO:
     }
     // test pointer sorting
     if (indirect_option) {	// != NULL
+    	long index_time = 0;
     	for (p = indirect_option; *p; p++) {
     	    for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
 				if (info->option == *p) {	// jound
@@ -656,7 +657,7 @@ REDO_P:
 #ifdef  DEBUG
 						usec[0] = elapsed_time;
 		                if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
-		                show_result(info->description, 1, 0);
+		                show_result(info->description, usec, 1, 0, 0);
 #else
 						long	timer2 = (usec[i] = elapsed_time) - timer1;
 						index_time += timer2;
@@ -669,7 +670,7 @@ REDO_P:
 		            }
 #ifndef DEBUG
 					if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
-		            if (show_result(info->description, repeat_count, skip) > limit) goto REDO_P;
+		            if (show_result(info->description, usec, repeat_count, skip, index_time) > limit) goto REDO_P;
 #endif
 		            if (check_result(info->name, workbuff)) {   // error
 		                print_out = TRUE;
