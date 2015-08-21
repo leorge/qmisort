@@ -108,7 +108,7 @@ static long stop_timer(struct timeval *from) {
 	return	rtn;
 }
 
-static long end_timer(const char *comment, int size, int skip) {
+static long show_result(const char *comment, int size, int skip) {
 	int	percent = 0;
 #ifdef  DEBUG
     fprintf(OUT, "\tusec = %ld", *usec);
@@ -558,7 +558,7 @@ QSORT:
             qsort(workbuff, nmemb, size, cmpstring);
             usec[i] = stop_timer(&start_time);
         }
-        if (end_timer(description, repeat_count, skip) > limit) goto QSORT;
+        if (show_result(description, repeat_count, skip) > limit) goto QSORT;
     }
     memcpy(sorted_array, workbuff, memsize);
 
@@ -610,13 +610,13 @@ REDO:
 #ifdef  DEBUG
 				usec[0] = elapsed_time;
                 if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
-                end_timer(info->description, 1, 0);
+                show_result(info->description, 1, 0);
 #else
 				usec[i] = elapsed_time;
 #endif
             }
 #ifndef DEBUG
-            if (end_timer(info->description, repeat_count, skip) > limit) goto REDO;
+            if (show_result(info->description, repeat_count, skip) > limit) goto REDO;
 #endif
             if (check_result(info->name, workbuff)) {   // error
                 print_out = TRUE;
@@ -656,7 +656,7 @@ REDO_P:
 #ifdef  DEBUG
 						usec[0] = elapsed_time;
 		                if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
-		                end_timer(info->description, 1, 0);
+		                show_result(info->description, 1, 0);
 #else
 						long	timer2 = (usec[i] = elapsed_time) - timer1;
 						index_time += timer2;
@@ -669,7 +669,7 @@ REDO_P:
 		            }
 #ifndef DEBUG
 					if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
-		            if (end_timer(info->description, repeat_count, skip) > limit) goto REDO_P;
+		            if (show_result(info->description, repeat_count, skip) > limit) goto REDO_P;
 #endif
 		            if (check_result(info->name, workbuff)) {   // error
 		                print_out = TRUE;
