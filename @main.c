@@ -497,6 +497,9 @@ int main(int argc, char *argv[])
 #endif
 
     // gap list
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "small_boundary = %ld\n", small_boundary);
+#endif
     size_t	f1 = 1, f2 = 1, fib = 1;
     gap_count = 1;
     if (small_boundary > nmemb) small_boundary = nmemb;
@@ -665,6 +668,7 @@ REDO_P:
 						free(idxtbl);
 		            }
 #ifndef DEBUG
+					if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
 		            if (end_timer(info->description, repeat_count, skip) > limit) goto REDO_P;
 #endif
 		            if (check_result(info->name, workbuff)) {   // error
