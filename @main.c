@@ -586,7 +586,7 @@ QSORT:
     srand(seed);
     random_number = set_random();
     // test array_sorting or indeirect sorting
-    long elapsed_time;
+    long sorting_time;
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
         if (index & idx) {
             index &= ~idx;  // clear bit
@@ -603,20 +603,20 @@ REDO:
             clear = cache;  // really enough?
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
-            elapsed_time = 0;
+            sorting_time = 0;
             for (int i = 0; i < repeat_count; i++) {
             	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
 				start_timer(&start_time);
 				(*info->sort_function)(workbuff, nmemb, size, cmpstring);
-				elapsed_time = stop_timer(&start_time);
+				sorting_time = stop_timer(&start_time);
 #ifdef  DEBUG
-				usec[0] = elapsed_time;
+				usec[0] = sorting_time;
                 if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
                 show_result(info->description, usec, 1, 0, 0);
 #else
-				usec[i] = elapsed_time;
+				usec[i] = sorting_time;
 #endif
             }
 #ifndef DEBUG
@@ -646,7 +646,7 @@ REDO_P:
 					if (trace_level == TRACE_NONE)  // don't add a semicolon ";"
 #endif
 						fprintf(OUT, "%s", info->name);
-		            elapsed_time = index_sum = index_time = 0;
+		            sorting_time = index_sum = index_time = 0;
 		            for (int i = 0; i < repeat_count; i++) {
 		            	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
 		                workbuff = NextBuffer;
@@ -657,7 +657,7 @@ REDO_P:
 						if (idxtbl == NULL) return EXIT_FAILURE;
 						start_timer(&core_time);
 						(*info->sort_function)(idxtbl, nmemb, cmpstring);
-						elapsed_time = stop_timer(&core_time);
+						sorting_time = stop_timer(&core_time);
 						unindex(workbuff, idxtbl, nmemb, size);     // restore index table to workbuff
 						index_time = stop_timer(&start_time);
 #ifdef  DEBUG
@@ -665,7 +665,7 @@ REDO_P:
 		                if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
 		                show_result(info->description, usec, 1, 0, 0);
 #else
-						index_sum += (shell_time[i] = index_time) - (usec[i] = elapsed_time);
+						index_sum += (shell_time[i] = index_time) - (usec[i] = sorting_time);
 						if (trace_level >= TRACE_DUMP) {
 							if (i == 0) fprintf(OUT, "\n");
 							fprintf(OUT, "indexing time = %ld\n", shell_time[i]);
