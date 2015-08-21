@@ -298,7 +298,8 @@ int main(int argc, char *argv[])
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
 				"\t-V : trace level for indexing time.\n"
-				"\t       1 - average of indexing time.\n"
+				"\t       0 - indirect sorting time includes indexing time).\n"
+				"\t       1 - pointer sorting time followed by indexing time.\n"
 				"\t       2 - show every indexing time.\n"
 #else
                 "\t-u : reUse random number (default is FALSE).\n"
