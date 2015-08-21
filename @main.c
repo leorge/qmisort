@@ -107,7 +107,7 @@ static long stop_timer(struct timeval *from) {
 	return	rtn;
 }
 
-static long show_result(const char *comment, long *usec, int size, int skip, long index_time) {
+static long show_result(const char *comment, long *usec, int size, int skip, double index_time) {
 	int	percent = 0;
 #ifdef  DEBUG
     fprintf(OUT, "\tusec = %ld", *usec);
@@ -586,7 +586,7 @@ QSORT:
     srand(seed);
     random_number = set_random();
     // test array_sorting or indeirect sorting
-    long elapsed_time, timer1;
+    long elapsed_time;
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
         if (index & idx) {
             index &= ~idx;  // clear bit
@@ -603,7 +603,7 @@ REDO:
             clear = cache;  // really enough?
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
-            elapsed_time = timer1 = 0;
+            elapsed_time = 0;
             for (int i = 0; i < repeat_count; i++) {
             	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
@@ -630,7 +630,10 @@ REDO:
     }
     // test pointer sorting
     if (indirect_option) {	// != NULL
-    	long index_time = 0;
+#ifndef DEBUG
+    	long *shell_time = calloc(sizeof(long), repeat_count);
+#endif
+    	long index_sum, index_time;
     	for (p = indirect_option; *p; p++) {
     	    for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
 				if (info->option == *p) {	// jound
@@ -643,8 +646,7 @@ REDO_P:
 					if (trace_level == TRACE_NONE)  // don't add a semicolon ";"
 #endif
 						fprintf(OUT, "%s", info->name);
-		            elapsed_time = timer1 = 0;
-		            index_time = 0;
+		            elapsed_time = index_sum = index_time = 0;
 		            for (int i = 0; i < repeat_count; i++) {
 		            	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
 		                workbuff = NextBuffer;
@@ -655,26 +657,26 @@ REDO_P:
 						if (idxtbl == NULL) return EXIT_FAILURE;
 						start_timer(&core_time);
 						(*info->sort_function)(idxtbl, nmemb, cmpstring);
-						timer1 = stop_timer(&core_time);
+						elapsed_time = stop_timer(&core_time);
 						unindex(workbuff, idxtbl, nmemb, size);     // restore index table to workbuff
-						elapsed_time = stop_timer(&start_time);
+						index_time = stop_timer(&start_time);
 #ifdef  DEBUG
-						usec[0] = elapsed_time;
+						usec[0] = index_time;
 		                if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
 		                show_result(info->description, usec, 1, 0, 0);
 #else
-						long	timer2 = (usec[i] = elapsed_time) - timer1;
-						index_time += timer2;
+						index_sum += (shell_time[i] = index_time) - (usec[i] = elapsed_time);
 						if (trace_level >= TRACE_DUMP) {
 							if (i == 0) fprintf(OUT, "\n");
-							fprintf(OUT, "indexing time = %ld\n", timer2);
+							fprintf(OUT, "indexing time = %ld\n", shell_time[i]);
 						}
 #endif
 						free(idxtbl);
 		            }
 #ifndef DEBUG
-					if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
-		            if (show_result(info->description, usec, repeat_count, skip, index_time) > limit) goto REDO_P;
+					long *dump_timer = trace_level ? usec : shell_time;
+		            if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
+		            if (show_result(info->description, dump_timer, repeat_count, skip, trace_level ? index_sum : 0) > limit) goto REDO_P;
 #endif
 		            if (check_result(info->name, workbuff)) {   // error
 		                print_out = TRUE;
