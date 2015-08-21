@@ -534,6 +534,11 @@ int main(int argc, char *argv[])
     /***** sort with built-in qsort(3) to get sorted array as a sorted_array result. *****/
 
     long *usec = NULL;
+#ifdef DEBUG
+	usec = malloc(sizeof(long));
+#else
+	usec = calloc(sizeof(long),repeat_count);
+#endif
 
     if ((sorted_array = calloc(nmemb, size)) == NULL)
     {   /* Can't get work area  */
@@ -547,10 +552,8 @@ QSORT:
         fprintf(OUT, "%s", name);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // for nmemb.awk
-        usec = malloc(sizeof(long));
         for (int i = 0; i < 1; i++) {	// once
 #else
-        usec = calloc(sizeof(long),repeat_count);
         for (int i = 0; i < repeat_count; i++) {
 #endif
             workbuff = NextBuffer;
