@@ -35,10 +35,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #endif
 #define first   ((char *)base)
     char *hole;
-    if (nmemb <= small_boundary) {  // Trick to investigate entire quick sort
-        hole = first + length * (nmemb >> 1);  // middle element
-    }
-    else if (nmemb <= medium_boundary) {    // hybrid sorting
+    if (nmemb <= medium_boundary) {    // hybrid sorting
         medium_func(base, nmemb, length, comp);
         return;
     }
@@ -84,7 +81,8 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     }
     char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s <-- last = %s\n", dump_data(hole), dump_data(last));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%ld] <-- last = %s\n"
+    		, dump_data(hole), (hole - first) / length ,dump_data(last));
 #endif
     copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
     char    *lo = first,  *hi = (hole = last) - length, *eq = NULL;
