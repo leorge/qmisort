@@ -35,7 +35,7 @@ bool    reuse_random = FALSE;       // reuse random number or not
 
 size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
-size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
+size_t  small_boundary = 13;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_binary;
 
 size_t	*gaplist = NULL;
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
                 "\t       v - median of various elements. cf. -v option\n"
 #endif
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
-                "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
+                "\t-l : boundary to change algorithm when N is smaLL (default is 13).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is auto).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
