@@ -2,7 +2,7 @@
 #
 # Get comparisons of pointer sorting in various N.
 #
-#   -P : Pointer sorting
+#   -P : Pointer sorting. options are below.
 #       m - Merge sort.
 #       q - Quicksort. pivot is a middle element.
 #       i - Linear insertion sort.
@@ -16,10 +16,11 @@
 #       p - steP sort. step up and down sort.
 #
 if [ $# -eq 0 ]; then
-    echo $0 numbers
+    echo $0 options numbers
     exit;
 fi
 
+options=$1; shift
 for N in $*; do
     src/random.awk $N | Debug/Sort -N $N -P mqibLhHBCup -V 1
 done > tmp$$
