@@ -434,7 +434,8 @@ int main(int argc, char *argv[])
     // Open file
     FILE *fp = fin ? fopen(fin, "r") : stdin;   // open file or use stdin
     if (fp == NULL) {
-        perror(NULL);       // Output system error message to OUT.
+        if (fin) fprintf(stderr, "Filename = %s\n", fin);
+    	perror(NULL);       // Output system error message to OUT.
         return EXIT_FAILURE;
     }
 
