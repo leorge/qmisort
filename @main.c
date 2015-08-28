@@ -188,8 +188,8 @@ int main(int argc, char *argv[])
                 "quick sort : pivot is median of random 3 elements with hole."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quick sort : pivot is the miDDle element with swaps."},
-            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
-                "hybrid sort of mErgE sort : indirect sorting."},
+//            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
+//                "hybrid sort of mErgE sort : indirect sort."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first,
                 "quick sort : pivot is the First element with swaps."},
             {'h', QSORT_HOLE, "qsort_hole()", qsort_hole,
@@ -199,9 +199,9 @@ int main(int argc, char *argv[])
                 "quick sort : pivot is the middle element with swaps in K&R style."},
 #endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort,
-                "Merge sort : array sort."},
-            {'M', MERGE_INDR, "merge_index()", merge_index,
-                "Merge sort : indirect sort."},
+                "Merge sort."},
+//            {'M', MERGE_INDR, "merge_index()", merge_index,
+//                "Merge sort : indirect sort."},
 			{'q', QSORT_HYBRID, "hybrid_array()", hybrid_array,
 				"Quick sort : hybrid sort."},
 			{'r', QSORT_RANDOM, "qsort_random()", qsort_random,
@@ -215,10 +215,10 @@ int main(int argc, char *argv[])
     };
     INFO	test_indirect[] = {	// order to show help
 			{'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
-			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid sort of mErgE sort."},
+			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid Merge sort."},
 			{'q', 0, "qsort_phole(*)", qsort_phole, "Quicksort with hole. pivot is a middle element."},
-			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer, "hybrid sort of quick sort."},
-			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid sort of quick sort."},
+			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer, "hybrid quick sort."},
+			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quick sort."},
 			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
 			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
 			{'L', 0, "shellsort(*)", shellsort, "shellsort."},
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
             for (info = test, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) {
                 printf("\t-%c : %s\n", info->option, info->description);
             }
-            puts("\t-P : Pointer sort.");
+            puts("\t-I : Indirect sort.");
             for (info = test_indirect, i = 0; i++ < sizeof(test_indirect) / sizeof(INFO); info++) {
                 printf("\t       %c %c %s\n", info->option, info->type ? '*' : '-', info->description);
             }
@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
                 "\t       3 - conventional median-of-3 quick sort.\n"
                 "\t       M - indirect sort of Merge sort.\n"
                 "\t       m - array sort of Merge sort.\n"
-                "\t       h - Hybrid merge sort (default).\n"
+                "\t       h - indirect Hybrid merge sort (default).\n"
 #ifdef DEBUG
                 "\t-C : algorithm to Choose a pivot in quick sort.\n"
                 "\t       r - Random element.\n"
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
                 "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
-    			"\t       same to the value of -P option followed by \"-\". Default is \"b\".\n"
+    			"\t       same to the value of -I option followed by \"-\". Default is \"b\".\n"
                 "\t-Z : siZe of an array element."
             );
             return EXIT_SUCCESS;
