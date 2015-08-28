@@ -1,7 +1,7 @@
 /*
  * qsort_hole.c
  *
- *  Quick sort - Use a last element as a hole.
+ *  Quicksort - Use a last element as a hole.
  *
  *  Created on: 2013/01/01
  *      Author: leo
@@ -134,7 +134,7 @@ static void psort(void **base, size_t nmemb) {
 #endif
 }
 
-void qsort_phole(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void qsort_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     dump_pointer("qsort_phole() start in " __FILE__, base, nmemb);

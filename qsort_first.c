@@ -1,7 +1,7 @@
 /*
  * qsort_first.c
  *
- *  Traditional quick sort using swap: pivot is a first element.
+ *  Traditional quicksort using swap: pivot is a first element.
  *
  *  Created on: 2013/01/27
  *      Author: leo

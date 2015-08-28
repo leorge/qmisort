@@ -1,7 +1,7 @@
 /*
  * qsort_random.c
  *
- *  Quick sort - select a random pivot as a hole.
+ *  Quicksort - select a random pivot as a hole.
  *               asymmetric search to resolve a few data issue.
  *
  *  Created on: 2013/05/10

@@ -1,7 +1,7 @@
 /*
  * qsort_med3.c
  *
- *  Traditional quick sort using swap: pivot is a meidan of 3 quick sort.
+ *  Traditional quicksort using swap: pivot is a meidan of 3 quick sort.
  *
  *  Created on: 2013/02/04
  *      Author: leo
