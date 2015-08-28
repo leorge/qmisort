@@ -99,7 +99,7 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
 #endif
 }
 
-void hybrid_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
+void qsort_phybrid(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
 {
     if (nmemb <= 1) return;
     if (idxtbl != NULL) {
@@ -148,7 +148,7 @@ void stable_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     if (nmemb <= 1) return;
     void **idxtbl = make_index(base, nmemb, size);
     if (idxtbl != NULL) {
-        hybrid_pointer(idxtbl, nmemb, compare);
+        qsort_phybrid(idxtbl, nmemb, compare);
         address_sort(idxtbl, nmemb, compare);
         unindex(base, idxtbl, nmemb, size);
         free(idxtbl);

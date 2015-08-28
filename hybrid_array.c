@@ -132,7 +132,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #endif
 }
 
-void hybrid_array(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+void qsort_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
         char a[size]; pivot = a; *a = '\0';
