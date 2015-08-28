@@ -83,7 +83,7 @@ void qsort_hole(void *base, size_t nmemb, size_t size, int (*compare)(const void
     }
 }
 
-/* pointer sorting */
+/* pointer sort */
 
 static void psort(void **base, size_t nmemb) {
     if (nmemb <= 1) return;

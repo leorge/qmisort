@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quick sort : pivot is the miDDle element with swaps."},
             {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
-                "hybrid sorting of mErgE sort : indirect sorting."},
+                "hybrid sort of mErgE sort : indirect sorting."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first,
                 "quick sort : pivot is the First element with swaps."},
             {'h', QSORT_HOLE, "qsort_hole()", qsort_hole,
@@ -199,15 +199,15 @@ int main(int argc, char *argv[])
                 "quick sort : pivot is the middle element with swaps in K&R style."},
 #endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort,
-                "Merge sort : array sorting."},
+                "Merge sort : array sort."},
             {'M', MERGE_INDR, "merge_index()", merge_index,
-                "Merge sort : indirect sorting."},
+                "Merge sort : indirect sort."},
 			{'q', QSORT_HYBRID, "hybrid_array()", hybrid_array,
-				"Quick sort : hybrid sorting."},
+				"Quick sort : hybrid sort."},
 			{'r', QSORT_RANDOM, "qsort_random()", qsort_random,
 				"quick sort : pivot is a Random element with hole."},
             {'s', QSORT_STABLE, "stable_array()", stable_array,
-                "quick sort : Stable hybrid sorting."},
+                "quick sort : Stable hybrid sort."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort,
                 "dUmmy sort : do nothing to cause error."},
 			{'w', SWAP_MED3, "qsort_med3()", qsort_med3,
@@ -215,10 +215,10 @@ int main(int argc, char *argv[])
     };
     INFO	test_indirect[] = {	// order to show help
 			{'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
-			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid sorting of mErgE sort."},
+			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid sort of mErgE sort."},
 			{'q', 0, "qsort_phole(*)", qsort_phole, "Quicksort with hole. pivot is a middle element."},
-			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer, "hybrid sorting of quick sort."},
-			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid sorting of quick sort."},
+			{'Q', 1, "hybrid_pointer(*)", hybrid_pointer, "hybrid sort of quick sort."},
+			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid sort of quick sort."},
 			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
 			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
 			{'L', 0, "shellsort(*)", shellsort, "shellsort."},
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
             for (info = test, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) {
                 printf("\t-%c : %s\n", info->option, info->description);
             }
-            puts("\t-P : Pointer sorting.");
+            puts("\t-P : Pointer sort.");
             for (info = test_indirect, i = 0; i++ < sizeof(test_indirect) / sizeof(INFO); info++) {
                 printf("\t       %c %c %s\n", info->option, info->type ? '*' : '-', info->description);
             }
@@ -272,8 +272,8 @@ int main(int argc, char *argv[])
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
                 "\t       3 - conventional median-of-3 quick sort.\n"
-                "\t       M - indirect sorting of Merge sort.\n"
-                "\t       m - array sorting of Merge sort.\n"
+                "\t       M - indirect sort of Merge sort.\n"
+                "\t       m - array sort of Merge sort.\n"
                 "\t       h - Hybrid merge sort (default).\n"
 #ifdef DEBUG
                 "\t-C : algorithm to Choose a pivot in quick sort.\n"
@@ -298,8 +298,8 @@ int main(int argc, char *argv[])
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
 				"\t-V : trace level for indexing time.\n"
-				"\t       0 - indirect sorting time includes indexing time).\n"
-				"\t       1 - pointer sorting time followed by indexing time.\n"
+				"\t       0 - indirect sort time includes indexing time).\n"
+				"\t       1 - pointer sort time followed by indexing time.\n"
 				"\t       2 - show every indexing time.\n"
 #else
                 "\t-u : reUse random number (default is FALSE).\n"
@@ -585,7 +585,7 @@ QSORT:
 #endif
     srand(seed);
     random_number = set_random();
-    // test array_sorting or indeirect sorting
+    // test array sort or indeirect sort
     long sorting_time;
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
         if (index & idx) {
@@ -628,7 +628,7 @@ REDO:
             }
         }
     }
-    // test pointer sorting
+    // test pointer sort
     if (indirect_option) {	// != NULL
 #ifndef DEBUG
     	long *shell_time = calloc(sizeof(long), repeat_count);

@@ -76,7 +76,7 @@ extern size_t set_random(void);
 extern void (*small_func)();
 extern void (*medium_func)();
 
-// array sorting
+// array sort
 void    hybrid_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -88,11 +88,11 @@ void    qsort_random    (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    qsort_random3   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
-// index sorting
+// index sort
 void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
-// pointer sorting
+// pointer sort
 void    bubble_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    comb_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    heap_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

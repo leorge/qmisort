@@ -76,7 +76,7 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
     }
 }
 
-/***** Indirect sorting of qsort(3) *****/
+/***** Indirect sort of qsort(3) *****/
 static int      (*comp)(const void *, const void *);
 
 static int  comp_idx(const void *p1, const void *p2) {

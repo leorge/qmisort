@@ -12,7 +12,7 @@
 static int  (*comp)(const void *, const void *);
 static size_t   length;
 
-/* array_sorting */
+/* array_sort */
 static void copy(void *dst, const void *src, size_t size)
 {
 #ifdef  DEBUG
@@ -87,7 +87,7 @@ void merge_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
     }
 }
 
-/* index / pointer sorting */
+/* index / pointer sort */
 static void psort(void **dst, void **src, bool revert, size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
@@ -143,7 +143,7 @@ static void psort(void **dst, void **src, bool revert, size_t nmemb) {
 #endif
 }
 
-/* pointer sorting */
+/* pointer sort */
 void merge_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
     void **idxtbl = calloc(nmemb, sizeof(void *));  // double buffer
@@ -156,7 +156,7 @@ void merge_pointer(void **base, size_t nmemb, int (*compare)(const void *, const
     }
 }
 
-/* index sorting */
+/* index sort */
 void merge_index(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
     void **idxtbl = make_index(base, nmemb, size);
