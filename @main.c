@@ -362,6 +362,9 @@ int main(int argc, char *argv[])
             random_depth = strtol(optarg, NULL, 0);
             if (random_depth < 0) random_depth = 0;
             break;
+        case 'I':
+            indirect_option = optarg;
+            break;
         case 'L':
             p = &optarg[strlen(optarg) - 1];
             if (*p == '%') IsPercentB = TRUE;
@@ -375,9 +378,6 @@ int main(int argc, char *argv[])
             break;
         case 'o':
             print_out = TRUE;
-            break;
-        case 'P':
-            indirect_option = optarg;
             break;
         case 'R':
             repeat_count = strtoul(optarg, NULL, 0);
