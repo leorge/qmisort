@@ -22,7 +22,7 @@ fi
 
 options=$1; shift
 for N in $*; do
-    src/random.awk $N | Debug/Sort -N $N -P mqibLhHBCup -V 1
+    src/random.awk $N | Debug/Sort -N $N -P $options -V 1
 done > tmp$$
 
 awk -f - tmp$$ <<'EOF'
