@@ -1,5 +1,5 @@
 /*
- * qsort_hole.c
+ * quick_hole.c
  *
  *  Quicksort - Use a last element as a hole.
  *
@@ -71,14 +71,14 @@ static void sort(void *base, size_t nmemb) {
 #endif
 }
 
-void qsort_hole(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+void quick_hole(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
         sort(base, nmemb);
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_hole() done.\n");
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_hole() done.\n");
 #endif
     }
 }
@@ -134,14 +134,14 @@ static void psort(void **base, size_t nmemb) {
 #endif
 }
 
-void qsort_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void quick_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    dump_pointer("qsort_phole() start in " __FILE__, base, nmemb);
+    dump_pointer("quick_phole() start in " __FILE__, base, nmemb);
 #endif
     comp = compare;
     psort(base, nmemb);
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "qsort_phole() done.\n");
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_phole() done.\n");
 #endif
 }

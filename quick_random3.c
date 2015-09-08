@@ -1,5 +1,5 @@
 /*
- * qsort_random3.c
+ * quick_random3.c
  *
  *  Final entire quicksort with hole.
  *  Pivot is the median of random 3 elements.
@@ -108,12 +108,18 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #endif
 }
 
-void qsort_random3(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+void quick_random3(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
+#ifdef DEBUG
+        dump_array("quick_random3() start in " __FILE__, base, nmemb, size);
+#endif
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
         set_random();
         sort(base, nmemb, random_depth);
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_random3() done.\n");
+#endif
     }
 }

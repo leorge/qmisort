@@ -38,8 +38,8 @@ void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 13;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_binary;
 
-size_t	*gaplist = NULL;
-int		gap_count = 0;
+size_t  *gaplist = NULL;
+int     gap_count = 0;
 
 size_t set_random(void) {
     size_t  rtn = rand();   // [0..RAND_MAX]
@@ -92,35 +92,35 @@ typedef struct {
 
 // Estimate time in microseconds
 
-static struct timeval	start_time, core_time;	// time stamp
+static struct timeval   start_time, core_time;  // time stamp
 
 static void start_timer(struct timeval *from) {
-	assert(from!= NULL);
+    assert(from!= NULL);
     gettimeofday(from, NULL);
 }
 
 static long stop_timer(struct timeval *from) {
-	assert(from != NULL);
-	struct timeval to;
-	gettimeofday(&to, NULL);
+    assert(from != NULL);
+    struct timeval to;
+    gettimeofday(&to, NULL);
     long rtn = (to.tv_sec - from->tv_sec) * 1000000. + to.tv_usec - from->tv_usec;
-	return	rtn;
+    return  rtn;
 }
 
 static long show_result(const char *comment, long *usec, int size, int skip, double index_time) {
-	int	percent = 0;
+    int percent = 0;
 #ifdef  DEBUG
     fprintf(OUT, "\tusec = %ld", *usec);
     if (trace_level >= TRACE_COUNT) {
-    	fprintf(OUT, "\tcall = %ld\tcompare = %ld\tcopy = %ld"
-    	        , qsort_called, qsort_comp_str, qsort_moved);
+        fprintf(OUT, "\tcall = %ld\tcompare = %ld\tcopy = %ld"
+                , qsort_called, qsort_comp_str, qsort_moved);
     }
 #else
-    int 	peak = 0;
-	double	esd = 0.0, mean = 0.0;
+    int     peak = 0;
+    double  esd = 0.0, mean = 0.0;
     if (size > skip) {
         long    y, max_y = 0, n = 0;
-        double	sum = 0., delta;
+        double  sum = 0., delta;
         for (int i = skip; i < size; n++, i++) {
             sum += (y = usec[i]);
             if (y > max_y) {
@@ -138,7 +138,7 @@ static long show_result(const char *comment, long *usec, int size, int skip, dou
             }
             esd = --n ? sqrt(esd / n) : 0;
         }
-        else mean = sum;	// m == 1
+        else mean = sum;    // m == 1
     }
 
     fprintf(OUT, "\tusec = %.0f", mean);
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
             // simple in-place sort.
-            {'3', QSORT_RANDOM3, "qsort_random3()", qsort_random3,
+            {'3', QSORT_RANDOM3, "quick_random3()", quick_random3,
                 "quicksort : pivot is median of random 3 elements with hole."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quicksort : pivot is the miDDle element with swaps."},
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 //                "hybrid sort of mErgE sort : indirect sort."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first,
                 "quicksort : pivot is the First element with swaps."},
-            {'h', QSORT_HOLE, "qsort_hole()", qsort_hole,
+            {'h', QSORT_HOLE, "quick_hole()", quick_hole,
                 "quicksort : prototype with Hole."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr,
@@ -202,33 +202,33 @@ int main(int argc, char *argv[])
                 "Merge sort."},
 //            {'M', MERGE_INDR, "merge_index()", merge_index,
 //                "Merge sort : indirect sort."},
-			{'q', QSORT_HYBRID, "qsort_hybrid()", qsort_hybrid,
-				"Quicksort : hybrid sort."},
-			{'r', QSORT_RANDOM, "qsort_random()", qsort_random,
-				"quicksort : pivot is a Random element with hole."},
+            {'q', QSORT_HYBRID, "quick_hybrid()", quick_hybrid,
+                "Quicksort : hybrid sort."},
+            {'r', QSORT_RANDOM, "quick_random()", quick_random,
+                "quicksort : pivot is a Random element with hole."},
             {'s', QSORT_STABLE, "stable_array()", stable_array,
                 "quicksort : Stable hybrid sort."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort,
                 "dUmmy sort : do nothing to cause error."},
-			{'w', SWAP_MED3, "qsort_med3()", qsort_med3,
-				"quicksort : pivot is median of 3 elements with sWaps."},
+            {'w', SWAP_MED3, "qsort_med3()", qsort_med3,
+                "quicksort : pivot is median of 3 elements with sWaps."},
     };
-    INFO	test_indirect[] = {	// order to show help
-			{'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
-			{'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid Merge sort."},
-			{'q', 0, "qsort_pointer(*)", qsort_pointer, "Quicksort with hole. pivot is a middle element."},
-			{'Q', 1, "qsort_phybrid(*)", qsort_phybrid, "hybrid Quicksort."},
-			{'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
-			{'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
-			{'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
-			{'L', 0, "shellsort(*)", shellsort, "shellsort."},
-			{'h', 0, "heap_sort(*)", heap_sort, "Heap sort. build a heap with sift up."},
-			{'H', 0, "heap2_sort(*)", heap2_sort, "Heap sort. build a heap with sift down."},
-#ifdef	DEBUG	// impractical below
-			{'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
-			{'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
-			{'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
-			{'p', 0, "step_sort(*)", step_sort, "steP sort."},
+    INFO    test_indirect[] = { // order to show help
+            {'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
+            {'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid Merge sort."},
+            {'q', 0, "quick_pointer(*)", quick_pointer, "Quicksort with hole. pivot is a middle element."},
+            {'Q', 1, "quick_phybrid(*)", quick_phybrid, "hybrid Quicksort."},
+            {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
+            {'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},
+            {'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
+            {'L', 0, "shellsort(*)", shellsort, "shellsort."},
+            {'h', 0, "heap_sort(*)", heap_sort, "Heap sort. build a heap with sift up."},
+            {'H', 0, "heap2_sort(*)", heap2_sort, "Heap sort. build a heap with sift down."},
+#ifdef  DEBUG   // impractical below
+            {'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
+            {'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
+            {'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
+            {'p', 0, "step_sort(*)", step_sort, "steP sort."},
 #endif
     };
     // prepare to analyze command arguments
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
     strcat(optstring, "?A:C:D:I:L:l:N:oR:T:uV:v:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
-    char	*indirect_option = NULL;
+    char    *indirect_option = NULL;
     if (prg == NULL) prg = argv[0];
     char    *fin = NULL;            // file name to input
     typedef long INDEX;
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
             for (info = test_indirect, i = 0; i++ < sizeof(test_indirect) / sizeof(INFO); info++) {
                 printf("\t       %c %c %s\n", info->option, info->type ? '*' : '-', info->description);
             }
-			puts(
+            puts(
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
                 "\t       3 - conventional median-of-3 quicksort.\n"
@@ -297,10 +297,10 @@ int main(int argc, char *argv[])
 #endif
 #ifndef DEBUG
                 "\t-T : uncerTainTy percenT to pass a test (default is 2%).\n"
-				"\t-V : trace level for indexing time.\n"
-				"\t       0 - indirect sort time includes indexing time).\n"
-				"\t       1 - pointer sort time followed by indexing time.\n"
-				"\t       2 - show every indexing time.\n"
+                "\t-V : trace level for indexing time.\n"
+                "\t       0 - indirect sort time includes indexing time).\n"
+                "\t       1 - pointer sort time followed by indexing time.\n"
+                "\t       2 - show every indexing time.\n"
 #else
                 "\t-u : reUse random number (default is FALSE).\n"
                 "\t-V : trace level for Debugging.\n"
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
                 "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
-    			"\t       same to the value of -I option followed by \"-\". Default is \"b\".\n"
+                "\t       same to the value of -I option followed by \"-\". Default is \"b\".\n"
                 "\t-Z : siZe of an array element."
             );
             return EXIT_SUCCESS;
@@ -398,13 +398,13 @@ int main(int argc, char *argv[])
             buffer_length = (int)strtoul(optarg, NULL, 0);
             break;
         case 'y':   // Algorithm when N is small
-        	c = *optarg;
-    	    for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
-    	    	if (c == info->option && ! info->type) {
-    	    		small_func = info->sort_function;
-    	    		break;
-    	    	}
-    	    }
+            c = *optarg;
+            for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
+                if (c == info->option && ! info->type) {
+                    small_func = info->sort_function;
+                    break;
+                }
+            }
             break;
         case 'Z':
             size = (size_t)strtoul(optarg, NULL, 0);
@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
     FILE *fp = fin ? fopen(fin, "r") : stdin;   // open file or use stdin
     if (fp == NULL) {
         if (fin) fprintf(stderr, "Filename = %s\n", fin);
-    	perror(NULL);       // Output system error message to OUT.
+        perror(NULL);       // Output system error message to OUT.
         return EXIT_FAILURE;
     }
 
@@ -501,21 +501,21 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "small_boundary = %ld\n", small_boundary);
 #endif
-    size_t	f1 = 1, f2 = 1, fib = 1;
+    size_t  f1 = 1, f2 = 1, fib = 1;
     gap_count = 1;
     if (small_boundary > nmemb) small_boundary = nmemb;
     while ((fib = f1 + f2) < small_boundary) {
-    	if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, fib);
-    	f1 = f2; f2 = fib;
-    	gap_count++;
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, fib);
+        f1 = f2; f2 = fib;
+        gap_count++;
     }
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "gap_count = %d\tfibonacci = %ld\tf2 = %ld\n", gap_count, fib, f2);
-    size_t G[gap_count]; gaplist = G;	// gap_count is not huge.
+    size_t G[gap_count]; gaplist = G;   // gap_count is not huge.
     for (i = 0; i < gap_count; i++) {
-    	f1 = fib - f2;
-    	G[i] = fib = f2;
-    	f2 = f1;
-    	if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, G[i]);
+        f1 = fib - f2;
+        G[i] = fib = f2;
+        f2 = f1;
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, G[i]);
     }
 
 //#define   BUFCYCLE    2
@@ -536,9 +536,9 @@ int main(int argc, char *argv[])
 
     long *usec = NULL;
 #ifdef DEBUG
-	usec = malloc(sizeof(long));
+    usec = malloc(sizeof(long));
 #else
-	usec = calloc(sizeof(long),repeat_count);
+    usec = calloc(sizeof(long),repeat_count);
 #endif
 
     if ((sorted_array = calloc(nmemb, size)) == NULL)
@@ -553,7 +553,7 @@ QSORT:
         fprintf(OUT, "%s", name);
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // for nmemb.awk
-        for (int i = 0; i < 1; i++) {	// once
+        for (int i = 0; i < 1; i++) {   // once
 #else
         for (int i = 0; i < repeat_count; i++) {
 #endif
@@ -599,25 +599,25 @@ REDO:
 #ifdef DEBUG
             if (trace_level == TRACE_NONE)  // don't add a semicolon ";"
 #endif
-            	fprintf(OUT, "%s", info->name);
+                fprintf(OUT, "%s", info->name);
             cache = calloc(sizeof(long), ENOUGH);
             clear = cache;  // really enough?
             for (long l = 0; l < ENOUGH; l++) *clear++ = -1L;
             free(cache);
             sorting_time = 0;
             for (int i = 0; i < repeat_count; i++) {
-            	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
+                qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
-				start_timer(&start_time);
-				(*info->sort_function)(workbuff, nmemb, size, cmpstring);
-				sorting_time = stop_timer(&start_time);
+                start_timer(&start_time);
+                (*info->sort_function)(workbuff, nmemb, size, cmpstring);
+                sorting_time = stop_timer(&start_time);
 #ifdef  DEBUG
-				usec[0] = sorting_time;
+                usec[0] = sorting_time;
                 if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
                 show_result(info->description, usec, 1, 0, 0);
 #else
-				usec[i] = sorting_time;
+                usec[i] = sorting_time;
 #endif
             }
 #ifndef DEBUG
@@ -630,63 +630,63 @@ REDO:
         }
     }
     // test pointer sort
-    if (indirect_option) {	// != NULL
+    if (indirect_option) {  // != NULL
 #ifndef DEBUG
-    	long *shell_time = calloc(sizeof(long), repeat_count);
+        long *shell_time = calloc(sizeof(long), repeat_count);
 #endif
-    	long index_sum, index_time;
-    	for (p = indirect_option; *p; p++) {
-    	    for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
-				if (info->option == *p) {	// jound
+        long index_sum, index_time;
+        for (p = indirect_option; *p; p++) {
+            for (info = test_indirect, idx = 0; idx < sizeof(test_indirect) / sizeof(INFO); idx++, info++) {
+                if (info->option == *p) {   // jound
 #ifdef DEBUG
-					if (trace_level >= TRACE_DUMP) fprintf(OUT, "Start %s : %s\n", info->name, info->description);
+                    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Start %s : %s\n", info->name, info->description);
 #else
 REDO_P:
 #endif
 #ifdef DEBUG
-					if (trace_level == TRACE_NONE)  // don't add a semicolon ";"
+                    if (trace_level == TRACE_NONE)  // don't add a semicolon ";"
 #endif
-						fprintf(OUT, "%s", info->name);
-		            sorting_time = index_sum = index_time = 0;
-		            for (int i = 0; i < repeat_count; i++) {
-		            	qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
-		                workbuff = NextBuffer;
-		                memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
+                        fprintf(OUT, "%s", info->name);
+                    sorting_time = index_sum = index_time = 0;
+                    for (int i = 0; i < repeat_count; i++) {
+                        qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
+                        workbuff = NextBuffer;
+                        memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
 
-						start_timer(&start_time);
-						void **idxtbl = make_index(workbuff, nmemb, size); // make an index table from srcbuf
-						if (idxtbl == NULL) return EXIT_FAILURE;
-						start_timer(&core_time);
-						(*info->sort_function)(idxtbl, nmemb, cmpstring);
-						sorting_time = stop_timer(&core_time);
-						unindex(workbuff, idxtbl, nmemb, size);     // restore index table to workbuff
-						index_time = stop_timer(&start_time);
+                        start_timer(&start_time);
+                        void **idxtbl = make_index(workbuff, nmemb, size); // make an index table from srcbuf
+                        if (idxtbl == NULL) return EXIT_FAILURE;
+                        start_timer(&core_time);
+                        (*info->sort_function)(idxtbl, nmemb, cmpstring);
+                        sorting_time = stop_timer(&core_time);
+                        unindex(workbuff, idxtbl, nmemb, size);     // restore index table to workbuff
+                        index_time = stop_timer(&start_time);
 #ifdef  DEBUG
-						usec[0] = index_time;
-		                if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
-		                show_result(info->description, usec, 1, 0, 0);
+                        usec[0] = index_time;
+                        if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
+                        show_result(info->description, usec, 1, 0, 0);
 #else
-						index_sum += (shell_time[i] = index_time) - (usec[i] = sorting_time);
-						if (trace_level >= TRACE_DUMP) {
-							if (i == 0) fprintf(OUT, "\n");
-							fprintf(OUT, "indexing time = %ld\n", shell_time[i]);
-						}
+                        index_sum += (shell_time[i] = index_time) - (usec[i] = sorting_time);
+                        if (trace_level >= TRACE_DUMP) {
+                            if (i == 0) fprintf(OUT, "\n");
+                            fprintf(OUT, "indexing time = %ld\n", shell_time[i]);
+                        }
 #endif
-						free(idxtbl);
-		            }
+                        free(idxtbl);
+                    }
 #ifndef DEBUG
-					long *dump_timer = trace_level ? usec : shell_time;
-		            if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
-		            if (show_result(info->description, dump_timer, repeat_count, skip, trace_level ? index_sum : 0) > limit) goto REDO_P;
+                    long *dump_timer = trace_level ? usec : shell_time;
+                    if (trace_level >= TRACE_DUMP) fprintf(OUT, "%s\t", info->name);
+                    if (show_result(info->description, dump_timer, repeat_count, skip, trace_level ? index_sum : 0) > limit) goto REDO_P;
 #endif
-		            if (check_result(info->name, workbuff)) {   // error
-		                print_out = TRUE;
-		                break;
-		            }
-					break;
-				}
-    	    }
-    	}
+                    if (check_result(info->name, workbuff)) {   // error
+                        print_out = TRUE;
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
     }
     // output result
     if (print_out) for (p = workbuff, i = 0; i++ < nmemb; p += size) fprintf(OUT, "%s\n", p);

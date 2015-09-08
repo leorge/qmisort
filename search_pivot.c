@@ -1,5 +1,5 @@
 /*
- * qsort_search.c
+ * search_pivot.c
  *
  *  Search a median element quickly.
  *
@@ -98,7 +98,7 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
     return search_median(index, pickup, compare);
 }
 
-/* search apivotin in an index	*/
+/* search a pivot in an index	*/
 void *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random)
 {
 #ifdef  DEBUG
