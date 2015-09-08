@@ -116,7 +116,6 @@ void quick_random3(void *base, size_t nmemb, size_t size, int (*compare)(const v
 #endif
         char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
-        set_random();
         sort(base, nmemb, random_depth);
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_random3() done.\n");
