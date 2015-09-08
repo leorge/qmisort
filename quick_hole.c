@@ -93,7 +93,7 @@ static void psort(void **base, size_t nmemb) {
 #endif
 	void **first = base;
     void **last = first + (nmemb - 1);  // point a last element
-    void **hole = first + (nmemb >> 1);	// meddle element
+    void **hole = first + (nmemb >> 1);	// middle element
     pivot = *hole;
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [%ld]\n", dump_data(pivot), hole - first);
