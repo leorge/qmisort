@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     INFO    test_indirect[] = { // order to show help
             {'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
             {'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid Merge sort."},
-            {'q', 0, "quick_pointer(*)", quick_pointer, "Quicksort with hole. pivot is a middle element."},
+            {'q', 0, "quick_pmiddle(*)", quick_pmiddle, "Quicksort with hole. pivot is a middle element."},
             {'Q', 1, "quick_phybrid(*)", quick_phybrid, "hybrid Quicksort."},
             {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
             {'i', 0, "insert_sort(*)", insert_sort, "insertion sort with linear search."},

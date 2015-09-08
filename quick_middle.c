@@ -68,14 +68,14 @@ static void sort(void **base, size_t nmemb) {
 #endif
 }
 
-void quick_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void quick_pmiddle(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    dump_pointer("quick_phole() start in " __FILE__, base, nmemb);
+    dump_pointer("quick_pmiddle() start in " __FILE__, base, nmemb);
 #endif
     comp = compare;
     sort(base, nmemb);
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_phole() done.\n");
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_pmiddle() done.\n");
 #endif
 }
