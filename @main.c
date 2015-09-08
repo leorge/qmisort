@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
                 "\t       m - array sort of Merge sort.\n"
                 "\t       h - indirect Hybrid merge sort (default).\n"
 #ifdef DEBUG
-                "\t-C : algorithm to Choose a pivot in quicksort.\n"
+                "\t-C : algorithm to Choose a pivot for -q option.\n"
                 "\t       r - Random element.\n"
                 "\t       3 - median of random 3 elements (default).\n"
                 "\t       l - median of random Log2(n) elements.\n"
