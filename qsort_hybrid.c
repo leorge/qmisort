@@ -50,12 +50,12 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
         else random = RAND_BASE >> 1;
         size_t distance;
         switch (pivot_type) {   // Quicksort Algorithm
-        case PIVOT_RANDOM:
-            hole = first + (nmemb * random / RAND_BASE) * length;  // pick up one element at random
+        case PIVOT_RANDOM:      // a single element at random
+            hole = first + (nmemb * random / RAND_BASE) * length;
             break;
-        case PIVOT_RANDOM3:
+        case PIVOT_RANDOM3:     // median of random 3 elements
             distance = nmemb / 3;    // distance between elements
-            char *p1 = first + (distance * random / RAND_BASE) * length;  // pick up median of random 3 elements
+            char *p1 = first + (distance * random / RAND_BASE) * length;
             char *p2 = p1 + (distance *= length);
             char *p3 = p2 + distance;
 #ifdef  DEBUG
@@ -66,10 +66,10 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
                    (comp(p2, p1) < 0 ? p1: (comp(p2, p3) < 0 ? p2 : p3)) :
                    (comp(p2, p3) < 0 ? p3: (comp(p2, p1) < 0 ? p2 : p1)));
             break;
-        case PIVOT_VARIOUS:
+        case PIVOT_VARIOUS:     // median of variout elements
             hole = pivot_array(base, nmemb, length, pivot_number, comp, random);
             break;
-        case PIVOT_LOG2:
+        case PIVOT_LOG2:        // median of log2(N) elements
             hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
             break;
         default:
