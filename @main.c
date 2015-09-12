@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
             // simple in-place sort.
             {'3', QSORT_RANDOM3, "quick_random3()", quick_random3,
-                "quicksort : pivot is median of random 3 elements with hole."},
+                "quicksort : pivot is the median of random 3 elements with hole."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quicksort : pivot is the miDDle element with swaps."},
 //            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort,
                 "dUmmy sort : do nothing to cause error."},
             {'w', SWAP_MED3, "qsort_med3()", qsort_med3,
-                "quicksort : pivot is median of 3 elements with sWaps."},
+                "quicksort : pivot is the median of 3 elements with sWaps."},
     };
     INFO    test_indirect[] = { // order to show help
             {'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
