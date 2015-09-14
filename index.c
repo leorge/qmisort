@@ -47,7 +47,7 @@ void **make_index(void *array1d, size_t nmemb, size_t size)
 /***** Restore array 1d from index table *****/
 void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
 {
-    void    **ptr, *adrs;
+    void    **ptr, *dest;	// Pointer and destination
     size_t  i;
     char    tbuf[size];     // Temporary buffer
 #ifdef DEBUG
@@ -59,18 +59,18 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
                 fprintf(OUT, "idxtbl[%d] = %p\t%s\n", i, idxtbl[i], (char *)idxtbl[i]);
     }
 #endif
-    for (adrs = array1d, ptr = idxtbl, i = 0; i < nmemb; adrs += size, ptr++, i++) {    // cyclic permutation
+    for (dest = array1d, ptr = idxtbl, i = 0; i < nmemb; dest += size, ptr++, i++) {    // cyclic permutation
 #ifdef DEBUG
-        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%ld] = %p\t%s\n", i, adrs, dump_data(adrs));
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%ld] = %p\t%s\n", i, dest, dump_data(dest));
 #endif
         void    **p, *dst, *src;
-        if (*(p = ptr) != adrs) {
-            copy(tbuf, dst = adrs, size);   // save an element
+        if (*(p = ptr) != dest) {
+            copy(tbuf, dst = dest, size);   // save an element
             do {
-                copy(dst, src = *p, size);          // copy an element
-                *p = dst;                               // restore in idxtbl
+                copy(dst, src = *p, size);  // copy an element
+                *p = dst;                   // restore in idxtbl
                 p = &idxtbl[((dst = src) - array1d) / size];
-            } while (*p != adrs);
+            } while (*p != dest);
             copy(*p = src, tbuf, size);     // restore saved element
         }
     }
