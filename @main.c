@@ -275,13 +275,13 @@ int main(int argc, char *argv[])
                 "\t       M - indirect sort of Merge sort.\n"
                 "\t       m - array sort of Merge sort.\n"
                 "\t       h - indirect Hybrid merge sort (default).\n"
-#ifdef DEBUG
+//#ifdef DEBUG
                 "\t-C : algorithm to Choose a pivot for -q option.\n"
                 "\t       r - Random element.\n"
                 "\t       3 - median of random 3 elements (default).\n"
                 "\t       l - median of random Log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
-#endif
+//#endif
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 13).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is auto).\n"
