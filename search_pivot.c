@@ -12,13 +12,16 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
 {
 #ifdef DEBUG
 	search_pivot++;
-    dump_pointer("search_median()", base, nmemb);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "search_median() : ");
     assert(base != NULL);
     assert(nmemb != 0);
     assert(compare != NULL);
 #endif
     void **top = base, **bottom = &base[nmemb - 1], **middle = &base[nmemb >> 1];
     while (top < bottom) {
+#ifdef  DEBUG
+        dump_pointer("array", top, bottom - top + 1);
+#endif
         void **hole = &top[(bottom - top) >> 1];    // middle
         void *pivot = *hole;    // store middle data
         *hole = *bottom;
@@ -27,15 +30,14 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
                 , dump_data(pivot), dump_data(*hole));
 #endif
         hole = bottom; // last data --> middle
-        void **lo = top, **hi = bottom, **eq = NULL;
+        void **lo = top, **hi = bottom - 1, **eq = NULL;
         for (; lo < hole; lo++) {
             if (compare(*lo, pivot) >= 0) {
 #ifdef  DEBUG
                 if (trace_level >= TRACE_MOVE) fprintf(OUT, "move %s --> %s\n"
                         , dump_data(*lo), dump_data(*hole));
 #endif
-                *hole = *lo;
-                hole = lo;
+                *hole = *lo; hole = lo;
                 for (; hi > hole; hi--) {
                     int chk;
                     if ((chk =compare(*hi, pivot)) < 0) {
@@ -43,7 +45,7 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
                         if (trace_level >= TRACE_MOVE) fprintf(OUT, "move %s <-- %s\n"
                                 , dump_data(*hole), dump_data(*hi));
 #endif
-                        hole = hi;
+                        *hole = *hi; hole = hi;
                         eq = NULL;  // not equal then reset
                     }
                     else if (chk > 0) eq = NULL;
