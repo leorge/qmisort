@@ -17,18 +17,18 @@ N=`echo 2^$maxP | bc`
 src/random.awk $N > random.$maxP    # generate a data file
 for power in `seq 3 $maxP`; do
     B=`echo 2^$power | bc`          # boundary
-    cmd="Release/Sort -N $N -hMaV r -r 3 -A M -Z $Z -L $B"
+    # median of random 3 elements
+    cmd="Release/Sort -N $N -h3qC 3 -D 3 -A M -Z $Z -L $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/hybrid_array/random/
-    cmd="Release/Sort -N $N -aV 3 -r 3 -A M -Z $Z -L $B"
+    $cmd random.$maxP | sed s/quick_hybrid/hybrid_random3/
+    # median of variout elements
+    cmd="Release/Sort -N $N -qC v -v 5 -D 3 -A M -Z $Z -L $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/hybrid_array/median3/
-    cmd="Release/Sort -N $N -aV v -r 3 -A M -Z $Z -L $B"
+    $cmd random.$maxP | sed s/quick_hybrid/hybrid_various/
+    # median of log2(N) elements
+    cmd="Release/Sort -N $N -I m -qC l -D 3 -A M -Z $Z -L $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/hybrid_array/various/
-    cmd="Release/Sort -N $N -aV l -r 3 -A M -Z $Z -L $B"
-    echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/hybrid_array/log2N/
+    $cmd random.$maxP | sed s/quick_hybrid/hybrid_log2N/
 done > tmp.Loption
 
 # edit output
