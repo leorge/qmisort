@@ -50,7 +50,7 @@ static void sort(void *base, size_t nmemb, int depth) {
         size_t distance;
         switch (pivot_type) {   // Quicksort Algorithm
         case PIVOT_RANDOM:      // a single element at random
-            hole = first + (nmemb * random / RAND_BASE) * length;
+            hole = first + (nmemb * random / RAND_BASE) * length;    // 0 .. (nmemb - 1)
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "random pivot is %s [%ld]\n",
                     dump_data(hole), (hole - first) / length);
@@ -87,7 +87,6 @@ static void sort(void *base, size_t nmemb, int depth) {
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%ld] <-- last = %s\n"
     		, dump_data(hole), (hole - first) / length ,dump_data(last));
 #endif
-    hole = first + (nmemb * random / RAND_BASE) * length;    // 0 .. (nmemb - 1)
     copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
     char    *lo = first,  *hi = (hole = last) - length, *eq = NULL;
     for (; lo < hole; lo += length) {
