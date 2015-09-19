@@ -101,21 +101,21 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
 }
 
 /* search a pivot in an index	*/
-void *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random)
-{
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "pivot_pointer(base, nmemb = %ld, pickup = %ld, compare())\n", nmemb, pickup);
-    assert(base != NULL);
-    assert(nmemb > 1);
-    assert(pickup != 0);
-#endif
-    size_t distance = (size_t)(nmemb / pickup);    // distance between elements
-    void **p = &base[nmemb * random / RAND_BASE / pickup];  // 1st pick up point
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "distance = %ld\tfirst data = %s\n" , distance, dump_data(p));
-#endif
-    void *index[pickup];
-    for (int idx = 0; idx < pickup; p += distance) index[idx++] = p;
-    return search_median(index, pickup, compare);
-}
+//void *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random)
+//{
+//#ifdef  DEBUG
+//    if (trace_level >= TRACE_DUMP) fprintf(OUT,
+//            "pivot_pointer(base, nmemb = %ld, pickup = %ld, compare())\n", nmemb, pickup);
+//    assert(base != NULL);
+//    assert(nmemb > 1);
+//    assert(pickup != 0);
+//#endif
+//    size_t distance = (size_t)(nmemb / pickup);    // distance between elements
+//    void **p = &base[nmemb * random / RAND_BASE / pickup];  // 1st pick up point
+//#ifdef  DEBUG
+//    if (trace_level >= TRACE_DUMP) fprintf(OUT, "distance = %ld\tfirst data = %s\n" , distance, dump_data(p));
+//#endif
+//    void *index[pickup];
+//    for (int idx = 0; idx < pickup; p += distance) index[idx++] = p;
+//    return search_median(index, pickup, compare);
+//}
