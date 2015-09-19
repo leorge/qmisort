@@ -78,7 +78,7 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
 {
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "pivot_array(base, nmemb = %ld, size = %ld, pickup = %ld, compare())\n", nmemb, size, pickup);
+            "pivot_array(base, nmemb = %ld, size = %ld, pickup = %ld, compare(), random = %ld)\n", nmemb, size, pickup, random);
     assert(base != NULL);
     assert(nmemb > 1);
     assert(size != 0);
