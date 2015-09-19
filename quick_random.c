@@ -51,6 +51,10 @@ static void sort(void *base, size_t nmemb, int depth) {
         switch (pivot_type) {   // Quicksort Algorithm
         case PIVOT_RANDOM:      // a single element at random
             hole = first + (nmemb * random / RAND_BASE) * length;
+#ifdef  DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "random pivot is %s [%ld]\n",
+                    dump_data(hole), (hole - first) / length);
+#endif
             break;
         case PIVOT_RANDOM3:     // median of random 3 elements
             distance = nmemb / 3;    // distance between elements
@@ -59,7 +63,7 @@ static void sort(void *base, size_t nmemb, int depth) {
             char *p3 = p2 + distance;
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                    "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
+                    "random 3 : distance = %ld\t pickup = (%s, %s, %s)\n", distance / length, p1, p2, p3);
 #endif
             hole = (comp(p1, p3) < 0 ?
                    (comp(p2, p1) < 0 ? p1: (comp(p2, p3) < 0 ? p2 : p3)) :
