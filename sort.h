@@ -85,7 +85,6 @@ void    qsort_middle    (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    quick_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    quick_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    quick_random    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
-void    quick_random3   (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    stable_array    (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // index sort
@@ -111,7 +110,7 @@ void    stepup_sort     (void *base[], size_t nmemb, int (*compare)(const void *
 
 // search pivot
 void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random);
-void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random);
+//void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 
 // others
 const char  *dump_data(const void *data);

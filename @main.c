@@ -35,7 +35,7 @@ bool    reuse_random = FALSE;       // reuse random number or not
 
 size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
-size_t  small_boundary = 13;         //  nmemb to alternate from merge sort.
+size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_binary;
 
 size_t  *gaplist = NULL;
@@ -77,7 +77,6 @@ typedef enum {
     SWAP_MED3,
     QSORT_HOLE,
     QSORT_RANDOM,
-    QSORT_RANDOM3,
     QSORT_HYBRID,
     QSORT_STABLE,
 } SORT_TYPE;
@@ -183,9 +182,9 @@ int main(int argc, char *argv[])
     extern  int optind;
     extern  char *optarg;
     INFO *info, test[] = {  // alphabetic order in symbol names of enum for each block.
-            // simple in-place sort.
-            {'3', QSORT_RANDOM3, "quick_random3()", quick_random3,
-                "quicksort : pivot is the median of random 3 elements with hole."},
+            // aray sort.
+            {'3', SWAP_MED3, "qsort_med3()", qsort_med3,
+                "quicksort : pivot is the median of 3 elements with sWaps."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quicksort : pivot is the miDDle element with swaps."},
 //            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
@@ -210,8 +209,6 @@ int main(int argc, char *argv[])
                 "quicksort : Stable hybrid sort."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort,
                 "dUmmy sort : do nothing to cause error."},
-            {'w', SWAP_MED3, "qsort_med3()", qsort_med3,
-                "quicksort : pivot is the median of 3 elements with sWaps."},
     };
     INFO    test_indirect[] = { // order to show help
             {'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
