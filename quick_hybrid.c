@@ -13,7 +13,7 @@ static int      (*comp)(const void *, const void *);
 static size_t   length;
 static char     *pivot;
 #ifdef  DEBUG
-static size_t   random;         // random number
+static size_t   random;         // random number to reuse
 #endif
 
 static void copy(void *dst, const void *src)
