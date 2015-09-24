@@ -276,8 +276,9 @@ int main(int argc, char *argv[])
                 "\t-C : algorithm to Choose a pivot.\n"
                 "\t       r - Random element (default).\n"
                 "\t       3 - median of random 3 elements.\n"
-                "\t       l - median of random Log2(n) elements.\n"
                 "\t       v - median of various elements. cf. -v option\n"
+                "\t       l - median of random Log2(n) elements.\n"
+                "\t       h - hybrid of Log2(n) and median of 3\n"
 //#endif
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 13).\n"
@@ -348,6 +349,9 @@ int main(int argc, char *argv[])
                 break;
             case 'v':
                 pivot_type = PIVOT_VARIOUS;
+                break;
+            case 'h':
+                pivot_type = PIVOT_HYBRID;
                 break;
             default:
                 fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);

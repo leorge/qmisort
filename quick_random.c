@@ -56,6 +56,13 @@ static void sort(void *base, size_t nmemb, int depth) {
                     dump_data(hole), (hole - first) / length);
 #endif
             break;
+        case PIVOT_HYBRID:     // median of random (log2(N) < 5 ? 3 : log2(N)) elements
+        	if (nmemb >= 32) {
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+                hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
+        		break;
+        	}	// do  below if log2(N) < 5
         case PIVOT_RANDOM3:     // median of random 3 elements
             distance = nmemb / 3;    // distance between elements
             char *p1 = first + (distance * random / RAND_BASE) * length;
@@ -74,6 +81,7 @@ static void sort(void *base, size_t nmemb, int depth) {
             break;
         case PIVOT_LOG2:        // median of log2(N) elements
             hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
+//#pragma GCC diagnostic pop
             break;
         default:
 #ifdef DEBUG

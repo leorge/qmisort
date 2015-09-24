@@ -20,6 +20,7 @@ typedef enum {  // Pivot choice
     PIVOT_RANDOM3,
     PIVOT_VARIOUS,
     PIVOT_LOG2,
+    PIVOT_HYBRID,
 } PivotChoice;
 
 typedef enum {  // trace lelve
