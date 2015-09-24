@@ -4,7 +4,7 @@
 
 if [ $# -eq 0 ] ; then	# with no parameter
     echo "$0 - Get elapsed time with various -L option"
-    echo "   usage : $0  max_power_of_N log2(N)"
+    echo "   usage : $0  max_power_of_N element_size"
     exit 255	# aborted
 fi
 
