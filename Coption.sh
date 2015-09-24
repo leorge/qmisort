@@ -1,4 +1,16 @@
 #!/bin/sh
+#
+# Compare -C options.
+#
+#   -h : quicksort - prototype with Hole.
+#   -r : quicksort - pivot is a Random element[s] with hole.
+#   -C r : pivot is a random elements.
+#   -C 3 : pivot is the median of 3 random elements with hole.
+#   -C v : pivot is the median of various random elements with hole.
+#   -C l : pivot is the median of log2(N) random elements with hole.
+#   -C h : hybrid of -C 3 and -C l.
+#   -D 3 : Depth of recursion is 3 to generate a random number.
+#
 
 # Help message
 
@@ -17,8 +29,12 @@ Z=$1; shift
 if [ $maxP -le 3 ]; then maxP=4; fi
 N=`echo 2^$maxP | bc`
 src/random.awk $N > random.$maxP    # generate a data file
-for power in `seq 10 $maxP`; do
+for power in `seq 12 $maxP`; do
     B=`echo 2^$power | bc`          # boundary
+    # single random elements
+    cmd="Release/Sort -Z $Z -hrC r -D 3 -N $B"
+    echo $cmd | tee /dev/stderr
+    $cmd random.$maxP
     # median of random 3 elements
     cmd="Release/Sort -Z $Z -rC 3 -D 3 -N $B"
     echo $cmd | tee /dev/stderr
