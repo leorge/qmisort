@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
 //#endif
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
-                "\t-L : boundary to change algorithm from N is Large (default is 8000).\n"
+                "\t-L : boundary to change algorithm from N is Large (default is 8192).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
