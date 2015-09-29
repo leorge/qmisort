@@ -37,6 +37,10 @@ static void sort(void *base, size_t nmemb, int depth) {
     char    *hole;
     if (nmemb <= small_boundary) {
         hole = first + (nmemb >> 1) * length;	// middle element
+#ifdef  DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at middle %s [%ld]\n",
+                    dump_data(hole), (hole - first) / length);
+#endif
     }
     else {  // N is large
 		if (depth > 0) {
