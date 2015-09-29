@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
                 "\n"
                 "\t-A : Algorithm when N is medium.\n"
                 "\t       3 - conventional median-of-3 quicksort.\n"
-                "\t       M - indirect sort of Merge sort.\n"
+                "\t       M - indirect Merge sort.\n"
                 "\t       m - array sort of Merge sort.\n"
                 "\t       h - indirect Hybrid merge sort (default).\n"
 //#ifdef DEBUG
@@ -281,8 +281,8 @@ int main(int argc, char *argv[])
                 "\t       h - hybrid of Log2(n) and median of 3\n"
 //#endif
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
-                "\t-l : boundary to change algorithm when N is smaLL (default is 13).\n"
-                "\t-L : boundary to change algorithm from N is Large (default is auto).\n"
+                "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
+                "\t-L : boundary to change algorithm from N is Large (default is 8000).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
         medium_boundary = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
     if (medium_boundary == 0) medium_boundary = 8192;   // default
-    if (medium_boundary > nmemb) medium_boundary = nmemb;
+//    if (medium_boundary > nmemb) medium_boundary = nmemb;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
 #endif
