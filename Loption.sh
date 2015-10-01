@@ -17,18 +17,9 @@ N=`echo 2^$maxP | bc`
 src/random.awk $N > random.$maxP    # generate a data file
 for power in `seq 3 $maxP`; do
     B=`echo 2^$power | bc`          # boundary
-    # median of random 3 elements
-    cmd="Release/Sort -N $N -h3qC 3 -D 3 -A M -Z $Z -L $B"
+    cmd="Release/Sort -N $N -Z $Z -hqC 3 -D 3 -l 8 -A M -I m -L $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/quick_hybrid/hybrid_random3/
-    # median of variout elements
-    cmd="Release/Sort -N $N -qC v -v 5 -D 3 -A M -Z $Z -L $B"
-    echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/quick_hybrid/hybrid_various/
-    # median of log2(N) elements
-    cmd="Release/Sort -N $N -I m -qC l -D 3 -A M -Z $Z -L $B"
-    echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/quick_hybrid/hybrid_log2N/
+    $cmd random.$maxP 
 done > tmp.Loption
 
 # edit output
