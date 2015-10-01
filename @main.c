@@ -33,7 +33,7 @@ size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
 bool    reuse_random = FALSE;       // reuse random number or not
 
-size_t  medium_boundary = 0;        //  nmemb to alternate to merge sort.
+size_t  threshold = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = insert_binary;
@@ -487,15 +487,15 @@ int main(int argc, char *argv[])
     // medium boundary
     int skip = repeat_count > 1 ? 1: 0;
     if (Loption < 0) {  // depth for hybrid sorting boundary
-        medium_boundary = nmemb / pow(2.0, -Loption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
+        threshold = nmemb / pow(2.0, -Loption / (IsPercentB ? 100.0 / log2(nmemb): 1.0));
     }
     else if (Loption > 0) { // size
-        medium_boundary = IsPercentB ? (nmemb * Loption) / 100: Loption;
+        threshold = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
-    if (medium_boundary == 0) medium_boundary = 8192;   // default
+    if (threshold == 0) threshold = 8192;   // default
 //    if (medium_boundary > nmemb) medium_boundary = nmemb;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", medium_boundary);
+    if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", threshold);
 #endif
 
     // gap list

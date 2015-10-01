@@ -25,7 +25,7 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
     qsort_called++; // Counted in middle_index() or pivot_sort()
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
-    if (nmemb <= medium_boundary) {
+    if (nmemb <= threshold) {
         (*medium_func)(base, nmemb, sizeof(void *), comp_idx);
     }
     else {

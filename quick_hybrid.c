@@ -35,7 +35,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #endif
 #define first   ((char *)base)
     char *hole;
-    if (nmemb <= medium_boundary) {    // hybrid sort
+    if (nmemb <= threshold) {    // hybrid sort
         medium_func(base, nmemb, length, comp);
         return;
     }
