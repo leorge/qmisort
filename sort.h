@@ -95,10 +95,10 @@ void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(c
 // pointer sort
 void    bubble_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    comb_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    heap_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    heap2_sort      (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    heap_top        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    heap_bottom     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    insert_binary   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    insert_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    insert_linear   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    qsort3_indr     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    quick_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    quick_pmiddle   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));

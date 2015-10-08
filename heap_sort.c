@@ -55,8 +55,8 @@ static void sort(size_t nmemb) {
     } while (n);
 }
 
-// bulld a heap by sift up
-void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+// bulld a heap by top down (sift up)
+void heap_top(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     dump_pointer("sort() start in " __FILE__, base, nmemb);
@@ -84,15 +84,15 @@ void heap_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 	root = base;
 	sort(nmemb);
 #ifdef DEBUG
-    dump_pointer("heap_sort done", root, nmemb);
+    dump_pointer("heap_top done", root, nmemb);
 #endif
 }
 
-// build a heap by sift down
-void heap2_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+// build a heap by bottom up (sift down)
+void heap_bottom(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    dump_pointer("heap2_sort() start in " __FILE__, base, nmemb);
+    dump_pointer("heap_bottom() start in " __FILE__, base, nmemb);
 #endif
     comp = compare;
     root = base;
@@ -105,6 +105,6 @@ void heap2_sort(void **base, size_t nmemb, int (*compare)(const void *, const vo
 #endif
     sort(nmemb);
 #ifdef DEBUG
-    dump_pointer("heap2_sort done", root, nmemb);
+    dump_pointer("heap_bottom done", root, nmemb);
 #endif
 }
