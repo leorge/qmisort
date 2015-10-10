@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
             {'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
             {'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid Merge sort."},
             {'q', 0, "quick_pmiddle(*)", quick_pmiddle, "Quicksort with hole. pivot is a middle element."},
-            {'Q', 1, "quick_phybrid(*)", quick_phybrid, "hybrid Quicksort."},
+            {'Q', 1, "quick_phybrid(*)", quick_phybrid, "Quicksort and hybrid merge sort."},
             {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
             {'i', 0, "insert_linear(*)", insert_linear, "insertion sort with linear search."},
             {'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
