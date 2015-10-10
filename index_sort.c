@@ -26,7 +26,7 @@ static void sort(void *base[], size_t nmemb, RANDOM_DEPTH depth) {
     dump_pointer("sort() start in " __FILE__, base, nmemb);
 #endif
     if (nmemb <= threshold) {
-        (*medium_func)(base, nmemb, sizeof(void *), comp_idx);
+    	merge_phybrid(base, nmemb, comp);   // hybrid poiner merge sort
     }
     else {
         size_t  random = RAND_BASE >> 1;
