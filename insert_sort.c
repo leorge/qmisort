@@ -67,10 +67,10 @@ void insert_linear(void **base, size_t nmemb, int (*compare)(const void *, const
 }
 
 /* shellsort */
-void shellsort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+void shell_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
-    dump_pointer("shellsort() start in " __FILE__, base, nmemb);
+    dump_pointer("shell_sort() start in " __FILE__, base, nmemb);
     if (trace_level >= TRACE_DUMP) {
     	fprintf(OUT, "gaplist =");
         for (int gap = 0; gap < gap_count; gap++) fprintf(OUT, " %ld", gaplist[gap]);
@@ -100,6 +100,6 @@ void shellsort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 		}
     }
 #ifdef DEBUG
-    dump_pointer("shellsort() done.", base, nmemb);
+    dump_pointer("shell_sort() done.", base, nmemb);
 #endif
 }
