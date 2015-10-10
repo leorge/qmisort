@@ -216,9 +216,9 @@ int main(int argc, char *argv[])
             {'q', 0, "quick_pmiddle(*)", quick_pmiddle, "Quicksort with hole. pivot is a middle element."},
             {'Q', 1, "quick_phybrid(*)", quick_phybrid, "hybrid Quicksort."},
             {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
-            {'i', 0, "insert_sort(*)", insert_linear, "insertion sort with linear search."},
+            {'i', 0, "insert_linear(*)", insert_linear, "insertion sort with linear search."},
             {'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
-            {'L', 0, "shellsort(*)", shellsort, "shellsort."},
+            {'L', 0, "shell_sort(*)", shell_sort, "shell sort."},
             {'h', 0, "heap_top(*)", heap_top, "Heap sort. build a heap by top-down."},
             {'H', 0, "heap_bottom(*)", heap_bottom, "Heap sort. build a heap by bottom-up."},
 #ifdef  DEBUG   // impractical below
