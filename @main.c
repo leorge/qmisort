@@ -573,15 +573,7 @@ QSORT:
 
 #define ENOUGH  4000000L
     long *cache, *clear;
-    unsigned seed = (unsigned)time(NULL);
-//    struct timespec tp;
-//    int rtn = clock_gettime(CLOCK_BOOTTIME,&tp);
-    FILE *clk;
-    if ((clk = fopen("/proc/uptime", "r")) != NULL) {
-        float f1, f2;
-        if (fscanf(clk, "%f %f", &f1, &f2)) seed = (unsigned)(f2*100.);    // 10 nano seconds
-        fclose(clk);
-    }
+    unsigned seed = (unsigned)time(NULL) + (unsigned)clock();
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "random seed = %d\n", seed);
 #endif
