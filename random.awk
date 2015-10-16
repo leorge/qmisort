@@ -9,7 +9,8 @@
 #   But the one-liner generate no duplicated number.
 #
 BEGIN {
-    srand()
+    "date +%N" | getline seed
+    srand(seed)
     num = ARGC > 1 ? (ARGV[1] + 0) : 7
     fmt = sprintf("%d", num - 1)
     fmt = sprintf("%%0%dd\n", length(fmt))
