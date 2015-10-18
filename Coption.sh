@@ -47,10 +47,10 @@ for power in `seq 12 $maxP`; do
     cmd="Release/Sort -Z $Z -rC l -D 3 -N $B"
     echo $cmd | tee /dev/stderr
     $cmd random.$maxP | sed s/quick_random/quick_log2N/
-    # hybrid of random3 and log2(N)
+    # mixture of random3 and log2(N)
     cmd="Release/Sort -Z $Z -rC h -D 3 -N $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/quick_random/quick_hybrid/
+    $cmd random.$maxP | sed s/quick_random/quick_mix/
 done > $OUT
 
 # edit output
