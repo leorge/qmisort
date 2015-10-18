@@ -17,6 +17,7 @@
 #include    <ctype.h>
 #include    <math.h>
 #include    <sys/time.h>
+#include    <sys/resource.h>
 #include    <time.h>
 #include    <unistd.h>
 #include    "sort.h"
@@ -92,16 +93,38 @@ typedef struct {
 // Estimate time in microseconds
 
 static struct timeval   start_time, core_time;  // time stamp
+static long     time_from;  // to test getrusage()
+
+static long timestamp() {
+    struct  rusage  usage;
+    struct  timeval tv;
+    getrusage(RUSAGE_SELF, &usage);
+    tv = usage.ru_utime;
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP)
+        fprintf(OUT, "timestamp() %ld.06%ld\n", tv.tv_sec, tv.tv_usec);
+#endif
+    return  tv.tv_sec * 1000000 + tv.tv_usec; // micro sec.
+}
 
 static void start_timer(struct timeval *from) {
     assert(from!= NULL);
     gettimeofday(from, NULL);
+    time_from = timestamp();
 }
 
 static long stop_timer(struct timeval *from) {
     assert(from != NULL);
     struct timeval to;
+    long time_to = timestamp();
     gettimeofday(&to, NULL);
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP)
+        fprintf(OUT, "getrusage() : %ld - %ld = %ld\n", time_to, time_from, time_to - time_from);
+#else
+//    fprintf(stderr, "getrusage() : %ld - %ld = %ld\n", time_to, time_from, time_to - time_from);
+//    Elapsed time gotton by getursage() is larger than gettimeofday(), and sometimes zero.
+#endif
     long rtn = (to.tv_sec - from->tv_sec) * 1000000. + to.tv_usec - from->tv_usec;
     return  rtn;
 }
