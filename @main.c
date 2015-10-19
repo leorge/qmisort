@@ -93,7 +93,7 @@ typedef struct {
 // Estimate time in microseconds
 
 static struct timeval   start_time, core_time;  // time stamp
-#define RUSAGE 1
+//#define RUSAGE 1
 #ifdef  RUSAGE
 static long     time_from;  // to test getrusage()
 static long usertime() {
