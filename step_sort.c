@@ -25,7 +25,7 @@ void step_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
         // step up
         char **anchor = first + 1;
         for (pivot = p1 = first; p1 < last; p1 = p2) {
-            if (compare(*pivot, *(p2 = p1 + 1)) > 0) {
+            if (compare(*pivot, *(p2 = p1 + 1)) >= 0) {
                 if (p2 < last) continue; else p1 = p2;
             }
             else if (p1 == pivot) {
@@ -43,7 +43,7 @@ void step_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
 #endif
         anchor = last - 1;
         for (pivot = p2 = last; p2 > first; p2 = p1) {
-            if (compare(*(p1 = p2 - 1), *pivot) > 0) {
+            if (compare(*(p1 = p2 - 1), *pivot) >= 0) {
                 if (p1 > first) continue; else p2 = p1;
             }
             else if (p2 == pivot) {
@@ -74,7 +74,7 @@ void stepup_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
         char **p1, **p2, **pivot;
         char **anchor = first + 1;
         for (pivot = p1 = first; p1 < last; p1 = p2) {
-            if (compare(*pivot, *(p2 = p1 + 1)) > 0) {
+            if (compare(*pivot, *(p2 = p1 + 1)) >= 0) {
                 if (p2 < last) continue; else p1 = p2;
             }
             else if (p1 == pivot) {
