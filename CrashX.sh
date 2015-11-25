@@ -1,21 +1,23 @@
 #!/bin/sh -v
 
-# Show version
-java -version
-perl --version
-
-# Download from princeton.edu and compile
+# Download java programs from princeton.edu & compile
 wget http://introcs.cs.princeton.edu/java/stdlib/stdlib.jar
 wget http://algs4.cs.princeton.edu/23quicksort/QuickX.java
-jar xf stdlib.jar 
-javac -cp :. QuickX.java 
+javac -cp .:stdlib.jar QuickX.java
 
-# Download from Github and test scripts
-wget https://github.com/leorge/QuickJava/raw/master/KillQuickX.pl
-wget https://github.com/leorge/QuickJava/raw/master/QuickX.pl
+# Download a killer data generator from Github
+wget https://github.com/leorge/Sort/qmisort/blob/master/KillQuickX.pl
 chmod +x *.pl
-#./KillQuickX.pl 64 | xargs ./QuickX.pl 
+
+# Show versions
+java -version
+
+perl --version
+
+# test
+seq -w 1 16 | shuf | java -cp .:stdlib.jar QuickX | xargs echo
+./KillQuickX.pl 50 | xargs echo
 
 # Crash
-./KillQuickX.pl 40000 | java -cp :. QuickX 2>&1 | head 
+./KillQuickX.pl 40000 | java -cp .:stdlib.jar QuickX 2>&1 | head 
 
