@@ -29,7 +29,7 @@ void step_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
                 if (p2 < last) continue; else p1 = p2;
             }
             else if (p1 == pivot) {
-                pivot =p2;
+                pivot = p2;
                 continue;
             }
             tmp = *pivot; *pivot = *p1; *p1 = tmp;  // swap
