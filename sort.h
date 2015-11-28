@@ -55,20 +55,20 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 
 /***** variables *****/
 
-extern size_t		*gaplist;			// main.c
+extern size_t       *gaplist;           // main.c
 extern size_t       INS;                // main.c
 extern size_t       random_number;      // main.c
 extern size_t       threshold;          // main.c
 extern size_t       small_boundary;     // main.c
-extern int			gap_count;			// main.c
+extern int          gap_count;          // main.c
 extern int          pivot_number;       // main.c
-extern PivotChoice  pivot_type;       	// main.c
+extern PivotChoice  pivot_type;         // main.c
 extern RANDOM_DEPTH random_depth;       // main.c
 extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
 
 #ifdef DEBUG
-extern long qsort_moved, qsort_comp_str, qsort_called, search_pivot;	// main.c
+extern long qsort_moved, qsort_comp_str, qsort_called, search_pivot;    // main.c
 extern Trace    trace_level;            // main.c
 #endif
 
@@ -78,6 +78,7 @@ extern void (*small_func)();
 extern void (*medium_func)();
 
 // array sort
+void    dual_pivot      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_first     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_kr        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
@@ -114,16 +115,15 @@ void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (
 //void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 
 // others
-const char  *dump_data(const void *data);
 void    **make_index(void *array1d, size_t nmemb, size_t size);
 void    unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size);
 
 // for debug
-#ifdef DEBUG
-void    dump_array(const char *msg, const void *head, size_t nmemb, size_t size);
-char    *dump_index(char *buf, INSERT_INDEX index, int length);
-void    dump_pointer(char *msg, void *head[], size_t length);
-void    dump_rate(size_t anterior, size_t posterior);
-#endif
+const char  *dump_data(const void *data);
+void        dump_copy(void *dst, const void *src);
+void        dump_array(const char *msg, const void *head, size_t nmemb, size_t size);
+char        *dump_index(char *buf, INSERT_INDEX index, int length);
+void        dump_pointer(char *msg, void *head[], size_t length);
+void        dump_rate(size_t anterior, size_t posterior);
 
 #endif /* SORT_H_ */
