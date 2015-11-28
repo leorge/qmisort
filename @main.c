@@ -80,6 +80,7 @@ typedef enum {
     QSORT_RANDOM,
     QSORT_HYBRID,
     QSORT_STABLE,
+    QSORT_DUAL,
 } SORT_TYPE;
 
 typedef struct {
@@ -216,6 +217,8 @@ int main(int argc, char *argv[])
                 "quicksort : pivot is the First element with swaps."},
             {'h', QSORT_HOLE, "quick_hole()", quick_hole,
                 "quicksort : prototype with Hole."},
+			{'j', QSORT_DUAL, "dual_pivot()", dual_pivot,
+				"quicksort : implemented dualpivot quicksort in Java."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr,
                 "quicksort : pivot is the middle element with swaps in K&R style."},
