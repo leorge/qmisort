@@ -11,7 +11,6 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
-static char     *pivot;
 #ifdef  DEBUG
 static size_t   random;         // random number to reuse
 #endif
@@ -19,8 +18,7 @@ static size_t   random;         // random number to reuse
 static void copy(void *dst, const void *src)
 {
 #ifdef  DEBUG
-    qsort_moved++;
-    if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %s, src = %s)\n", dump_data(dst), dump_data(src));
+	dump_copy(dst, src);
 #endif
     memcpy(dst, src, length); /* restore an elements  */
 }
@@ -84,7 +82,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%ld] <-- last = %s\n"
     		, dump_data(hole), (hole - first) / length ,dump_data(last));
 #endif
-    copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
+    char pivot[length]; copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
     char    *lo = first,  *hi = (hole = last) - length, *eq = NULL;
     for (; lo < hole; lo += length) {
         if (comp(lo, pivot) >= 0) {
@@ -135,7 +133,6 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 void quick_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
-        char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
         sort(base, nmemb, random_depth);
 #ifdef DEBUG
@@ -178,7 +175,6 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
             t->address = *p++;  // may be gotten by malloc()
         }
         /*  sort    */
-        char a[sizeof(POINTER_INDEX)]; pivot = a; *a = '\0';
         comp = acomp;       // sort() calls comp()
         comp_p = compare;   // comp() calls compare()
         length = sizeof(POINTER_INDEX);

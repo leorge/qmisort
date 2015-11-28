@@ -8,7 +8,6 @@
 #include "sort.h"
 
 static int  (*comp)(const void *, const void *);
-static char *pivot;
 
 static void sort(void **base, size_t nmemb) {
     if (nmemb <= 1) return;
@@ -19,7 +18,7 @@ static void sort(void **base, size_t nmemb) {
 	void **first = base;
     void **last = first + (nmemb - 1);  // point a last element
     void **hole = first + (nmemb >> 1);	// middle element
-    pivot = *hole;
+    char *pivot = *hole;
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [%ld]\n", dump_data(pivot), hole - first);
 #endif

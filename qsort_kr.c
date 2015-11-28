@@ -11,7 +11,6 @@
 static int  (*comp)(const void *, const void *);
 static size_t   length;
 static char *swapbuf;
-static char *pivot;
 
 /* exchange 2 elements */
 static void swap(void *p1, void *p2)
@@ -62,7 +61,6 @@ void qsort_kr(void *base, size_t nmemb, size_t size, int (*compare)(const void *
 {
     if (nmemb > 1) {
         char a[size]; swapbuf = a; *a = '\0';
-        char b[size]; pivot = b; *b = '\0';
         length = size; comp = compare;
         sort(base, nmemb);
     }

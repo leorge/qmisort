@@ -10,13 +10,11 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
-static char *pivot;
 
 static void copy(void *dst, const void *src)
 {
 #ifdef  DEBUG
-    qsort_moved++;
-    if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %s, src = %s)\n", dump_data(dst), dump_data(src));
+	dump_copy(dst, src);
 #endif
     memcpy(dst, src, length); /* restore an elements  */
 }
@@ -30,7 +28,7 @@ static void sort(void *base, size_t nmemb) {
 	char *first = base;
     char *last = first + length * (nmemb - 1);  // point a last element
     char *hole = last;
-    copy(pivot, hole);
+    char pivot[length]; copy(pivot, hole);
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [last]\n", dump_data(pivot));
 #endif
@@ -74,7 +72,6 @@ static void sort(void *base, size_t nmemb) {
 void quick_hole(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
     if (nmemb > 1) {
-        char a[size]; pivot = a; *a = '\0';
         length = size; comp = compare;
         sort(base, nmemb);
 #ifdef  DEBUG
