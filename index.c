@@ -12,6 +12,7 @@
 static void copy(void *dst, const void *src, size_t n)
 {
 #ifdef DEBUG
+	//  qsort_moved += n;
     qsort_moved++;
     if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %p, src = %p : %s , size = %ld)\n", dst, src, dump_data(src), n);
 #endif
