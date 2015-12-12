@@ -18,6 +18,7 @@
 typedef enum {  // Pivot choice
     PIVOT_RANDOM,
     PIVOT_RANDOM3,
+    PIVOT_RANDOM5,
     PIVOT_VARIOUS,
     PIVOT_LOG2,
     PIVOT_HYBRID,
@@ -94,6 +95,7 @@ void    merge_hybrid    (void *base, size_t nmemb, size_t size, int (*compare)(c
 void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 
 // pointer sort
+void    ai_sort         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    bubble_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    comb_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    heap_top        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
@@ -105,10 +107,9 @@ void    quick_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *
 void    quick_pmiddle   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    shell_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    shell_sort      (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    step_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    stepup_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    rabbit_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 
 // search pivot
 void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random);

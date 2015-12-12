@@ -37,7 +37,7 @@ bool    reuse_random = FALSE;       // reuse random number or not
 size_t  threshold = 0;        //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
-void    (*small_func)() = insert_binary;
+void    (*small_func)() = ai_sort;
 
 size_t  *gaplist = NULL;
 int     gap_count = 0;
@@ -242,16 +242,16 @@ int main(int argc, char *argv[])
             {'q', 0, "quick_pmiddle(*)", quick_pmiddle, "Quicksort with hole. pivot is a middle element."},
             {'Q', 1, "quick_phybrid(*)", quick_phybrid, "Quicksort and hybrid merge sort."},
             {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
-            {'i', 0, "insert_linear(*)", insert_linear, "insertion sort with linear search."},
-            {'b', 0, "insert_binary(*)", insert_binary, "insertion sort with binary search."},
+            {'i', 0, "insert_linear(*)", insert_linear, "Insertion sort with linear search."},
+            {'b', 0, "insert_binary(*)", insert_binary, "insertion sort with Binary search."},
+            {'a', 0, "ai_sort(*)", ai_sort, "Accelerated linear insertion sort."},
             {'L', 0, "shell_sort(*)", shell_sort, "shell sort."},
             {'h', 0, "heap_top(*)", heap_top, "Heap sort. build a heap by top-down."},
             {'H', 0, "heap_bottom(*)", heap_bottom, "Heap sort. build a heap by bottom-up."},
 #ifdef  DEBUG   // impractical below
             {'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
             {'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
-            {'u', 0, "stepup_sort(*)", stepup_sort, "step Up sort."},
-            {'p', 0, "step_sort(*)", step_sort, "steP sort."},
+            {'r', 0, "rabbit_sort(*)", rabbit_sort, "rabbit sort."},
 #endif
     };
     // prepare to analyze command arguments
@@ -298,14 +298,13 @@ int main(int argc, char *argv[])
                 "\t       M - indirect Merge sort.\n"
                 "\t       m - array sort of Merge sort.\n"
                 "\t       h - indirect Hybrid merge sort (default).\n"
-//#ifdef DEBUG
                 "\t-C : algorithm to Choose a pivot.\n"
                 "\t       r - Random element (default).\n"
                 "\t       3 - median of random 3 elements.\n"
-                "\t       v - median of various elements. cf. -v option\n"
+                "\t       5 - median of random 5 elements.\n"
+                "\t       v - median of random various elements. cf. -v option\n"
                 "\t       l - median of random Log2(n) elements.\n"
-                "\t       h - hybrid of Log2(n) and median of 3\n"
-//#endif
+                "\t       h - hybrid of Log2(n) and median of 5 and 3\n"
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is 8192).\n"
@@ -366,6 +365,9 @@ int main(int argc, char *argv[])
             switch(*optarg) {
             case '3':
                 pivot_type = PIVOT_RANDOM3;
+                break;
+            case '5':
+                pivot_type = PIVOT_RANDOM5;
                 break;
             case 'l':
                 pivot_type = PIVOT_LOG2;
