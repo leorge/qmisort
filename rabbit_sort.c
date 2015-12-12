@@ -17,7 +17,7 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     char **first = base, **last = first + nmemb - 1;
     do {
 #ifdef DEBUG
-        dump_pointer("Search a bigger  rabbit.", first, last - first + 1);
+        dump_pointer("Search a larger  rabbit.", first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         char **rabbit, *tmp;
