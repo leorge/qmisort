@@ -66,6 +66,29 @@ void insert_linear(void **base, size_t nmemb, int (*compare)(const void *, const
 #endif
 }
 
+/* accelerated insertion sort */
+void ai_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
+    if (nmemb <= 1) return;
+#ifdef DEBUG
+    qsort_called++;
+    dump_pointer("ai_sort() start in " __FILE__, base, nmemb);
+#endif
+    void **last = &base[nmemb - 1];     // point the last element
+    for (void **p1 = base, **p2 = last; p1 < last;) {
+    	if (compare(*p1, *p2) > 0){
+#ifdef DEBUG
+    	    if (trace_level >= TRACE_DUMP)
+    	    	fprintf(OUT, "ai_sort() swap %s <--> %s\n", dump_data(*p1), dump_data(*p2));
+#endif
+    		void *tmp = *p1; *p1 = *p2; *p2 = tmp;	// swap
+    	}
+    	p1++;
+    	if (++p2 > last)
+    		p2 = p1 + ((p2 - p1) >> 1);
+    }
+    insert_linear(base, nmemb - 1, compare);
+}
+
 /* shellsort */
 void shell_sort(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
