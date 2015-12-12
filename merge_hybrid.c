@@ -11,23 +11,22 @@
 
 static int  (*comp)(const void *, const void *);
 
-static void sort(void **dst, void **src, bool revert, size_t nmemb) {
+static void sort(void **dst, void **src, size_t nmemb) {
     if (nmemb <= 1) return;
-    void **store = revert ? src : dst;  // destination
 #ifdef DEBUG
     qsort_called++;
-    dump_pointer("sort() start in " __FILE__, revert ? dst : src, nmemb);
-    void **first = store;
+    dump_pointer("sort() start in " __FILE__, src, nmemb);
+    void **first = dst;
 #endif
     if (nmemb <= small_boundary) {    /* Insertion sort */
-        small_func(store, nmemb, comp);
+        small_func(dst, nmemb, comp);
     }
     else {
         size_t n_lo = nmemb >> 1;   // = nmemb / 2
         size_t n_hi = nmemb - n_lo;
-        sort(dst, src, ! revert, n_lo);
-        sort(&dst[n_lo], &src[n_lo], ! revert, n_hi);
-        void **left = revert ? dst : src;
+        sort(src, dst, n_lo);
+        sort(&src[n_lo], &dst[n_lo], n_hi);
+        void **left = src;
         void **right = &left[n_lo];
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
@@ -40,12 +39,12 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #ifdef DEBUG
                 if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*left));
 #endif
-                *store++ = *left++;     // add one
+                *dst++ = *left++;     // add one
                 if (--n_lo <= 0) {  // empty?
 #ifdef DEBUG
                 	if (trace_level >= TRACE_MOVE) dump_pointer("append", right, n_hi);
 #endif
-                    memcpy(store, right, n_hi * sizeof(void *));    // append remained data
+                    memcpy(dst, right, n_hi * sizeof(void *));    // append remained data
                     break;
                 }
             }
@@ -53,12 +52,12 @@ static void sort(void **dst, void **src, bool revert, size_t nmemb) {
 #ifdef DEBUG
                 if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*right));
 #endif
-                *store++ = *right++;
+                *dst++ = *right++;
                 if (--n_hi <= 0) {
 #ifdef DEBUG
                 	if (trace_level >= TRACE_MOVE) dump_pointer("append", left, n_lo);
 #endif
-                    memcpy(store, left, n_lo * sizeof(void *));
+                    memcpy(dst, left, n_lo * sizeof(void *));
                     break;
                 }
             }
@@ -81,7 +80,7 @@ void merge_phybrid(void **base, size_t nmemb, int (*compare)(const void *, const
         else {
             comp = compare;
             memcpy(idxtbl, base, nmemb * sizeof(void *));   // copy pointers
-            sort(base, idxtbl, FALSE, nmemb);
+            sort(base, idxtbl, nmemb);
             free(idxtbl);
         }
 #ifdef DEBUG
