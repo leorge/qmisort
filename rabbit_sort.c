@@ -17,7 +17,7 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     char **first = base, **last = first + nmemb - 1;
     do {
 #ifdef DEBUG
-        dump_pointer("Search a larger  rabbit.", first, last - first + 1);
+        dump_pointer("Search a greater rabbit.", first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         char **rabbit, *tmp;
@@ -28,6 +28,10 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
             if (chk < 0) hole = p;  // a smaller rabbit is in a hole.
             else {  // found a not smaller rabbit
                 if (hole != NULL) {
+#ifdef DEBUG
+                	if (trace_level >= TRACE_MOVE)
+                		fprintf(OUT, "%s <--> %s\n", dump_data(*rabbit), dump_data(*hole));
+#endif
                     tmp = *hole; *hole = *rabbit; *rabbit = tmp;  // push out a smaller rabbit.
                     anchor = hole; hole = NULL; rabbit = p;
                 }
@@ -36,13 +40,17 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
         }
         if (hole != NULL) { // The biggest rabbit is roaming.
             assert(hole == last);
+#ifdef DEBUG
+			if (trace_level >= TRACE_MOVE)
+				fprintf(OUT, "%s <--> %s\n", dump_data(*rabbit), dump_data(*hole));
+#endif
             tmp = *hole; *hole = *rabbit; *rabbit = tmp;
             anchor = hole; hole = NULL;
         }
         else if (anchor == NULL) break; // no changed
         last = anchor - 1;
 #ifdef DEBUG
-        dump_pointer("Search a smaller rabbit.", first, last - first + 1);
+        dump_pointer("Search a lesser  rabbit.", first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         for (char **p = rabbit = last; p-- > first;) {
@@ -50,6 +58,10 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
             if (chk > 0) hole = p;
             else {
                 if (hole != NULL) {
+#ifdef DEBUG
+                	if (trace_level >= TRACE_MOVE)
+                		fprintf(OUT, "%s <--> %s\n", dump_data(*rabbit), dump_data(*hole));
+#endif
                     tmp = *hole; *hole = *rabbit; *rabbit = tmp;
                     anchor = hole; hole = NULL; rabbit = p;
                 }
@@ -58,6 +70,10 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
         }
         if (hole != NULL) {
             assert(hole == first);
+#ifdef DEBUG
+			if (trace_level >= TRACE_MOVE)
+				fprintf(OUT, "%s <--> %s\n", dump_data(*rabbit), dump_data(*hole));
+#endif
             tmp = *hole; *hole = *rabbit; *rabbit = tmp;
             anchor = hole;
         }
