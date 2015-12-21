@@ -167,32 +167,32 @@ void quick_random(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 
 /* hybrid sort */
 static void hybrid_sort(ARRAY array, RANDOM_DEPTH depth) {
-    if (array.N <= 1) return;
-#ifdef DEBUG
-    qsort_called++;
-    dump_partition("hybrid_sort() start in " __FILE__, array);
-#endif
-
-    char *first = array.base;
-    size_t   random;
-    char *hole;
-    if (array.N <= threshold) {    // hybrid sort
-        (*medium_func)(array.base, array.N, length, comp);
-    }
-    else {  // N is large
-        if (depth > 0) {
-            depth--;
-            random = set_random();
+	size_t	nmemb = array.N;
+    if (nmemb > 1) {
+        if (nmemb <= threshold) {    // hybrid sort
+            (*medium_func)(array.base, nmemb, length, comp);
         }
-        else random = RAND_BASE >> 1;
-        hole = median5(array.base, array.N, length, comp, random);
-        ARRAY sub_array[2];
-        partition(array, sub_array, hole);
-        random_sort(sub_array[0], depth);
-        random_sort(sub_array[1], depth);
+        else {  // N is large
 #ifdef DEBUG
-        dump_partition("hybrid_sort() done.", array);
+    		qsort_called++;
+    		dump_partition("hybrid_sort() start in " __FILE__, array);
 #endif
+            char *hole;
+            size_t   random;
+            if (depth > 0) {
+                depth--;
+                random = set_random();
+            }
+            else random = RAND_BASE >> 1;
+            hole = median5(array.base, nmemb, length, comp, random);
+            ARRAY sub_array[2];
+            partition(array, sub_array, hole);
+            random_sort(sub_array[0], depth);
+            random_sort(sub_array[1], depth);
+#ifdef DEBUG
+            dump_partition("hybrid_sort() done.", array);
+#endif
+        }
     }
 }
 
