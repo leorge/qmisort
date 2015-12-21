@@ -39,8 +39,7 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
             random = set_random();
         }
         else random = RAND_BASE >> 1;
-        hole = (nmemb <= pivot5) ? median5(base, nmemb, length, comp, random)
-             : pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
+        hole = median5(base, nmemb, length, comp, random);
     }
     char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
