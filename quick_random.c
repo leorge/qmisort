@@ -192,7 +192,7 @@ static void hybrid_sort(ARRAY array, RANDOM_DEPTH depth) {
 #ifdef DEBUG
             dump_partition("hybrid_sort() done.", array);
 #endif
-        }
+        }	// I will make this function secure.
     }
 }
 
