@@ -20,6 +20,7 @@
 #include    <sys/resource.h>
 #include    <time.h>
 #include    <unistd.h>
+#include	<limits.h>
 #include    "sort.h"
 
 /*
@@ -27,9 +28,11 @@
  */
 
 /****   Public  ****/
-PivotChoice  pivot_type = PIVOT_RANDOM;
 Trace   trace_level = TRACE_NONE;   // to debug
-int     pivot_number = 5;
+int     pivot_number = 5;			// for -v option
+size_t  pivot1 = 8;					// if N <= pivot_1 then middle element is a pivot
+size_t  pivot3 = 31;				// if N <= pivot_3 then median of 3 is a pivot
+size_t  pivot5 = ULONG_MAX;			// if N <= Pivot_5 then median of 5 is a pivot else median of log2(N).
 size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
 bool    reuse_random = FALSE;       // reuse random number or not
@@ -250,6 +253,7 @@ int main(int argc, char *argv[])
             {'H', 0, "heap_bottom(*)", heap_bottom, "Heap sort. build a heap by bottom-up."},
 #ifdef  DEBUG   // impractical below
             {'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
+            {'T', 0, "cocktail_sort(*)", cocktail_sort, "cockTail sort."},
             {'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
             {'r', 0, "rabbit_sort(*)", rabbit_sort, "rabbit sort."},
 #endif
@@ -260,7 +264,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:C:D:I:L:l:N:oR:T:uV:v:Y:y:Z:");
+    strcat(optstring, "?A:D:I:L:l:N:pP:R:T:uV:v:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     char    *indirect_option = NULL;
@@ -298,20 +302,17 @@ int main(int argc, char *argv[])
                 "\t       M - indirect Merge sort.\n"
                 "\t       m - array sort of Merge sort.\n"
                 "\t       h - indirect Hybrid merge sort (default).\n"
-                "\t-C : algorithm to Choose a pivot.\n"
-                "\t       r - Random element (default).\n"
-                "\t       3 - median of random 3 elements.\n"
-                "\t       5 - median of random 5 elements.\n"
-                "\t       v - median of random various elements. cf. -v option\n"
-                "\t       l - median of random Log2(n) elements.\n"
-                "\t       h - hybrid of Log2(n) and median of 5 and 3\n"
                 "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is 8192).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
-                "\t-o : print Out the last result.\n"
+                "\t-p : print Out the last result.\n"
+                "\t-P l,m,n : threshold to change the choice of Pivot.\n"
+                "\t       l - N to change from median of 3 to middle.\n"
+			    "\t       m - N to change from median of 5 to median of 3\n"
+			    "\t       n - N to change from median of Log2(N) to median of 5\n"
                 "\t-R : Repeat count "
 #ifndef DEBUG
                 "of sampling to calculate Stdev (default is 12).\n"
@@ -361,32 +362,6 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case 'C':   // Algorithm to Choose a pivot while N is large in quick_sort()
-            switch(*optarg) {
-            case '3':
-                pivot_type = PIVOT_RANDOM3;
-                break;
-            case '5':
-                pivot_type = PIVOT_RANDOM5;
-                break;
-            case 'l':
-                pivot_type = PIVOT_LOG2;
-                break;
-            case 'r':
-                pivot_type = PIVOT_RANDOM;
-                break;
-            case 'v':
-                pivot_type = PIVOT_VARIOUS;
-                break;
-            case 'h':
-                pivot_type = PIVOT_HYBRID;
-                break;
-            default:
-                fprintf(stderr, "Illegal value \"%s\" for -P option.\n", optarg);
-                return EXIT_FAILURE;
-                break;
-            }
-            break;
         case 'D':
             random_depth = strtol(optarg, NULL, 0);
             if (random_depth < 0) random_depth = 0;
@@ -405,8 +380,22 @@ int main(int argc, char *argv[])
         case 'N':
             nmemb = strtoul(optarg, NULL, 0);
             break;
-        case 'o':
+        case 'p':
             print_out = TRUE;
+            break;
+        case 'P':
+        	p = strtok(optarg, ",");
+        	if (p != NULL) {
+        		if(*p != '\0') pivot1 = strtoul(p, NULL, 0);
+        		p = strtok(NULL, ",");
+        		if (p != NULL) {
+        			if(*p != '\0') pivot3 = strtoul(p, NULL, 0);
+            		p = strtok(NULL, ",");
+            		if (p != NULL) {
+            			if(*p != '\0') pivot5 = strtoul(p, NULL, 0);
+            		}
+        		}
+        	}
             break;
         case 'R':
             repeat_count = strtoul(optarg, NULL, 0);

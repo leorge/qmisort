@@ -15,15 +15,6 @@
 
 #define OUT     stdout
 
-typedef enum {  // Pivot choice
-    PIVOT_RANDOM,
-    PIVOT_RANDOM3,
-    PIVOT_RANDOM5,
-    PIVOT_VARIOUS,
-    PIVOT_LOG2,
-    PIVOT_HYBRID,
-} PivotChoice;
-
 typedef enum {  // trace lelve
     TRACE_NONE,
     TRACE_COUNT,    // count up
@@ -61,9 +52,9 @@ extern size_t       INS;                // main.c
 extern size_t       random_number;      // main.c
 extern size_t       threshold;          // main.c
 extern size_t       small_boundary;     // main.c
+extern size_t		pivot1, pivot3, pivot5;	// main.c
 extern int          gap_count;          // main.c
 extern int          pivot_number;       // main.c
-extern PivotChoice  pivot_type;         // main.c
 extern RANDOM_DEPTH random_depth;       // main.c
 extern bool         reuse_random;       // main.c
 extern bool         ispointer;          // index_sort.c
@@ -97,6 +88,7 @@ void    merge_index     (void *base, size_t nmemb, size_t size, int (*compare)(c
 // pointer sort
 void    ai_sort         (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    bubble_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    cocktail_sort   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    comb_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    heap_top        (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    heap_bottom     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
@@ -107,11 +99,12 @@ void    quick_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *
 void    quick_pmiddle   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_phybrid   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    merge_pointer   (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
+void    rabbit_sort     (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    shell_sort      (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
-void    rabbit_sort       (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 
 // search pivot
+void    *median5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random);
 void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 //void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 

@@ -11,9 +11,6 @@
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
-#ifdef  DEBUG
-static size_t   random;         // random number to reuse
-#endif
 
 static void copy(void *dst, const void *src)
 {
@@ -28,10 +25,9 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
 #ifdef DEBUG
     qsort_called++;
     dump_array("sort() start in " __FILE__, base, nmemb, length);
-#else
-    size_t   random;
 #endif
 #define first   ((char *)base)
+    size_t   random;
     char *hole;
     if (nmemb <= threshold) {    // hybrid sort
         (*medium_func)(base, nmemb, length, comp);
@@ -42,40 +38,9 @@ static void sort(void *base, size_t nmemb, RANDOM_DEPTH depth) {
             depth--;
             random = set_random();
         }
-#ifdef DEBUG
-        else if (reuse_random) {}   // no change
-#endif
         else random = RAND_BASE >> 1;
-        size_t distance;
-        switch (pivot_type) {   // Quicksort Algorithm
-        case PIVOT_RANDOM:      // a single element at random
-            hole = first + (nmemb * random / RAND_BASE) * length;
-            break;
-        case PIVOT_RANDOM3:     // median of random 3 elements
-            distance = nmemb / 3;    // distance between elements
-            char *p1 = first + (distance * random / RAND_BASE) * length;
-            char *p2 = p1 + (distance *= length);
-            char *p3 = p2 + distance;
-#ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                    "nmemb = %ld\tdistance = %ld\t pickup = (%s, %s, %s)\n", nmemb, distance, p1, p2, p3);
-#endif
-            hole = (comp(p1, p3) < 0 ?
-                   (comp(p2, p1) < 0 ? p1: (comp(p2, p3) < 0 ? p2 : p3)) :
-                   (comp(p2, p3) < 0 ? p3: (comp(p2, p1) < 0 ? p2 : p1)));
-            break;
-        case PIVOT_VARIOUS:     // median of variout elements
-            hole = pivot_array(base, nmemb, length, pivot_number, comp, random);
-            break;
-        case PIVOT_LOG2:        // median of log2(N) elements
-            hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
-            break;
-        default:
-#ifdef DEBUG
-            assert(FALSE);
-#endif
-            break;
-        }
+        hole = (nmemb <= pivot5) ? median5(base, nmemb, length, comp, random)
+             : pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
     }
     char *last = first + length * (nmemb - 1);
 #ifdef  DEBUG
