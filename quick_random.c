@@ -23,11 +23,73 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-static void sort(void *base, size_t nmemb, int depth) {
-    if (nmemb <= 1) return;
+typedef struct {
+	char  *base;
+	size_t N;
+} ARRAY;
+
+void dump_partition(const char *msg, ARRAY array) {
+	dump_array(msg, array.base, array.N, length);
+}
+
+static void partition(const ARRAY array, ARRAY *sub_array, char *hole) {
+    size_t nmemb = array.N;
+    char *first = array.base;
+    char *last = first + length * (nmemb - 1);    // point a last element
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%ld] <-- last = %s\n"
+            , dump_data(hole), (hole - first) / length ,dump_data(last));
+#endif
+    char save[length]; copy(save, hole); copy(hole, last);    // save <-- hole <-- last
+    char    *lo = first,  *hi = (hole = last) - length, *eq = NULL;
+    for (; lo < hole; lo += length) {
+        if (comp(lo, save) >= 0) {
+#ifdef  DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
+#endif
+            copy(hole, lo);
+            hole = lo;
+            for (; hi > hole; hi -= length) {
+                int chk;
+                if ((chk =comp(hi, save)) < 0) {
+#ifdef  DEBUG
+                    if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
+#endif
+                    copy(hole, hi);
+                    hole = hi;
+                    eq = NULL;  // not equal then reset
+                }
+                else if (chk > 0) eq = NULL;
+                else if (eq == NULL) eq = hi;   // first equal element
+            }
+        }
+    }
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore save %s --> %s [%ld]\n"
+            , dump_data(save), dump_data(hole), (lo - first) / length);
+#endif
+    copy(hole, save);  // restore
+#ifdef DEBUG
+    dump_partition("sort() partitioned", array);
+#endif
+    if (eq == NULL) eq = hole;
+#ifdef DEBUG
+    else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", (eq - hole) / length);
+#endif
+    size_t  n_lo = (hole - first) / length; // number of element in lower partition
+    size_t  n_hi = (last - eq) / length;
+#ifdef DEBUG
+    dump_rate(n_lo, n_hi);
+#endif
+    sub_array[0].base = array.base; sub_array[0].N = n_lo;
+    sub_array[1].base = eq;         sub_array[1].N = n_hi;
+}
+
+static void sort(ARRAY array, int depth) {
+    if (array.N <= 1) return;
 #ifdef DEBUG
     qsort_called++;
-    dump_array("sort() start in " __FILE__, base, nmemb, length);
+    dump_partition("sort() start in " __FILE__, array);
 #else
     size_t   random;    // not reused in Release program
 #endif
@@ -40,9 +102,8 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
     else random = RAND_BASE >> 1;   // to choose the middle element
 
-#define first   ((char *)base)
-    char    *hole;
-    size_t distance;
+    size_t distance, nmemb = array.N;
+    char *hole, *first = array.base;
     if (nmemb <= pivot1) {  // prior to pivot_type
         hole = first + (nmemb >> 1) * length;   // middle element
 #ifdef  DEBUG
@@ -71,61 +132,18 @@ static void sort(void *base, size_t nmemb, int depth) {
 #endif
     }
     else if (nmemb <= pivot5) {
-        hole = median5(base, nmemb, length, comp, random);
+        hole = median5(first, nmemb, length, comp, random);
     }
     else {  // N is large
-        hole = pivot_array(base, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
+        hole = pivot_array(first, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
     }
-    char *last = first + length * (nmemb - 1);    // point a last element
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%ld] <-- last = %s\n"
-            , dump_data(hole), (hole - first) / length ,dump_data(last));
-#endif
-    char pivot[length]; copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
-    char    *lo = first,  *hi = (hole = last) - length, *eq = NULL;
-    for (; lo < hole; lo += length) {
-        if (comp(lo, pivot) >= 0) {
-#ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
-#endif
-            copy(hole, lo);
-            hole = lo;
-            for (; hi > hole; hi -= length) {
-                int chk;
-                if ((chk =comp(hi, pivot)) < 0) {
-#ifdef  DEBUG
-                    if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
-#endif
-                    copy(hole, hi);
-                    hole = hi;
-                    eq = NULL;  // not equal then reset
-                }
-                else if (chk > 0) eq = NULL;
-                else if (eq == NULL) eq = hi;   // first equal element
-            }
-        }
-    }
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s --> %s [%ld]\n"
-            , dump_data(pivot), dump_data(hole), (lo - first) / length);
-#endif
-    copy(hole, pivot);  // restore
+
+    ARRAY sub_array[2];
+    partition(array, sub_array, hole);
+    sort(sub_array[0], depth);
+    sort(sub_array[1], depth);
 #ifdef DEBUG
-    dump_array("sort() partitioned", base, nmemb, length);
-#endif
-    if (eq == NULL) eq = hole;
-#ifdef DEBUG
-    else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", (eq - hole) / length);
-#endif
-    size_t  n_lo = (hole - first) / length; // number of element in lower partition
-    size_t  n_hi = (last - eq) / length;
-#ifdef DEBUG
-    dump_rate(n_lo, n_hi);
-#endif
-    sort(first, n_lo, depth);
-    sort(eq + length, n_hi, depth);
-#ifdef DEBUG
-    dump_array("sort() done.", base, nmemb, length);
+    dump_partition("sort() done.", array);
 #endif
 }
 
@@ -136,6 +154,7 @@ void quick_random(void *base, size_t nmemb, size_t size, int (*compare)(const vo
         dump_array("quick_random() start in " __FILE__, base, nmemb, size);
 #endif
         length = size; comp = compare;
+        ARRAY array; array.base = base; array.N = nmemb;
         sort(base, nmemb, random_depth);
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_random() done.\n");
