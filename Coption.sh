@@ -6,6 +6,7 @@
 #   -r : quicksort - pivot is a Random element[s] with hole.
 #   -C r : pivot is a random elements.
 #   -C 3 : pivot is the median of 3 random elements with hole.
+#   -C 5 : pivot is the median of 5, 3 random elements with hole.
 #   -C v : pivot is the median of various random elements with hole.
 #   -C l : pivot is the median of log2(N) random elements with hole.
 #   -C h : hybrid of -C 3 and -C l.
@@ -39,10 +40,14 @@ for power in `seq 12 $maxP`; do
     cmd="Release/Sort -Z $Z -rC 3 -D 3 -N $B"
     echo $cmd | tee /dev/stderr
     $cmd random.$maxP | sed s/quick_random/quick_random3/
-    # median of variout elements
-    cmd="Release/Sort -Z $Z -rC v -D 3 -N $B"
+    # median of random 5 elements
+    cmd="Release/Sort -Z $Z -rC 5 -D 3 -N $B"
     echo $cmd | tee /dev/stderr
-    $cmd random.$maxP | sed s/quick_random/quick_various/
+    $cmd random.$maxP | sed s/quick_random/quick_random5/
+    # median of variout elements
+#    cmd="Release/Sort -Z $Z -rC v -D 3 -N $B"
+#    echo $cmd | tee /dev/stderr
+#    $cmd random.$maxP | sed s/quick_random/quick_various/
     # median of log2(N) elements
     cmd="Release/Sort -Z $Z -rC l -D 3 -N $B"
     echo $cmd | tee /dev/stderr
