@@ -28,9 +28,11 @@ typedef struct {
 	size_t N;
 } ARRAY;
 
+#ifdef  DEBUG
 void dump_partition(const char *msg, ARRAY array) {
 	dump_array(msg, array.base, array.N, length);
 }
+#endif
 
 static void partition(const ARRAY array, ARRAY *sub_array, char *hole) {
     size_t nmemb = array.N;
@@ -85,7 +87,8 @@ static void partition(const ARRAY array, ARRAY *sub_array, char *hole) {
     sub_array[1].base = eq;         sub_array[1].N = n_hi;
 }
 
-static void sort(ARRAY array, int depth) {
+/* not hybrid sort */
+static void random_sort(ARRAY array, int depth) {
     if (array.N <= 1) return;
 #ifdef DEBUG
     qsort_called++;
@@ -140,8 +143,8 @@ static void sort(ARRAY array, int depth) {
 
     ARRAY sub_array[2];
     partition(array, sub_array, hole);
-    sort(sub_array[0], depth);
-    sort(sub_array[1], depth);
+    random_sort(sub_array[0], depth);
+    random_sort(sub_array[1], depth);
 #ifdef DEBUG
     dump_partition("sort() done.", array);
 #endif
@@ -155,9 +158,124 @@ void quick_random(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 #endif
         length = size; comp = compare;
         ARRAY array; array.base = base; array.N = nmemb;
-        sort(base, nmemb, random_depth);
+        random_sort(array, random_depth);
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_random() done.\n");
 #endif
+    }
+}
+
+/* hybrid sort */
+static void hybrid_sort(ARRAY array, RANDOM_DEPTH depth) {
+    if (array.N <= 1) return;
+#ifdef DEBUG
+    qsort_called++;
+    dump_partition("hybrid_sort() start in " __FILE__, array);
+#endif
+
+    char *first = array.base;
+    size_t   random;
+    char *hole;
+    if (array.N <= threshold) {    // hybrid sort
+        (*medium_func)(array.base, array.N, length, comp);
+    }
+    else {  // N is large
+        if (depth > 0) {
+            depth--;
+            random = set_random();
+        }
+        else random = RAND_BASE >> 1;
+        hole = median5(array.base, array.N, length, comp, random);
+        ARRAY sub_array[2];
+        partition(array, sub_array, hole);
+        random_sort(sub_array[0], depth);
+        random_sort(sub_array[1], depth);
+#ifdef DEBUG
+        dump_partition("hybrid_sort() done.", array);
+#endif
+    }
+}
+
+void quick_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
+{
+    if (nmemb > 1) {
+        length = size; comp = compare;
+        ARRAY array; array.base = base; array.N = nmemb;
+        hybrid_sort(array, random_depth);
+#ifdef DEBUG
+        if (search_pivot && trace_level >= TRACE_DUMP)
+            fprintf(OUT, "search_pivot = %ld times\n", search_pivot);
+#endif
+    }
+}
+
+/* Stable sort */
+typedef struct {
+    size_t  index;      // index in a void **idxtbl
+    void    *address;   // addres of element
+} POINTER_INDEX;
+
+static int      (*comp_p)(const void *, const void *);
+
+static int acomp(const void *p1, const void *p2) {
+    return  comp_p(((const POINTER_INDEX *)p1)->address, ((const POINTER_INDEX *)p2)->address);
+}
+
+static int icomp(const void *p1, const void *p2) {
+    return  ((POINTER_INDEX *)p1)->index -  ((POINTER_INDEX *)p2)->index;
+}
+
+void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, const void *))
+{
+    if (nmemb <= 1) return;
+    void *tbl = calloc(nmemb, sizeof(POINTER_INDEX));
+    ARRAY array;
+    if (tbl != NULL) {
+        /*  store idxtbl to POINTER_INDEX[] */
+        void    **p = idxtbl;
+        POINTER_INDEX   *t = (POINTER_INDEX *)tbl;
+        for (size_t i = 0; i < nmemb; t++) {
+#ifdef DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld].address = %p %s\n", i, *p, (char *)*p);
+#endif
+            t->index = i++;
+            t->address = *p++;  // may be gotten by malloc()
+        }
+        /*  sort    */
+        comp = acomp;       // sort() calls comp()
+        comp_p = compare;   // comp() calls compare()
+        length = sizeof(POINTER_INDEX);
+        array.base = tbl; array.N = nmemb;
+        hybrid_sort(array, random_depth);   // sort array
+        /*  sort to be stable and reoder idxtbl */
+        comp = icomp;
+        t = (POINTER_INDEX *)tbl;
+#ifdef DEBUG
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[0] = %ld, %p %s\n", t->index, t->address, (char *)(t->address));
+#endif
+        POINTER_INDEX   *from = t++;
+        for (size_t i = 1; i < nmemb; i++, t++) {
+#ifdef DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld] = %ld, %p %s\n", i, t->index, t->address, (char *)(t->address));
+#endif
+            if (compare(t->address, from->address)) {
+            	array.base = from; array.N = t - from;
+                hybrid_sort(array, random_depth);
+                from = t;
+            }
+        }
+        array.base = from, array.N = t - from;
+        hybrid_sort(array, 0);
+        /* reorder idxtbl   */
+        p = idxtbl;
+        t = (POINTER_INDEX *)tbl;
+        for (size_t i = 0; i < nmemb; i++) {
+#ifdef DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld] = %ld, %p %s\n", i, t->index, t->address, (char *)(t->address));
+#endif
+            *p++ = t++->address;
+        }
+        /* done */
+        free(tbl);
     }
 }
