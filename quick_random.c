@@ -24,13 +24,13 @@ static void copy(void *dst, const void *src)
 }
 
 typedef struct {
-	char  *base;
-	size_t N;
+    char  *base;
+    size_t N;
 } ARRAY;
 
 #ifdef  DEBUG
 void dump_partition(const char *msg, ARRAY array) {
-	dump_array(msg, array.base, array.N, length);
+    dump_array(msg, array.base, array.N, length);
 }
 #endif
 
@@ -167,15 +167,15 @@ void quick_random(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 
 /* hybrid sort */
 static void hybrid_sort(ARRAY array, RANDOM_DEPTH depth) {
-	size_t	nmemb = array.N;
+    size_t  nmemb = array.N;
     if (nmemb > 1) {
         if (nmemb <= threshold) {    // hybrid sort
             (*medium_func)(array.base, nmemb, length, comp);
         }
         else {  // N is large
 #ifdef DEBUG
-    		qsort_called++;
-    		dump_partition("hybrid_sort() start in " __FILE__, array);
+            qsort_called++;
+            dump_partition("hybrid_sort() start in " __FILE__, array);
 #endif
             char *hole;
             size_t   random;
@@ -259,7 +259,7 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%ld] = %ld, %p %s\n", i, t->index, t->address, (char *)(t->address));
 #endif
             if (compare(t->address, from->address)) {
-            	array.base = from; array.N = t - from;
+                array.base = from; array.N = t - from;
                 hybrid_sort(array, random_depth);
                 from = t;
             }
