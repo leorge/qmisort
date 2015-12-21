@@ -1,17 +1,48 @@
 /*
- * search_pivot.c
+ * get_pivot.c
  *
- *  Search a median element quickly.
+ *  Search the median of several elements.
  *
  *  Created on: 2015/05/27
  *      Author: leo
  */
 #include    "sort.h"
 
+void *median5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random) {
+    void *rtn;
+    size_t distance = nmemb >> 2;   // N / 4
+    size_t offset = (distance * random) / RAND_BASE;    // [0, N/4)
+    char *p1 = (char *)base + offset * size;                    // in [0, N/4)
+    char *p5 = p1 + ((nmemb >> 1) + distance) * size;   // in [3N/4, N)
+    char *p3 = (char *)base + ((nmemb >> 1) - (nmemb >> 4) + (offset >> 1)) * size; // in [7N/16, 9N/16)
+    distance >>= 1;         // N / 8
+    char *p2 = p3 - distance * size;    // in [5N/16, 7N/16)
+    char *p4 = p3 + distance * size;    // in [9N/16, 11N/16)
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of 5 in %ld from %s %s %s %s %s",
+        nmemb, dump_data(p1), dump_data(p2), dump_data(p3), dump_data(p4), dump_data(p5));
+#endif
+    // If you are a librarian, you can convert If statements to ternary operators.
+    if (compare(p1, p5) > 0) {char *tmp = p1; p1 = p5; p5 = tmp;}   // p1 <--> p5 then *p1 < *p5
+    if (compare(p2, p4) > 0) {char *tmp = p2; p2 = p4; p4 = tmp;}   // p2 <--> P4 then *p2 < *p4
+    if (compare(p3, p2) < 0) {char *tmp = p2; p2 = p3; p3 = tmp;}   // p3 <--> p2 then *p2 < *p3 < *p4
+    else if (compare(p4, p3) < 0) {char *tmp = p4; p4 = p3; p3 = tmp;}  // p4 <--> p3 then *p2 < *p3 < *p4
+    rtn = compare(p3, p1) < 0 ? (compare(p1, p4) < 0 ? p1 : p4)
+                            : (compare(p5, p3) < 0 ? (compare(p5, p2) < 0 ? p2 : p5) : p3);
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, " --> %s\n", dump_data(rtn));
+    int LEFT = 0, RIGHT=0, CHK;
+#define SIDE(a) CHK = compare((a), rtn); if (CHK < 0) LEFT++; else if (CHK > 0) RIGHT++;
+    SIDE(p1); SIDE(p2); SIDE(p3); SIDE(p4); SIDE(p5);
+    assert(LEFT < 3 && RIGHT < 3);
+#endif
+    return  rtn;
+}
+
 static void *search_median(void **base, size_t nmemb, int (*compare)(const void *, const void *))
 {
 #ifdef DEBUG
-	search_pivot++;
+    search_pivot++;
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "search_median() : ");
     assert(base != NULL);
     assert(nmemb != 0);
@@ -73,7 +104,7 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
     return  *middle;
 }
 
-/* search a pivot in an array	*/
+/* search a pivot in an array   */
 void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random)
 {
 #ifdef  DEBUG
@@ -85,6 +116,7 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
     assert(pickup != 0);
     assert(compare != NULL);
 #endif
+    void *rtn;
     size_t  distance = (size_t)(nmemb / pickup);      // distance of elements
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "distance = %ld\n", distance);
@@ -93,9 +125,22 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
 #define first   ((char *)base)
     char *p = first + (nmemb * random / RAND_BASE / pickup) * size;  // 1st pick up point
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "first data = %s\n", dump_data(p));
+    char tmp[10], buffer[pickup * sizeof(tmp)]; *buffer = '\0';
 #endif
     void *index[pickup];
-    for (int idx = 0; idx < pickup; p += distance) index[idx++] = p;
-    return search_median(index, pickup, compare);
+    for (int idx = 0; idx < pickup; p += distance) {
+        index[idx++] = p;
+#ifdef  DEBUG
+        if (trace_level >= TRACE_DUMP) {
+            snprintf(tmp, sizeof(tmp), " %s", dump_data(p));
+            strcat(buffer, tmp);
+        }
+#endif
+    }
+    rtn = search_median(index, pickup, compare);
+#ifdef  DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of %ld in %ld from%s --> %s\n"
+                                              , pickup, nmemb, buffer, dump_data(rtn));
+#endif
+    return rtn;
 }
