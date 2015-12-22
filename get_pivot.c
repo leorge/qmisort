@@ -8,7 +8,7 @@
  */
 #include    "sort.h"
 
-void *median5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random) {
+void *median_of_5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random) {
     void *rtn;
     size_t distance = nmemb >> 2;   // N / 4
     size_t offset = (distance * random) / RAND_BASE;    // [0, N/4)

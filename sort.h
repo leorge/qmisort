@@ -52,7 +52,7 @@ extern size_t       INS;                // main.c
 extern size_t       random_number;      // main.c
 extern size_t       threshold;          // main.c
 extern size_t       small_boundary;     // main.c
-extern size_t		pivot1, pivot3, pivot5;	// main.c
+extern size_t		median1, median3, median5, medianL;	// main.c
 extern int          gap_count;          // main.c
 extern int          pivot_number;       // main.c
 extern RANDOM_DEPTH random_depth;       // main.c
@@ -104,7 +104,7 @@ void    shell_sort      (void *base[], size_t nmemb, int (*compare)(const void *
 void    stable_pointer  (void *base[], size_t nmemb, int (*compare)(const void *, const void *));
 
 // search pivot
-void    *median5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random);
+void    *median_of_5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random);
 void    *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 //void    *pivot_pointer(void **base, size_t nmemb, size_t pickup, int (*compare)(const void *, const void *), size_t random);
 
