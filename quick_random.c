@@ -83,8 +83,8 @@ static void partition(const ARRAY array, ARRAY *sub_array, char *hole) {
 #ifdef DEBUG
     dump_rate(n_lo, n_hi);
 #endif
-    sub_array[0].base = array.base; sub_array[0].N = n_lo;
-    sub_array[1].base = eq;         sub_array[1].N = n_hi;
+    sub_array[0].base = array.base;  sub_array[0].N = n_lo;
+    sub_array[1].base = eq + length; sub_array[1].N = n_hi;
 }
 
 /* not hybrid sort */
@@ -101,20 +101,22 @@ static void random_sort(ARRAY array, int depth) {
         random = set_random();  // to choose a random element
     }
 #ifdef DEBUG
-    else if (reuse_random) {}   // no change
+    else if (reuse_random) {   // no change
+    	if (trace_level >= TRACE_DUMP) fprintf(OUT,"random number is reused %ld\n", random);
+    }
 #endif
     else random = RAND_BASE >> 1;   // to choose the middle element
 
     size_t distance, nmemb = array.N;
     char *hole, *first = array.base;
-    if (nmemb <= pivot1) {  // prior to pivot_type
-        hole = first + (nmemb >> 1) * length;   // middle element
+    if (nmemb <= median1) {
+        hole = first + (nmemb * random / RAND_BASE) * length;   // usually the middle element
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at middle %s [%ld]\n",
                 dump_data(hole), (hole - first) / length);
 #endif
     }
-    else if (nmemb <= pivot3) {
+    else if (nmemb <= median3) {
         distance = nmemb >> 2;    // N / 4
         char *p1 = first + ((distance >> 1) + ((distance * random) / RAND_BASE)) * length;  // in [N/8, 3N/8)
         char *p2 = p1 + (distance *= length);                                               // in [3N/8, 5N/8)
@@ -134,8 +136,8 @@ static void random_sort(ARRAY array, int depth) {
         assert(LEFT < 2 && RIGHT < 2);
 #endif
     }
-    else if (nmemb <= pivot5) {
-        hole = median5(first, nmemb, length, comp, random);
+    else if (nmemb <= median5) {
+        hole = median_of_5(first, nmemb, length, comp, random);
     }
     else {  // N is large
         hole = pivot_array(first, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
@@ -184,7 +186,7 @@ static void hybrid_sort(ARRAY array, RANDOM_DEPTH depth) {
                 random = set_random();
             }
             else random = RAND_BASE >> 1;
-            hole = median5(array.base, nmemb, length, comp, random);
+            hole = median_of_5(array.base, nmemb, length, comp, random);
             ARRAY sub_array[2];
             partition(array, sub_array, hole);
             random_sort(sub_array[0], depth);
