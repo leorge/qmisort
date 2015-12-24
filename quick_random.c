@@ -109,7 +109,7 @@ static void random_sort(ARRAY array, int depth) {
 
     size_t distance, nmemb = array.N;
     char *hole, *first = array.base;
-    if (nmemb <= median1) {
+    if (nmemb <= random1) {
         hole = first + (nmemb * random / RAND_BASE) * length;   // usually the middle element
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at middle %s [%ld]\n",
