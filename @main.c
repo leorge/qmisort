@@ -30,9 +30,9 @@
 /****   Public  ****/
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;			// for -v option
-size_t  median1 = 8;				// if N <= pivot_1 then middle element is a pivot
-size_t  median3 = 31;				// if N <= pivot_3 then median of 3 is a pivot
-size_t  median5 = 1023;				// if N <= Pivot_5 then median of 5 is a pivot else median of log2(N).
+size_t  random1 = 0;				// if N <= this then a random (usually middle) element is a pivot.
+size_t  median3 = 0;				// if N <= this then median of 3 is a pivot
+size_t  median5 = 0;				// if N <= this then median of 5 is a pivot else median of log2(N).
 size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
 bool    reuse_random = FALSE;       // reuse random number or not
@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
                 "\t-N : Number of members (default is 31).\n"
                 "\t-p : print Out the last result.\n"
                 "\t-P l,m,n : threshold to change the choice of Pivot.\n"
-                "\t       N <= l -- middle element.\n"
+                "\t       N <= l -- random or middle element.\n"
 			    "\t       N <= m -- median of 3 elements.\n"
 			    "\t       N <= n -- median of 5 elements.\n"
                 "\t-R : Repeat count "
@@ -386,7 +386,7 @@ int main(int argc, char *argv[])
         case 'P':
         	p = strtok(optarg, ",");
         	if (p != NULL) {
-        		if(*p != '\0') median1 = strtoul(p, NULL, 0);
+        		if(*p != '\0') random1 = strtoul(p, NULL, 0);
         		p = strtok(NULL, ",");
         		if (p != NULL) {
         			if(*p != '\0') median3 = strtoul(p, NULL, 0);
