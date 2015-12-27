@@ -10,14 +10,11 @@
 
 void *median_of_5(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *), size_t random) {
     void *rtn;
-    size_t distance = nmemb >> 2;   // N / 4
-    size_t offset = (distance * random) / RAND_BASE;    // [0, N/4)
-    char *p1 = (char *)base + offset * size;                    // in [0, N/4)
-    char *p5 = p1 + ((nmemb >> 1) + distance) * size;   // in [3N/4, N)
-    char *p3 = (char *)base + ((nmemb >> 1) - (nmemb >> 4) + (offset >> 1)) * size; // in [7N/16, 9N/16)
-    distance >>= 1;         // N / 8
-    char *p2 = p3 - distance * size;    // in [5N/16, 7N/16)
-    char *p4 = p3 + distance * size;    // in [9N/16, 11N/16)
+    size_t distance = (nmemb >> 3) + (nmemb >> 4);  // N/8 + N/16 = 3N/16
+    char *p1, *p2, *p3, *p4, *p5;
+    p1 = (char *)base + ((distance * random) / RAND_BASE) * size; // in [0, 3N/16)
+    distance *= size;
+    p5 = (p4 = (p3 = (p2 = p1 + distance) + distance) + distance) + distance;   // [3N/16, 15N/16)
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of 5 in %ld from %s %s %s %s %s",
         nmemb, dump_data(p1), dump_data(p2), dump_data(p3), dump_data(p4), dump_data(p5));
