@@ -20,7 +20,7 @@
 #include    <sys/resource.h>
 #include    <time.h>
 #include    <unistd.h>
-#include	<limits.h>
+#include    <limits.h>
 #include    "sort.h"
 
 /*
@@ -29,10 +29,11 @@
 
 /****   Public  ****/
 Trace   trace_level = TRACE_NONE;   // to debug
-int     pivot_number = 5;			// for -v option
-size_t  random1 = 0;				// if N <= this then a random (usually middle) element is a pivot.
-size_t  median3 = 0;				// if N <= this then median of 3 is a pivot
-size_t  median5 = 0;				// if N <= this then median of 5 is a pivot else median of log2(N).
+int     pivot_number = 5;           // for -v option
+size_t  random1 = 0;                // if N <= this then a random (usually middle) element is a pivot.
+size_t  median3 = 0;                // if N <= this then median of 3 is a pivot
+size_t  median5 = 0;                // if N <= this then median of 5 is a pivot
+size_t  medianL = 0;                // if N <= this then median of log2(N)-1|1 is a pivot else median of log2(N)-6|1
 size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
 bool    reuse_random = FALSE;       // reuse random number or not
@@ -220,8 +221,8 @@ int main(int argc, char *argv[])
                 "quicksort : pivot is the First element with swaps."},
             {'h', QSORT_HOLE, "quick_hole()", quick_hole,
                 "quicksort : prototype with Hole."},
-			{'j', QSORT_DUAL, "dual_pivot()", dual_pivot,
-				"quicksort : implemented dualpivot quicksort in Java."},
+            {'j', QSORT_DUAL, "dual_pivot()", dual_pivot,
+                "quicksort : implemented dualpivot quicksort in Java."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr,
                 "quicksort : pivot is the middle element with swaps in K&R style."},
@@ -309,10 +310,12 @@ int main(int argc, char *argv[])
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-p : print Out the last result.\n"
-                "\t-P l,m,n : threshold to change the choice of Pivot.\n"
+                "\t-P l,m,n,o : threshold to change the choice of Pivot.\n"
                 "\t       N <= l -- random or middle element.\n"
-			    "\t       N <= m -- median of 3 elements.\n"
-			    "\t       N <= n -- median of 5 elements.\n"
+                "\t       N <= m -- median of 3 elements.\n"
+                "\t       N <= n -- median of 5 elements.\n"
+                "\t       N <= o -- median of log2(N)-1|1 elements.\n"
+                "\t       else   -- median of log2(N)-6|1 elements.\n"
                 "\t-R : Repeat count "
 #ifndef DEBUG
                 "of sampling to calculate Stdev (default is 12).\n"
@@ -384,18 +387,22 @@ int main(int argc, char *argv[])
             print_out = TRUE;
             break;
         case 'P':
-        	p = strtok(optarg, ",");
-        	if (p != NULL) {
-        		if(*p != '\0') random1 = strtoul(p, NULL, 0);
-        		p = strtok(NULL, ",");
-        		if (p != NULL) {
-        			if(*p != '\0') median3 = strtoul(p, NULL, 0);
-            		p = strtok(NULL, ",");
-            		if (p != NULL) {
-            			if(*p != '\0') median5 = strtoul(p, NULL, 0);
-            		}
-        		}
-        	}
+            p = strtok(optarg, ",");
+            if (p != NULL) {
+                if(*p != '\0') random1 = strtoul(p, NULL, 0);
+                p = strtok(NULL, ",");
+                if (p != NULL) {
+                    if(*p != '\0') median3 = strtoul(p, NULL, 0);
+                    p = strtok(NULL, ",");
+                    if (p != NULL) {
+                        if(*p != '\0') median5 = strtoul(p, NULL, 0);
+                        p = strtok(NULL, ",");
+                        if (p != NULL) {
+                            if(*p != '\0') medianL = strtoul(p, NULL, 0);
+                        }
+                    }
+                }
+            }
             break;
         case 'R':
             repeat_count = strtoul(optarg, NULL, 0);

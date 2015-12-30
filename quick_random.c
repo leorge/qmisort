@@ -139,8 +139,11 @@ static void random_sort(ARRAY array, int depth) {
     else if (nmemb <= median5) {
         hole = median_of_5(first, nmemb, length, comp, random);
     }
-    else {  // N is large
+    else if (nmemb <= medianL) {    // log2(N)-1|1
         hole = pivot_array(first, nmemb, length, ((size_t)log2(nmemb) - 1) | 1, comp, random);
+    }
+    else {  // when N=1024 median of odd(log2(N))=5, i.e. median of 5. N=4096 then 7
+        hole = pivot_array(first, nmemb, length, ((size_t)log2(nmemb) - 6) | 1, comp, random);
     }
 
     ARRAY sub_array[2];
