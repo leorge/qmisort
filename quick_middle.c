@@ -1,6 +1,8 @@
 /*
  * quick_middle.c
  *
+ *  Indirect Quicksort to evaluate.
+ *
  *  Created on: 2015/09/08
  *      Author: leo
  */
