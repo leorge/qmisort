@@ -86,7 +86,7 @@ void merge_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void
     }
 }
 
-/* index / pointer sort */
+/* pointer sort */
 static void psort(void **dst, void **src, size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
@@ -109,31 +109,33 @@ static void psort(void **dst, void **src, size_t nmemb) {
     }
 #endif
     while (TRUE) {
-        if (comp(*left, *right) <= 0) {
+        if (n_lo == 0) {
 #ifdef DEBUG
-			if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*left));
+            if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*right));
 #endif
-            *dst++ = *left++;     // add one
-            if (--n_lo <= 0) {  // empty?
+            *dst++ = *right++;
+            if (--n_hi == 0) break; // empty
+        }
+        else if (n_hi == 0) {
 #ifdef DEBUG
-            	if (trace_level >= TRACE_MOVE) dump_pointer("append right", right, n_hi);
+            if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*left));
 #endif
-                memcpy(dst, right, n_hi * sizeof(void *));    // append remained data
-                break;
-            }
+            *dst++ = *left++;
+            if (--n_lo == 0) break; // empty
+        }
+        else if (comp(*left, *right) <= 0) {
+#ifdef DEBUG
+            if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*left));
+#endif
+            *dst++ = *left++;
+            n_lo--;
         }
         else {
 #ifdef DEBUG
-			if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*right));
+            if (trace_level >= TRACE_MOVE) fprintf(OUT, "merge %s\n", dump_data(*right));
 #endif
             *dst++ = *right++;
-            if (--n_hi <= 0) {
-#ifdef DEBUG
-            	if (trace_level >= TRACE_MOVE) dump_pointer("append left", left, n_lo);
-#endif
-                memcpy(dst, left, n_lo * sizeof(void *));
-                break;
-            }
+            n_hi--;
         }
     }
 #ifdef DEBUG
@@ -141,7 +143,6 @@ static void psort(void **dst, void **src, size_t nmemb) {
 #endif
 }
 
-/* pointer sort */
 void merge_pointer(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
     if (nmemb <= 1) return;
     void **idxtbl = calloc(nmemb, sizeof(void *));  // double buffer
