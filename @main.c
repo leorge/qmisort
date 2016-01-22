@@ -38,7 +38,7 @@ size_t  random_number;              // variable type is same to nmemb
 RANDOM_DEPTH random_depth = 3;
 bool    reuse_random = FALSE;       // reuse random number or not
 
-size_t  threshold = 0;        //  nmemb to alternate to merge sort.
+size_t  threshold = 0;              //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
 size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
 void    (*small_func)() = ai_sort;
@@ -256,8 +256,8 @@ int main(int argc, char *argv[])
             {'B', 0, "bubble_sort(*)", bubble_sort, "Bubble sort."},
             {'T', 0, "cocktail_sort(*)", cocktail_sort, "cockTail sort."},
             {'C', 0, "comb_sort(*)", comb_sort, "Comb sort."},
-            {'r', 0, "rabbit_sort(*)", rabbit_sort, "rabbit sort."},
 #endif
+            {'r', 0, "rabbit_sort(*)", rabbit_sort, "rabbit sort."},
     };
     // prepare to analyze command arguments
     qsort(test, sizeof(test) / sizeof(INFO), sizeof(INFO), cmp_info);   // sort a table according to the SORT_TYPE.
@@ -387,22 +387,27 @@ int main(int argc, char *argv[])
             print_out = TRUE;
             break;
         case 'P':
-            p = strtok(optarg, ",");
-            if (p != NULL) {
-                if(*p != '\0') random1 = strtoul(p, NULL, 0);
-                p = strtok(NULL, ",");
-                if (p != NULL) {
-                    if(*p != '\0') median3 = strtoul(p, NULL, 0);
-                    p = strtok(NULL, ",");
-                    if (p != NULL) {
-                        if(*p != '\0') median5 = strtoul(p, NULL, 0);
-                        p = strtok(NULL, ",");
-                        if (p != NULL) {
-                            if(*p != '\0') medianL = strtoul(p, NULL, 0);
-                        }
-                    }
-                }
-            }
+			{
+				char *popt = malloc(strlen(optarg) + 1);
+				strcpy(popt, optarg);
+				p = strtok(popt, ",");
+				if (p != NULL) {
+					if(*p != '\0') random1 = strtoul(p, NULL, 0);
+					p = strtok(NULL, ",");
+					if (p != NULL) {
+						if(*p != '\0') median3 = strtoul(p, NULL, 0);
+						p = strtok(NULL, ",");
+						if (p != NULL) {
+							if(*p != '\0') median5 = strtoul(p, NULL, 0);
+							p = strtok(NULL, ",");
+							if (p != NULL) {
+								if(*p != '\0') medianL = strtoul(p, NULL, 0);
+							}
+						}
+					}
+				}
+				free(popt);
+			}
             break;
         case 'R':
             repeat_count = strtoul(optarg, NULL, 0);
@@ -516,7 +521,7 @@ int main(int argc, char *argv[])
     else if (Loption > 0) { // size
         threshold = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
-    if (threshold == 0) threshold = 8192;   // default
+//    if (threshold == 0) threshold = 8192;   // default
 //    if (medium_boundary > nmemb) medium_boundary = nmemb;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", threshold);
