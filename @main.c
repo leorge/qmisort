@@ -387,27 +387,27 @@ int main(int argc, char *argv[])
             print_out = TRUE;
             break;
         case 'P':
-			{
-				char *popt = malloc(strlen(optarg) + 1);
-				strcpy(popt, optarg);
-				p = strtok(popt, ",");
-				if (p != NULL) {
-					if(*p != '\0') random1 = strtoul(p, NULL, 0);
-					p = strtok(NULL, ",");
-					if (p != NULL) {
-						if(*p != '\0') median3 = strtoul(p, NULL, 0);
-						p = strtok(NULL, ",");
-						if (p != NULL) {
-							if(*p != '\0') median5 = strtoul(p, NULL, 0);
-							p = strtok(NULL, ",");
-							if (p != NULL) {
-								if(*p != '\0') medianL = strtoul(p, NULL, 0);
-							}
-						}
-					}
-				}
-				free(popt);
-			}
+            {
+                char *popt = malloc(strlen(optarg) + 1);
+                strcpy(popt, optarg);
+                p = strtok(popt, ",");
+                if (p != NULL) {
+                    if(*p != '\0') random1 = strtoul(p, NULL, 0);
+                    p = strtok(NULL, ",");
+                    if (p != NULL) {
+                        if(*p != '\0') median3 = strtoul(p, NULL, 0);
+                        p = strtok(NULL, ",");
+                        if (p != NULL) {
+                            if(*p != '\0') median5 = strtoul(p, NULL, 0);
+                            p = strtok(NULL, ",");
+                            if (p != NULL) {
+                                if(*p != '\0') medianL = strtoul(p, NULL, 0);
+                            }
+                        }
+                    }
+                }
+                free(popt);
+            }
             break;
         case 'R':
             repeat_count = strtoul(optarg, NULL, 0);
