@@ -1,10 +1,10 @@
 /*
  * quick_hole.c
  *
- *  Quicksort - Use a last element as a hole.
+ *  Quicksort uses a last element as a pivot hole instead of swaps.
  *
  *  Created on: 2013/01/01
- *      Author: leo
+ *      Author: Takeuchi Leorge <qmisort@gmail.com>
  */
 #include "sort.h"
 
@@ -14,68 +14,62 @@ static size_t   length;
 static void copy(void *dst, const void *src)
 {
 #ifdef  DEBUG
-	dump_copy(dst, src);
+    dump_copy(dst, src);
 #endif
-    memcpy(dst, src, length); /* restore an elements  */
+    memcpy(dst, src, length);
 }
 
 static void sort(void *base, size_t nmemb) {
-    if (nmemb <= 1) return;
+    if (nmemb > 1) {
 #ifdef DEBUG
-    qsort_called++;
-    dump_array("sort() start in " __FILE__, base, nmemb, length);
+        qsort_called++;
+        dump_array("sort() start in " __FILE__, base, nmemb, 0, 0, length);
 #endif
-	char *first = base;
-    char *last = first + length * (nmemb - 1);  // point a last element
-    char *hole = last;
-    char pivot[length]; copy(pivot, hole);
+#define first (char *)base
+        char *last = first + (nmemb - 1) * length;  // point the last element
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [last]\n", dump_data(pivot));
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [last]\n", dump_data(last));
 #endif
-    char *lo = first, *hi = hole - length;
-    for (; lo < hole; lo += length) {
-        if (comp(lo, pivot) > 0) {
+        char pivot[length], *hole; copy(pivot, hole = last);    // save the last element as a pivot
+        char *lo = first, *hi = last - length;  // search pointers
+        for (; lo < hole; lo += length) {       // outer loop
+            if (comp(lo, pivot) > 0) {
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
+                if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s --> %s\n", dump_data(lo), dump_data(hole));
 #endif
-            copy(hole, lo);
-            hole = lo;
-            for (; hi > hole; hi -= length) {
-                if (comp(hi, pivot) < 0) {  // symmetric comparison
+                copy(hole, lo); hole = lo;  // move a hole to lo.
+                for (; hi > hole; hi -= length) {   // inner loop, symmetric to the outer loop
+                    if (comp(hi, pivot) < 0) {      // symmetric comparison
 #ifdef  DEBUG
-                    if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
+                        if (trace_level >= TRACE_DUMP) fprintf(OUT, "move %s <-- %s\n", dump_data(hole), dump_data(hi));
 #endif
-                    copy(hole, hi);
-                    hole = hi;
+                        copy(hole, hi); hole = hi;  // move a hole to hi
+                    }
                 }
             }
         }
-    }
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%ld]\n",
-            dump_data(pivot), dump_data(hole), (hole - first) / length);
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%ld]\n",
+                dump_data(pivot), dump_data(hole), (hole - first) / length);
 #endif
-    copy(hole, pivot);  // restore
-    size_t  n_lo = (hole - first) / length; // number of element in lower partition
-    size_t  n_hi = (last - hole) / length;
+        copy(hole, pivot);  // restore
+        size_t  n_lo = (hole - first) / length; // the number of elements in lower partition
+        size_t  n_hi = (last - hole) / length;
 #ifdef DEBUG
-    dump_array("sort() partitioned", base, nmemb, length);
-    dump_rate(n_lo, n_hi);
+        dump_array("sort() partitioned.", base, n_lo, 1, n_hi, length);
+        dump_rate(n_lo, n_hi);
 #endif
-    sort(first, n_lo);
-    sort(hole + length, n_hi);
+        // recursive calls
+        sort(first, n_lo);
+        sort(hole + length, n_hi);
 #ifdef DEBUG
-    dump_array("sort() done.", base, nmemb, length);
+        dump_array("sort() done.", base, nmemb, 0, 0, length);
 #endif
+    }
 }
 
 void quick_hole(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
-    if (nmemb > 1) {
-        length = size; comp = compare;
-        sort(base, nmemb);
-#ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "quick_hole() done.\n");
-#endif
-    }
+    length = size; comp = compare;
+    sort(base, nmemb);
 }
