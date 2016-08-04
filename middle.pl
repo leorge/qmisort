@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# generate a bad data for qsort_middle().
+# Generate a worst data for a conventional quicksort with swaps that chooses the middle element as a pivot
 #
 use strict;
 use warnings;
