@@ -1,6 +1,6 @@
 #!/usr/bin/awk -f
 #
-#   Output tablist for expand(1)
+#   Output a tablist for expand(1).
 #
 #   usage :
 #       $ s=filename; expand -t `path/col.awk $s` $s
