@@ -12,7 +12,7 @@
 static void copy(void *dst, const void *src, size_t n)
 {
 #ifdef DEBUG
-	//  qsort_moved += n;
+    //  qsort_moved += n;
     qsort_moved++;
     if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %p, src = %p : %s , size = %ld)\n", dst, src, dump_data(src), n);
 #endif
@@ -48,7 +48,7 @@ void **make_index(void *array1d, size_t nmemb, size_t size)
 /***** Restore array 1d from index table *****/
 void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
 {
-    void    **ptr, *dest;	// Pointer and destination
+    void    **ptr, *dest;   // Pointer and destination
     size_t  i;
     char    tbuf[size];     // Temporary buffer
 #ifdef DEBUG
