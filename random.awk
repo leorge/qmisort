@@ -4,7 +4,7 @@
 #
 #   This script print a sequence of numbers like a following one-liner generates.
 #
-#       seq 0 `echo count-1|bc` | shuf | awk '{printf "%10d/n", $0}' 
+#       seq 0 10 | shuf | awk '{printf "%02d\n", $0}' 
 #
 #   But the one-liner generate no duplicated number.
 #
