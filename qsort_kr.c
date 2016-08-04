@@ -29,7 +29,7 @@ static void sort(void *base, size_t nmemb) {
     if (nmemb <= 1) return; // 0 or 1
 #ifdef DEBUG
     qsort_called++;
-    dump_array("sort() start in " __FILE__, base, nmemb, length);
+    dump_array("sort() start in " __FILE__, base, nmemb, 0, 0, length);
 #endif
 #define first   ((char *)base)
     char *last = first + (nmemb - 1) * length;
@@ -47,21 +47,19 @@ static void sort(void *base, size_t nmemb) {
     size_t  n_lo = (store - first) / length;    // number of element in lower partition
     size_t  n_hi = (last - store) / length;
 #ifdef DEBUG
-    dump_array("sort() partitioned", first, nmemb, length);
+    dump_array("sort() partitioned", first, n_lo, 1, n_hi, length);
     dump_rate(n_lo, n_hi);
 #endif
     sort(first, n_lo);
     sort(store + length, n_hi);
 #ifdef DEBUG
-    dump_array("sort() done.", first, nmemb, length);
+    dump_array("sort() done.", first, nmemb, 0, 0, length);
 #endif
 }
 
 void qsort_kr(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
-    if (nmemb > 1) {
-        char a[size]; swapbuf = a; *a = '\0';
-        length = size; comp = compare;
-        sort(base, nmemb);
-    }
+    char a[size]; swapbuf = a; *a = '\0';
+    length = size; comp = compare;
+    sort(base, nmemb);
 }
