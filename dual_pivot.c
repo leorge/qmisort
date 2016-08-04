@@ -1,4 +1,6 @@
 /*
+ * http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/util/DualPivotQuicksort.java
+ *
  * Copyright (c) 2009, 2011, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -25,8 +27,8 @@
 
 #include "sort.h"
 
-static int      (*comp)(const void *, const void *);
-static size_t   length;
+static int   (*comp)(const void *, const void *);
+static int   length;    // unsigned is inhibited in Java
 
 static void copy(void *dst, const void *src)
 {
@@ -36,7 +38,7 @@ static void copy(void *dst, const void *src)
     memcpy(dst, src, length); /* restore an elements  */
 }
 
-static void qi_sort(char *a, size_t left, size_t right, bool leftmost); // declaration
+static void qi_sort(char *a, int left, int right, bool leftmost); // declaration
 
 //package java.util;
 
@@ -119,13 +121,13 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost); // decla
  * @param left the index of the first element, inclusive, to be sorted
  * @param right the index of the last element, inclusive, to be sorted
  */
-static void sort(char *a, size_t left, size_t right) {
+static void sort(char *a, int left, int right) {
     // Use Quicksort on small arrays
 #ifdef DEBUG
     char *base = a;
     qsort_called++;
-    size_t N = right - left + 1;
-    dump_array("sort() start in " __FILE__, a, N, length);
+    int N = right - left + 1;
+    if (N > 1 ) dump_array("sort() start in " __FILE__, a, N, 0, 0, length);
 #endif
     if (right - left < QUICKSORT_THRESHOLD) {
         qi_sort(a, left, right, TRUE);
@@ -136,20 +138,20 @@ static void sort(char *a, size_t left, size_t right) {
      * Index run[i] is the start of i-th run
      * (ascending or descending sequence).
      */
-    size_t *run = calloc(sizeof(size_t), MAX_RUN_COUNT + 1);
-    size_t count = 0; run[0] = left;
+    int *run = calloc(sizeof(int), MAX_RUN_COUNT + 1);
+    int count = 0; run[0] = left;
 
     // Check if the array is nearly sorted
-    for (size_t k = left; k < right; run[count] = k) {
+    for (int k = left; k < right; run[count] = k) {
         if (comp(&a[k * length], &a[(k + 1) * length]) < 0) { // ascending
             while (++k <= right && comp(&a[(k - 1) * length], &a[k * length]) <= 0);
         } else if (comp(&a[k * length], &a[(k + 1) * length]) > 0) { // descending
             while (++k <= right && comp(&a[(k - 1) * length], &a[k * length]) >= 0);
-            for (size_t lo = run[count] - 1, hi = k; ++lo < --hi; ) {
+            for (int lo = run[count] - 1, hi = k; ++lo < --hi; ) {
                 char t[length]; copy(t, &a[lo * length]); copy(&a[lo * length], &a[hi * length]); copy(&a[hi * length], t);
             }
         } else { // equal
-            for (size_t m = MAX_RUN_LENGTH; ++k <= right && comp(&a[(k - 1) * length], &a[k * length]) == 0; ) {
+            for (int m = MAX_RUN_LENGTH; ++k <= right && comp(&a[(k - 1) * length], &a[k * length]) == 0; ) {
                 if (--m == 0) {
                     qi_sort(a, left, right, TRUE);
                     return;
@@ -179,20 +181,20 @@ static void sort(char *a, size_t left, size_t right) {
      * Implementation note: variable "right" is increased by 1.
      */
     char *b; byte odd = 0;
-    for (size_t n = 1; (n <<= 1) < count; odd ^= 1);
+    for (int n = 1; (n <<= 1) < count; odd ^= 1);
 
     if (odd == 0) { // Block copy with memcpy() is better. However, this case doesn't use quicksort.
         b = a; a = calloc(sizeof(char *), right - left + 1);
-        for (size_t i = left - 1; ++i < right;) copy(&a[i * length], &b[i * length]);
+        for (int i = left - 1; ++i < right;) copy(&a[i * length], &b[i * length]);
     } else {
         b = calloc(sizeof(char *), right - left + 1);
     }
 
     // Merging
-    for (size_t last; count > 1; count = last) {
-        for (size_t k = (last = 0) + 2; k <= count; k += 2) {
-            size_t hi = run[k], mi = run[(k - 1)];
-            for (size_t i = run[k - 2], p = i, q = mi; i < hi; ++i) {
+    for (int last; count > 1; count = last) {
+        for (int k = (last = 0) + 2; k <= count; k += 2) {
+            int hi = run[k], mi = run[(k - 1)];
+            for (int i = run[k - 2], p = i, q = mi; i < hi; ++i) {
                 if (q >= hi || (p < mi && (comp(&a[p * length], &a[q * length]) <= 0))) {
                     copy(&b[i * length], &a[p++ * length]);
                 } else {
@@ -202,14 +204,14 @@ static void sort(char *a, size_t left, size_t right) {
             run[++last] = hi;
         }
         if ((count & 1) != 0) {
-            for (size_t i = right, lo = run[count - 1]; --i >= lo;)
+            for (int i = right, lo = run[count - 1]; --i >= lo;)
                 copy(&b[i * length], &a[i * length]);
             run[++last] = right;
         }
         char *t; t = a; a = b; b = t;
     }
 #ifdef DEBUG
-    dump_array("qi_sort() merge done.", base, N, length);
+    dump_array("qi_sort() merge done.", base, N, 0, 0, length);
 #endif
     return;
 }
@@ -222,12 +224,12 @@ static void sort(char *a, size_t left, size_t right) {
  * @param right the index of the last element, inclusive, to be sorted
  * @param leftmost indicates if this part is the leftmost in the range
  */
-static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
-    size_t N = right - left + 1;
+static void qi_sort(char *a, int left, int right, bool leftmost) {
+    int N = right - left + 1;
 #ifdef DEBUG
     qsort_called++;
-    char *base = a;
-    dump_array("sort() start in " __FILE__, base, N, length);
+    char *base = a, *head = a + left * length;
+    if (N > 1) dump_array("qi_sort() start in " __FILE__, head, N, 0, 0, length);
 #endif
 
     // Use insertion sort on tiny arrays
@@ -238,7 +240,7 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
              * optimized for server VM, is used in case of
              * the leftmost part.
              */
-            for (size_t i = left, j = i; i < right; j = ++i) {
+            for (int i = left, j = i; i < right; j = ++i) {
                 char ai[length]; copy(ai, &a[(i + 1) * length]);
                 while (comp(ai, &a[j * length]) < 0) {
                     copy(&a[(j + 1) * length], &a[j * length]);
@@ -255,7 +257,7 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
             do {
                 if (left >= right) {
 #ifdef DEBUG
-                    dump_array("qi_sort() insertin sort done.", base, N, length);
+                    dump_array("qi_sort() insertion sort done.", base, N, 0, 0, length);
 #endif
                     return;
                 }
@@ -269,7 +271,7 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
              * sort, which is faster (in the context of Quicksort)
              * than traditional implementation of insertion sort.
              */
-            for (size_t k = left; ++left <= right; k = ++left) {
+            for (int k = left; ++left <= right; k = ++left) {
                 char a1[length], a2[length]; copy(a1, &a[k * length]); copy(a2, &a[left * length]);
 
                 if (comp(a1, a2) < 0) {
@@ -293,13 +295,13 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
             copy(&a[(right + 1) * length], last);
         }
 #ifdef DEBUG
-            dump_array("qi_sort() pair insertin sort done.", base, N, length);
+            dump_array("qi_sort() pair insertion sort done.", head, N, 0, 0, length);
 #endif
             return;
     }
 
     // Inexpensive approximation of N / 7
-    size_t seventh = (N >> 3) + (N >> 6) + 1;
+    int seventh = (N >> 3) + (N >> 6) + 1;
 
     /*
      * Sort five evenly spaced elements around (and including) the
@@ -308,11 +310,11 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
      * these elements was empirically determined to work well on
      * a wide variety of inputs.
      */
-    size_t e3 = left + ((right - left) >> 1); // The midpoint
-    size_t e2 = e3 - seventh;
-    size_t e1 = e2 - seventh;
-    size_t e4 = e3 + seventh;
-    size_t e5 = e4 + seventh;
+    int e3 = left + ((right - left) >> 1); // The midpoint
+    int e2 = e3 - seventh;
+    int e1 = e2 - seventh;
+    int e4 = e3 + seventh;
+    int e5 = e4 + seventh;
     char t[length]; // temporary data
 
     // Sort these elements using insertion sort
@@ -335,8 +337,8 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
     }
 
     // Pointers
-    size_t less  = left;  // The index of the first element of center part
-    size_t great = right; // The index before the first element of right part
+    int less  = left;  // The index of the first element of center part
+    int great = right; // The index before the first element of right part
 
     if (comp(&a[e1 * length], &a[e2 * length]) && comp(&a[e2 * length], &a[e3 * length]) && comp(&a[e3 * length], &a[e4 * length]) && comp(&a[e4 * length], &a[e5 * length])) {
         /*
@@ -381,7 +383,7 @@ static void qi_sort(char *a, size_t left, size_t right, bool leftmost) {
          *
          * Pointer k is the first index of ?-part.
          */
-        for (size_t k = less - 1; ++k <= great; ) {
+        for (int k = less - 1; ++k <= great; ) {
             char ak[length]; copy(ak, &a[k * length]);
             if (comp(ak, pivot1) < 0) { // Move a[k * length] to left part
                 copy(&a[k * length], &a[less * length]);
@@ -458,7 +460,7 @@ outer1:
              *
              * Pointer k is the first index of ?-part.
              */
-            for (size_t k = less - 1; ++k <= great; ) {
+            for (int k = less - 1; ++k <= great; ) {
                 char ak[length]; copy(ak, &a[k * length]);
                 if (comp(ak, pivot1) == 0) { // Move a[k * length] to left part
                     copy(&a[k * length], &a[less * length]);
@@ -522,7 +524,7 @@ outer2:
          *
          * Pointer k is the first index of ?-part.
          */
-        for (size_t k = less; k <= great; ++k) {
+        for (int k = less; k <= great; ++k) {
             if (comp(&a[k * length], pivot) == 0) {
                 continue;
             }
@@ -535,6 +537,7 @@ outer2:
                 while (comp(&a[great * length], pivot) > 0) {
                     --great;
                 }
+                if (k > great) break;   // Debugged. Confirm with the output of KillDualPivot.pl
                 if (comp(&a[great * length], pivot) < 0) { // a[great * length] <= pivot
                     copy(&a[k * length], &a[less * length]);
                     copy(&a[less * length], &a[great * length]);
@@ -564,7 +567,7 @@ outer2:
         qi_sort(a, great + 1, right, FALSE);
     }
 #ifdef DEBUG
-    dump_array("qi_sort() done.", base, N, length);
+    dump_array("qi_sort() done.", head, N, 0, 0, length);
 #endif
     return;
 }
@@ -572,11 +575,7 @@ outer2:
 
 void dual_pivot(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
-if (nmemb > 1) {
-    length = size; comp = compare;  // semi-constant
-    sort((char *)base, 0, nmemb - 1);
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "dual_pivot() done.\n");
-#endif
-    }
+    if (nmemb <= 1) return;
+    length = (int)size; comp = compare;
+    sort((char *)base, 0, (int)nmemb - 1);
 }
