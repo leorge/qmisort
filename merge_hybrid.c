@@ -1,7 +1,7 @@
 /*
- * merge_insert.c
+ * merge_hybrid.c
  *
- *  hybrid of merge sort and conventional insertion sort. Stable
+ *  hybrid Mergesort
  *
  *  Created on: 2015/02/04
  *      Author: leo
@@ -42,7 +42,7 @@ static void sort(void **dst, void **src, size_t nmemb) {
                 *dst++ = *left++;     // add one
                 if (--n_lo <= 0) {  // empty?
 #ifdef DEBUG
-                	if (trace_level >= TRACE_MOVE) dump_pointer("append", right, n_hi);
+                    if (trace_level >= TRACE_MOVE) dump_pointer("append", right, n_hi);
 #endif
                     memcpy(dst, right, n_hi * sizeof(void *));    // append remained data
                     break;
@@ -55,7 +55,7 @@ static void sort(void **dst, void **src, size_t nmemb) {
                 *dst++ = *right++;
                 if (--n_hi <= 0) {
 #ifdef DEBUG
-                	if (trace_level >= TRACE_MOVE) dump_pointer("append", left, n_lo);
+                    if (trace_level >= TRACE_MOVE) dump_pointer("append", left, n_lo);
 #endif
                     memcpy(dst, left, n_lo * sizeof(void *));
                     break;
@@ -70,40 +70,38 @@ static void sort(void **dst, void **src, size_t nmemb) {
 
 // pointer sort
 void merge_phybrid(void **base, size_t nmemb, int (*compare)(const void *, const void *)) {
-    if (nmemb > 1) {
+    if (nmemb <= 1) return;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                "merge_phybrid(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT,
+            "merge_phybrid(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
 #endif
-        void **idxtbl = calloc(nmemb, sizeof(void *));  // double buffer
-        if (idxtbl == NULL) perror(NULL);
-        else {
-            comp = compare;
-            memcpy(idxtbl, base, nmemb * sizeof(void *));   // copy pointers
-            sort(base, idxtbl, nmemb);
-            free(idxtbl);
-        }
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_phybrid() done.\n");
-#endif
+    void **idxtbl = calloc(nmemb, sizeof(void *));  // double buffer
+    if (idxtbl == NULL) perror(NULL);
+    else {
+        comp = compare;
+        memcpy(idxtbl, base, nmemb * sizeof(void *));   // copy pointers
+        sort(base, idxtbl, nmemb);
+        free(idxtbl);
     }
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_phybrid() done.\n");
+#endif
 }
 
 // index sort
 void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
-    if (nmemb > 1) {
+    if (nmemb <= 1) return;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                "merge_hybrid(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT,
+            "merge_hybrid(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
 #endif
-        void **idxtbl = make_index(base, nmemb, size);
-        if (idxtbl != NULL) {
-            merge_phybrid(idxtbl, nmemb, compare);
-            unindex(base, idxtbl, nmemb, size);
-            free(idxtbl);
-        }
-#ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_hybrid() done.\n");
-#endif
+    void **idxtbl = make_index(base, nmemb, size);
+    if (idxtbl != NULL) {
+        merge_phybrid(idxtbl, nmemb, compare);
+        unindex(base, idxtbl, nmemb, size);
+        free(idxtbl);
     }
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_hybrid() done.\n");
+#endif
 }
