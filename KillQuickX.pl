@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 #
-# generate a wrong data for QuickX.java
+# Generate a worst data for pseudomedian of nine.
+#
+#    cf. https://en.wikipedia.org/wiki/Quicksort#History
+#
+#    example - http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html
 #
 use strict;
 use warnings;
