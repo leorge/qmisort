@@ -31,7 +31,7 @@ static void sort(void *base, size_t nmemb) {
 #define pivot   first
 #ifdef DEBUG
     qsort_called++;
-    dump_array("sort() start in " __FILE__, base, nmemb, length);
+    dump_array("sort() start in " __FILE__, base, nmemb, 0, 0, length);
 #endif
     swap(base, base + (nmemb >> 1) * length);
 #ifdef DEBUG
@@ -51,26 +51,22 @@ static void sort(void *base, size_t nmemb) {
         swap(lo, hi);
     }
     swap(first, hi);
-#ifdef  DEBUG
-    dump_array("sort() partitioned.", base, nmemb, length);
-#endif
     size_t  n_lo = (hi - first) / length;   // number of elements in lower partition
     size_t  n_hi = (last - hi) / length;
 #ifdef  DEBUG
+    dump_array("sort() partitioned.", base, n_lo, 1, n_hi, length);
     dump_rate(n_lo, n_hi);
 #endif
     sort(first, n_lo);
     sort(hi + length, n_hi);
 #ifdef DEBUG
-    dump_array("sort() done.", base, nmemb, length);
+    dump_array("sort() done.", base, nmemb, 0, 0, length);
 #endif
 }
 
 void qsort_middle(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
-    if (nmemb > 1) {
-        char a[size]; swapbuf = a; *a = '\0';
-        length = size; comp = compare;
-        sort(base, nmemb);
-    }
+    char a[size]; swapbuf = a; *a = '\0';
+    length = size; comp = compare;
+    sort(base, nmemb);
 }
