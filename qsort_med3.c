@@ -29,11 +29,11 @@ static void sort(void *base, size_t nmemb) {
     if (nmemb <= 1) return; // 0 or 1
 #ifdef DEBUG
     qsort_called++;
-    dump_array("sort() start in " __FILE__, base, nmemb, length);
+    dump_array("sort() start in " __FILE__, base, nmemb, 0, 0, length);
 #endif
 #define first   ((char *)base)
     char *last = first + (nmemb - 1) * length;
-    char *middle = first + length * (nmemb >> 1);
+    char *middle = first + (nmemb >> 1) * length;
     char *pivot = nmemb <= small_boundary ? middle :
                  (comp(first, last) < 0 ?
                  (comp(middle, first) < 0 ? first: (comp(middle,  last) < 0 ? middle : last)) :
@@ -56,26 +56,22 @@ static void sort(void *base, size_t nmemb) {
         swap(lo, hi);
     }
     swap(first, hi);
-#ifdef  DEBUG
-    dump_array("sort() partitioned.", base, nmemb, length);
-#endif
     size_t  n_lo = (hi - first) / length;   // number of elements in lower partition
     size_t  n_hi = (last - hi) / length;
 #ifdef  DEBUG
+    dump_array("sort() partitioned.", base, n_lo, 1, n_hi, length);
     dump_rate(n_lo, n_hi);
 #endif
     sort(first, n_lo);
     sort(hi + length, n_hi);
 #ifdef DEBUG
-    dump_array("sort() done.", base, nmemb, length);
+    dump_array("sort() done.", base, nmemb, 0, 0, length);
 #endif
 }
 
 void qsort_med3(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *))
 {
-    if (nmemb > 1) {
-        char a[size]; swapbuf = a; *a = '\0';
-        length = size; comp = compare;
-        sort(base, nmemb);
-    }
+    char a[size]; swapbuf = a; *a = '\0';
+    length = size; comp = compare;
+    sort(base, nmemb);
 }
