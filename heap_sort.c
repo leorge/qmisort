@@ -22,7 +22,7 @@ static void heap(size_t nmemb, size_t node)
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "node = %ld\tstart = %s\n", node, dump_data(*start));
 #endif
-    void 	*key = *start;	// save
+    void    *key = *start;  // save
     size_t  leaf;
     while(TRUE) {
         leaf = (node << 1) + 1;         // 2n + 1
@@ -31,7 +31,7 @@ static void heap(size_t nmemb, size_t node)
         if (leaf + 1 < nmemb && comp(*child, *(child + 1)) < 0 ) {
             child++;
             leaf++;
-        }	// right leaf is larger than left leaf
+        }   // right leaf is larger than left leaf
         if (comp(key, *child) >= 0) break;
         *parent = *child; parent = child;    //slide
         node = leaf;
@@ -47,10 +47,10 @@ static void sort(size_t nmemb) {
 #ifdef DEBUG
     dump_pointer("sort()", root, nmemb);
 #endif
-	size_t  n = nmemb;
-	void **last = root + n - 1;  	// next element of the last element
+    size_t  n = nmemb;
+    void **last = root + n - 1;     // next element of the last element
     do {    // sort
-    	void *tmp = *last; *last = *root; *root = tmp;	// swap first <--> last
+        void *tmp = *last; *last = *root; *root = tmp;  // swap first <--> last
         last--; heap(--n, 0);     // shrink and re-build the heap
     } while (n);
 }
@@ -65,24 +65,24 @@ void heap_top(void **base, size_t nmemb, int (*compare)(const void *, const void
 #ifdef DEBUG
         qsort_called++;
 #endif
-    	size_t	child = node;
-        size_t	parent = (child - 1) >> 1;
+        size_t  child = node;
+        size_t  parent = (child - 1) >> 1;
         while (compare(base[parent], base[child]) < 0) {
 #ifdef DEBUG
-        	if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap : %s [%ld] <--> %s [%ld]\n"
-        			, dump_data(base[parent]), parent, dump_data(base[child]), child);
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap : %s [%ld] <--> %s [%ld]\n"
+                    , dump_data(base[parent]), parent, dump_data(base[child]), child);
 #endif
-        	void *tmp = base[parent]; base[parent] = base[child]; base[child] = tmp;
-        	if (! parent) break;	// root
-        	child = parent; parent = (child - 1) >> 1;
+            void *tmp = base[parent]; base[parent] = base[child]; base[child] = tmp;
+            if (! parent) break;    // root
+            child = parent; parent = (child - 1) >> 1;
         }
     }
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "A heap is built. compare = %ld\n", qsort_comp_str);
 #endif
-	comp = compare;
-	root = base;
-	sort(nmemb);
+    comp = compare;
+    root = base;
+    sort(nmemb);
 #ifdef DEBUG
     dump_pointer("heap_top done", root, nmemb);
 #endif
@@ -96,12 +96,12 @@ void heap_bottom(void **base, size_t nmemb, int (*compare)(const void *, const v
 #endif
     comp = compare;
     root = base;
-    size_t node = (nmemb - 1) >> 1;  	// lowest parent node
+    size_t node = (nmemb - 1) >> 1;     // lowest parent node
     do {
         heap(nmemb, node);
     } while (node--);
 #ifdef DEBUG
-	if (trace_level >= TRACE_DUMP) fprintf(OUT, "A heap is built. compare = %ld\n", qsort_comp_str);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "A heap is built. compare = %ld\n", qsort_comp_str);
 #endif
     sort(nmemb);
 #ifdef DEBUG
