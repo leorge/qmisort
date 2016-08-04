@@ -1,7 +1,7 @@
 #!/usr/bin/awk -f
 BEGIN {
     if (ARGC <= 1) {
-        print "same data : n, n, ..., n"
+        print "equal data : n, n, ..., n"
         exit;
     }
     else num = ARGV[1];
