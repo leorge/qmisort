@@ -4,7 +4,7 @@
 #
 BEGIN {
     if (ARGC <= 1) {
-        print "median-3-killer : n-1, 0, 1, 2, ..., n-2"
+        print "median-3-killer : 1, 2, ..., n-1, 0"
         exit;
     }
     else num = ARGV[1];
