@@ -28,7 +28,7 @@ static void asort(void *dst, void *src, size_t nmemb) {
     if (nmemb <= 1) return;
 #ifdef DEBUG
     qsort_called++;
-    if (trace_level >= TRACE_DUMP) dump_array("sort() start in " __FILE__, src, nmemb, length);
+    if (trace_level >= TRACE_DUMP) dump_array("sort() start in " __FILE__, src, nmemb, 0, 0, length);
 #endif
     size_t n_lo = nmemb >> 1;   // = nmemb / 2
     size_t n_hi = nmemb - n_lo;
@@ -40,17 +40,14 @@ static void asort(void *dst, void *src, size_t nmemb) {
     char *left = src;
     char *right = &left[n_lo * length];
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) {
-        dump_array("left", left, n_lo, length);
-        dump_array("right", right, n_hi, length);
-    }
+    if (trace_level >= TRACE_DUMP) dump_array("merge sub-arrays", left, n_lo, 0, n_hi, length);
 #endif
     while (TRUE) {
         if (comp(left, right) <= 0) {
             copy(dst, left, 1); dst += length; left += length;      // add one
             if (--n_lo <= 0) {  // empty?
 #ifdef DEBUG
-                if (trace_level >= TRACE_DUMP) dump_array("append right", right, n_hi, length);
+                if (trace_level >= TRACE_DUMP) dump_array("append right", right, n_hi, 0, 0, length);
 #endif
                 copy(dst, right, n_hi);   // append remained data
                 break;
@@ -60,7 +57,7 @@ static void asort(void *dst, void *src, size_t nmemb) {
             copy(dst, right, 1); dst += length; right += length;
             if (--n_hi <= 0) {
 #ifdef DEBUG
-                if (trace_level >= TRACE_DUMP) dump_array("append left", left, n_lo, length);
+                if (trace_level >= TRACE_DUMP) dump_array("append left", left, n_lo, 0, 0, length);
 #endif
                 copy(dst, left, n_lo);
                 break;
@@ -68,7 +65,7 @@ static void asort(void *dst, void *src, size_t nmemb) {
         }
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) dump_array("sort() done.", first, nmemb, length);
+    if (trace_level >= TRACE_DUMP) dump_array("sort() done.", first, nmemb, 0, 0, length);
 #endif
 }
 
