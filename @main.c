@@ -30,29 +30,19 @@
 /****   Public  ****/
 Trace   trace_level = TRACE_NONE;   // to debug
 int     pivot_number = 5;           // for -v option
-size_t  random1 = 0;                // if N <= this then a random (usually middle) element is a pivot.
-size_t  median3 = 0;                // if N <= this then median of 3 is a pivot
-size_t  median5 = 0;                // if N <= this then median of 5 is a pivot
+size_t  single1 = 31;               // if N <= this then the middle element is a pivot.
+size_t  median3 = 127;              // if N <= this then median of 3 is a pivot
+size_t  median5 = 4095;             // if N <= this then median of 5 is a pivot
 size_t  medianL = 0;                // if N <= this then median of log2(N)-1|1 is a pivot else median of log2(N)-6|1
 size_t  random_number;              // variable type is same to nmemb
-RANDOM_DEPTH random_depth = 3;
-bool    reuse_random = FALSE;       // reuse random number or not
 
 size_t  threshold = 0;              //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
-size_t  small_boundary = 8;         //  nmemb to alternate from merge sort.
+size_t  small_boundary = 31;        //  nmemb to alternate from merge sort.
 void    (*small_func)() = ai_sort;
 
 size_t  *gaplist = NULL;
 int     gap_count = 0;
-
-size_t set_random(void) {
-    size_t  rtn = rand();   // [0..RAND_MAX]
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "random = %ld  (%lf)\n", rtn, (double)rtn / RAND_BASE);
-#endif
-    return  rtn;
-}
 
 long    qsort_called, qsort_comp_str, qsort_moved, search_pivot;  // counters
 
@@ -74,17 +64,22 @@ typedef enum {
     DEBUG_SORT,
     DUMMY_SORT,
     MERGE_ARRAY,
-    MERGE_INDR,
-    MERGE_HYBRID,
     SWAP_FIRST,
     SWAP_MIDDLE,
     SWAP_KR,
     SWAP_MED3,
+    SWAP_3WAY,
+    SWAP_DUAL,
     QSORT_HOLE,
+    QSORT_SECURE,
+    QSORT_ASYMM,
     QSORT_RANDOM,
+    QSORT_PIVOT,
     QSORT_HYBRID,
     QSORT_STABLE,
-    QSORT_DUAL,
+    QUICK_SORT,
+    QM_SORT,
+    QMI_SORT,
 } SORT_TYPE;
 
 typedef struct {
@@ -99,7 +94,7 @@ typedef struct {
 
 static struct timeval   start_time, core_time;  // time stamp
 //#define RUSAGE 1
-#ifdef  RUSAGE
+#ifdef  RUSAGE      // see above
 static long     time_from;  // to test getrusage()
 static long usertime() {
     struct  rusage  usage;
@@ -213,15 +208,17 @@ int main(int argc, char *argv[])
             // aray sort.
             {'3', SWAP_MED3, "qsort_med3()", qsort_med3,
                 "quicksort : pivot is the median of 3 elements with sWaps."},
+            {'a', QSORT_ASYMM, "quick_asymm()", quick_asymm,
+                "quicksort : simple Asymmetric quicksort."},
             {'d', SWAP_MIDDLE, "qsort_middle()", qsort_middle,
                 "quicksort : pivot is the miDDle element with swaps."},
-//            {'E', MERGE_HYBRID, "merge_hybrid()", merge_hybrid,
-//                "hybrid sort of mErgE sort : indirect sort."},
             {'f', SWAP_FIRST, "qsort_first()", qsort_first,
                 "quicksort : pivot is the First element with swaps."},
             {'h', QSORT_HOLE, "quick_hole()", quick_hole,
                 "quicksort : prototype with Hole."},
-            {'j', QSORT_DUAL, "dual_pivot()", dual_pivot,
+            {'H', QSORT_HYBRID, "quick_hybrid()", quick_hybrid,
+                "Quicksort : Hybrid sort."},
+            {'j', SWAP_DUAL, "dual_pivot()", dual_pivot,
                 "quicksort : implemented dualpivot quicksort in Java."},
 #ifdef  DEBUG
             {'K', SWAP_KR, "qsort_kr()", qsort_kr,
@@ -229,25 +226,38 @@ int main(int argc, char *argv[])
 #endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort,
                 "Merge sort."},
-//            {'M', MERGE_INDR, "merge_index()", merge_index,
-//                "Merge sort : indirect sort."},
-            {'q', QSORT_HYBRID, "quick_hybrid()", quick_hybrid,
-                "Quicksort : hybrid sort."},
+			{'i', QM_SORT, "QM_sort()", QM_sort,
+				"QMsort    : Quicksort, indirect Mergesort."},
+            {'Q', QMI_SORT, "QMI_sort()", QMI_sort,
+                "QMIsort   : Quicksort, indirect Mergesort and linear Insertion sort."},
+            {'q', QUICK_SORT, "asymm_qsort()", asymm_qsort,
+                "Quicksort : final asymmetric QuickSort."},
             {'r', QSORT_RANDOM, "quick_random()", quick_random,
-                "quicksort : pivot is a Random element with hole."},
+                "quicksort : chose a Random element as a pivot."},
             {'s', QSORT_STABLE, "stable_array()", stable_array,
                 "quicksort : Stable hybrid sort."},
+            {'S', QSORT_SECURE, "quick_secure()", quick_secure,
+                "quicksort : Secured quick_hole()."},
+            {'t', QSORT_PIVOT, "quick_pivot()", quick_pivot,
+                "quicksort : chose the median of several elements as a pivoT."},
             {'U', DUMMY_SORT, "dummy_sort()", dummy_sort,
                 "dUmmy sort : do nothing to cause error."},
+            {'w', SWAP_3WAY, "qsort_3way()", qsort_3way,
+                "quicksort : 3-way partitioning."},
     };
+
     INFO    test_indirect[] = { // order to show help
             {'m', 0, "merge_pointer(*)", merge_pointer, "Merge sort."},
+#ifdef  DEBUG
             {'M', 1, "merge_phybrid(*)", merge_phybrid, "hybrid Merge sort."},
+#endif
             {'q', 0, "quick_pmiddle(*)", quick_pmiddle, "Quicksort with hole. pivot is a middle element."},
-            {'Q', 1, "quick_phybrid(*)", quick_phybrid, "Quicksort and hybrid merge sort."},
-            {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
-            {'i', 0, "insert_linear(*)", insert_linear, "Insertion sort with linear search."},
-            {'b', 0, "insert_binary(*)", insert_binary, "insertion sort with Binary search."},
+#ifdef  DEBUG
+//            {'Q', 1, "quick_phybrid(*)", quick_phybrid, "Quicksort and hybrid merge sort."},
+#endif
+//            {'s', 0, "stable_pointer(*)", stable_pointer, "Stable hybrid quicksort."},
+            {'i', 0, "insert_linear(*)", insert_linear, "linear insertion sort."},
+            {'b', 0, "insert_binary(*)", insert_binary, "Binary insertion sort."},
             {'a', 0, "ai_sort(*)", ai_sort, "Accelerated linear insertion sort."},
             {'L', 0, "shell_sort(*)", shell_sort, "shell sort."},
             {'h', 0, "heap_top(*)", heap_top, "Heap sort. build a heap by top-down."},
@@ -265,7 +275,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:D:I:L:l:N:pP:R:T:uV:v:Y:y:Z:");
+    strcat(optstring, "?A:I:L:l:N:pP:R:T:V:v:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     char    *indirect_option = NULL;
@@ -303,7 +313,6 @@ int main(int argc, char *argv[])
                 "\t       M - indirect Merge sort.\n"
                 "\t       m - array sort of Merge sort.\n"
                 "\t       h - indirect Hybrid merge sort (default).\n"
-                "\t-D : Depth of recusion to generate a random number (default depth is 3)\n"
                 "\t-l : boundary to change algorithm when N is smaLL (default is 8).\n"
                 "\t-L : boundary to change algorithm from N is Large (default is 8192).\n"
                 "\t       If the value is less than 0 then value means depth.\n"
@@ -311,11 +320,11 @@ int main(int argc, char *argv[])
                 "\t-N : Number of members (default is 31).\n"
                 "\t-p : print Out the last result.\n"
                 "\t-P l,m,n,o : threshold to change the choice of Pivot.\n"
-                "\t       N <= l -- random or middle element.\n"
+                "\t       N <= l -- middle element.\n"
                 "\t       N <= m -- median of 3 elements.\n"
                 "\t       N <= n -- median of 5 elements.\n"
-                "\t       N <= o -- median of log2(N)-1|1 elements.\n"
-                "\t       else   -- median of log2(N)-6|1 elements.\n"
+                "\t       N <= o -- median of (log2(N)-1)|1 elements.\n"
+                "\t       else   -- median of (log2(N)/2)|1 elements.\n"
                 "\t-R : Repeat count "
 #ifndef DEBUG
                 "of sampling to calculate Stdev (default is 12).\n"
@@ -329,7 +338,6 @@ int main(int argc, char *argv[])
                 "\t       1 - pointer sort time followed by indexing time.\n"
                 "\t       2 - show every indexing time.\n"
 #else
-                "\t-u : reUse random number (default is FALSE).\n"
                 "\t-V : trace level for Debugging.\n"
                 "\t       1 - Counts.\n"
                 "\t       2 - and actions.\n"
@@ -340,7 +348,11 @@ int main(int argc, char *argv[])
                 "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
-                "\t       same to the value of -I option followed by \"-\". Default is \"b\".\n"
+                "\t       same to the value of -I option"
+#ifdef  DEBUG
+                    " followed by \"-\""
+#endif
+                    ". Default is \"b\".\n"
                 "\t-Z : siZe of an array element."
             );
             return EXIT_SUCCESS;
@@ -365,10 +377,6 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case 'D':
-            random_depth = strtol(optarg, NULL, 0);
-            if (random_depth < 0) random_depth = 0;
-            break;
         case 'I':
             indirect_option = optarg;
             break;
@@ -392,7 +400,7 @@ int main(int argc, char *argv[])
                 strcpy(popt, optarg);
                 p = strtok(popt, ",");
                 if (p != NULL) {
-                    if(*p != '\0') random1 = strtoul(p, NULL, 0);
+                    if(*p != '\0') single1 = strtoul(p, NULL, 0);
                     p = strtok(NULL, ",");
                     if (p != NULL) {
                         if(*p != '\0') median3 = strtoul(p, NULL, 0);
@@ -414,9 +422,6 @@ int main(int argc, char *argv[])
             break;
         case 'T':
             limit = atoi(optarg);
-            break;
-        case 'u':
-            reuse_random = TRUE;
             break;
         case 'V':   // ignored in Release
             trace_level = strtoul(optarg, NULL, 0);
@@ -485,6 +490,9 @@ int main(int argc, char *argv[])
     else {
         length_compare = size;
     }
+#ifdef DEBUG
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Size of an element = %ld\n", size);
+#endif
 
     // allocate data area
     char    *srcbuf;          // Work buffer to store all input data
@@ -521,10 +529,9 @@ int main(int argc, char *argv[])
     else if (Loption > 0) { // size
         threshold = IsPercentB ? (nmemb * Loption) / 100: Loption;
     }
-//    if (threshold == 0) threshold = 8192;   // default
-//    if (medium_boundary > nmemb) medium_boundary = nmemb;
+    if (threshold == 0) threshold = 1023;   // default
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP && Loption != 0) fprintf(OUT, "medium_boundary = %ld\n", threshold);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "threshold = %ld\n", threshold);
 #endif
 
     // gap list
@@ -539,13 +546,22 @@ int main(int argc, char *argv[])
         f1 = f2; f2 = fib;
         gap_count++;
     }
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "gap_count = %d\tfibonacci = %ld\tf2 = %ld\n", gap_count, fib, f2);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "fibonacci[ %d ] = %ld", gap_count, fib);
     size_t G[gap_count]; gaplist = G;   // gap_count is not huge.
     for (i = 0; i < gap_count; i++) {
         f1 = fib - f2;
         G[i] = fib = f2;
         f2 = f1;
-        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, G[i]);
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " %ld", fib);
+    }
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "\n");
+
+    /* Dump other parameters except N */
+
+    if (trace_level >= TRACE_DUMP) {    // !!!!
+        fprintf(OUT, "Threshold for pivoting = %ld %ld %ld %ld\n", single1, median3, median5, medianL);
+        fprintf(OUT, "Threshold to change Asymmetric Quicksort to another = %ld\n", threshold);
+//      fprintf(OUT, "\n");
     }
 
 //#define   BUFCYCLE    2
@@ -582,7 +598,7 @@ int main(int argc, char *argv[])
 QSORT:
         fprintf(OUT, "%s", name);
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // for nmemb.awk
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // Don't delete for nmemb.awk
         for (int i = 0; i < 1; i++) {   // once
 #else
         for (int i = 0; i < repeat_count; i++) {
@@ -607,7 +623,6 @@ QSORT:
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "random seed = %d\n", seed);
 #endif
     srand(seed);
-    random_number = set_random();
     // test array sort or indeirect sort
     long sorting_time;
     for (info = test,idx = 1; index != 0; idx <<= 1, info++) {
@@ -633,6 +648,9 @@ REDO:
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
                 start_timer(&start_time);
                 (*info->sort_function)(workbuff, nmemb, size, cmpstring);
+#ifdef  DEBUG
+                if (trace_level >= TRACE_DUMP) dump_array("sorted.", workbuff, nmemb, 0, 0, size);
+#endif
                 sorting_time = stop_timer(&start_time);
 #ifdef  DEBUG
                 usec[0] = sorting_time;
