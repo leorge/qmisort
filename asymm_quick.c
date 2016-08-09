@@ -99,7 +99,7 @@ static void sort(void *base, size_t nmemb) {
         if (eq == NULL) eq = hole;
         copy(hole, save);  // restore
 
-        // sort sub-arrays iterative and recursive.
+        // sort sub-arrays recursively and iteratively.
         size_t  n_lo = (hole - first) / length; // number of element in lower partition
         size_t  n_hi = (last - eq) / length;
         if (n_lo < n_hi) {
