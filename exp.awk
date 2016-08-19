@@ -8,7 +8,7 @@
 #
 BEGIN {
     if (ARGC < 4) {
-        print "Usage : " ARGV[0] " first  2nd_row  count  [express]";
+        print "Usage : exp.awk first  2nd_row  count  [express]";
         exit;
     }
     first = ARGV[1]; gap = ARGV[1]; count = ARGV[3];
