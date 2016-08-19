@@ -1,14 +1,14 @@
 #!/usr/bin/awk -f
 #
-#  Print a expression "=express(cell1, cell2, .....)" for Calc or Excel.
-#  Default of express is "Average".
+#  Print a expression "=fuction(cell1, cell2, .....)" for Calc or Excel.
+#  Default of fuction is "Average".
 #
-#  Usage   : $0  head_cell second_row count [express]
+#  Usage   : $0  head_cell second_row count [fuction]
 #  example : $0  B3  7  3  --> =Average(B3,B10,B17)
 #
 BEGIN {
     if (ARGC < 4) {
-        print "Usage : exp.awk first  2nd_row  count  [express]";
+        print "Usage : exp.awk first  2nd_row  count  [fuction]";
         exit;
     }
     first = ARGV[1]; gap = ARGV[1]; count = ARGV[3];
@@ -17,8 +17,8 @@ BEGIN {
     row = match(first, /[0-9]/);
     column = substr(first, 1, row - 1);
     row = substr(first, row);
-    express = (ARGC > 4) ? ARGV[4] : "Average";
+    name = (ARGC > 4) ? ARGV[4] : "Average";
     for (i = 0; i++ < count; row += gap) cells = cells "," column row;
-    printf "=%s(%s)\n", express, substr(cells, 2);
+    printf "=%s(%s)\n", name, substr(cells, 2);
     exit;
 }
