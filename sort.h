@@ -61,6 +61,7 @@ extern void (*medium_func)();
 void    asymm_qsort     (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    dual_pivot      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    merge_sort      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
+void    pivot_hole      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    QM_sort         (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    QMI_sort        (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
 void    qsort_3way      (void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *));
