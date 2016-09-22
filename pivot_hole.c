@@ -6,14 +6,14 @@
  *  Created on: 2016/09/20
  *      Author: Takeuchi Leorge <qmisort@gmail.com>
  */
-#include	<stdlib.h>
+#include    <stdlib.h>
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
 
 static void sort(void *base, size_t nmemb) {
     if (nmemb > 1) {
-#define	copy(a,b)	memcpy((a), (b), length)
+#define copy(a,b)   memcpy((a), (b), length)
 #define first (char *)base
         char *last = first + (nmemb - 1) * length;  // point the last element
         char pivot[length], *hole; copy(pivot, hole = last);    // save the last element as a pivot
