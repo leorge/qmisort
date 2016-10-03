@@ -29,10 +29,8 @@ static void sort(void *base, size_t nmemb) {
             }
         }
         copy(hole, pivot);  // restore
-        size_t  n_lo = (hole - first) / length; // the number of elements in lower partition
-        size_t  n_hi = (last - hole) / length;
-        sort(first, n_lo);
-        sort(hole + length, n_hi);
+        sort(first, (hole - first) / length);
+        sort(hole + length, (last - hole) / length);
     }
 }
 
