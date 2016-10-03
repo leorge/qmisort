@@ -15,6 +15,8 @@ qmisort
 ### New QuickSort
 [quick_hole.c](https://github.com/leorge/qmisort/blob/master/quick_hole.c)
 : Simplest new QuickSort using a pivot hole. A pivot is the last element.  
+[pivot_hole.c](https://github.com/leorge/qmisort/blob/master/pivot_hole.c)
+: Debugging statements are removed from quick_hole.c.  
 [quick_secure.c](https://github.com/leorge/qmisort/blob/master/quick_secure.c) : Secured quick_hole.c.  
 [quick_asymm.c](https://github.com/leorge/qmisort/blob/master/quick_asymm.c) : Simplest asymmetric QuickSort.  
 [quick_random.c](https://github.com/leorge/qmisort/blob/master/quick_random.c) : Random pivoting.  
