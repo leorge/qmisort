@@ -37,5 +37,10 @@ or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2
 ### Perl scripts to generate a data sequence
 [KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
 : Worst data sequence for pseudomedian of nine in [QuickX.java](http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html).  
+[middle.pl](https://github.com/leorge/qmisort/blob/master/middle.pl)
+: Worst data sequence when a pivot is the middle element in the conventional QuickSort.  
+[hole_middle.pl](https://github.com/leorge/qmisort/blob/master/hole_middle.pl)
+: Worst data sequence when a pivot is the middle element in the Asymmetric QuickSort.  
+[quick_hole.pl](https://github.com/leorge[quick_hole.pl)
+: Best data sequence for quick_hole().   
 [merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Wrost data sequence for MergeSort.  
-[quick_hole.pl](https://github.com/leorge/qmisort/blob/master/quick_hole.pl) : Best data sequence for quick_hole().
