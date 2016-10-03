@@ -19,13 +19,23 @@
 [quick_random.c](https://github.com/leorge/qmisort/blob/master/quick_random.c) : Random pivoting.  
 [quck_pivot.c](https://github.com/leorge/qmisort/blob/master/quick_pivot.c) : Various pivoting.  
 [asymm_qsort.c](https://github.com/leorge/qmisort/blob/master/asymm_qsort.c) : Final entire Asymmetric QuickSort.  
-### Awk scripts to generate a data sequence
+### Scripts to generate a data sequence
 [random.awk](https://github.com/leorge/qmisort/blob/master/random.awk) : Random data sequence.  
 [median3.awk](https://github.com/leorge/qmisort/blob/master/median3.awk) : Worst data sequence for the median-of-three.  
-[sorted.awk](https://github.com/leorge/qmisort/blob/master/sorted.awk) : 0,1,2,...,n-2,n-1  
-[reverse.awk](https://github.com/leorge/qmisort/blob/master/reverse.awk) : n-1,n-2,....,2,1,0  
+[sorted.awk](https://github.com/leorge/qmisort/blob/master/sorted.awk)
+: Sorted data (0,1,2,...,n-2,n-1)  
+[reverse.awk](https://github.com/leorge/qmisort/blob/master/reverse.awk)
+: Sorted data in reverse order (n-1,n-2,....,2,1,0)  
+[middle.pl](https://github.com/leorge/qmisort/blob/master/middle.pl)
+: Worst data sequence when a pivot is the middle element in the conventional QuickSort.  
+[hole_middle.pl](https://github.com/leorge/qmisort/blob/master/hole_middle.pl)
+: Worst data sequence when a pivot is the middle element in the Asymmetric QuickSort.  
+[quick_hole.pl](https://github.com/leorge[quick_hole.pl)
+: Best data sequence for quick_hole().   
 [valley.awk](https://github.com/leorge/qmisort/blob/master/valley.awk) : n-1,n-3,...,3,1,0,2,4,...,n-4,n-2
 or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2  
+[KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
+: Worst data sequence for pseudomedian of nine in [QuickX.java](http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html).  
 [n111.awk](https://github.com/leorge/qmisort/blob/master/n111.awk) : n,1,1,1,...   
 [n11n.awk](https://github.com/leorge/qmisort/blob/master/n11n.awk) : n,1,1,1,...,1,1,n   
 [n1n1.awk](https://github.com/leorge/qmisort/blob/master/n1n1.awk) : n,1,n,1,...,n,1,n,1  
@@ -34,13 +44,4 @@ or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2
 [nn1n.awk](https://github.com/leorge/qmisort/blob/master/nn1n.awk) : n,n,...,n,1,n  
 [nnn1.awk](https://github.com/leorge/qmisort/blob/master/nnn1.awk) : n,n,...,n,1  
 [nnnn.awk](https://github.com/leorge/qmisort/blob/master/nnn1.awk) : n,n,...,n  
-### Perl scripts to generate a data sequence
-[KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
-: Worst data sequence for pseudomedian of nine in [QuickX.java](http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html).  
-[middle.pl](https://github.com/leorge/qmisort/blob/master/middle.pl)
-: Worst data sequence when a pivot is the middle element in the conventional QuickSort.  
-[hole_middle.pl](https://github.com/leorge/qmisort/blob/master/hole_middle.pl)
-: Worst data sequence when a pivot is the middle element in the Asymmetric QuickSort.  
-[quick_hole.pl](https://github.com/leorge[quick_hole.pl)
-: Best data sequence for quick_hole().   
 [merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Wrost data sequence for MergeSort.  
