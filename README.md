@@ -1,9 +1,9 @@
 # Source Files
 [@main.c](https://github.com/leorge/qmisort/blob/master/%40main.c) : A test program.
 ### Conventional QuickSort using swaps
-[qsort_first.c](https://github.com/leorge/qmisort/blob/master/qsort_first.c) : Pivot is the first element.  
+[qsort_first.c](https://github.com/leorge/qmisort/blob/master/qsort_first.c) : A pivot is the first element.  
 [qsort_kr.c](https://github.com/leorge/qmisort/blob/master/qsort_kr.c) : Kernighan & Ritchie style QuickSort  
-[qsort_middle.c](https://github.com/leorge/qmisort/blob/master/qsort_middle.c) : Pivot is the middle element.  
+[qsort_middle.c](https://github.com/leorge/qmisort/blob/master/qsort_middle.c) : A pivot is the middle element.  
 [qsort_med3.c](https://github.com/leorge/qmisort/blob/master/qsort_med3.c)
 : Pivot is the median of three elements (fist, middle, last).  
 [sort_3way.c](https://github.com/leorge/qmisort/blob/master/qsort_3way.c) : [Three way partitioning QuickSort](http://algs4.cs.princeton.edu/23quicksort/Quick3way.java.html).  
