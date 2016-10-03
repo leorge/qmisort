@@ -15,7 +15,7 @@
 [pivot_hole.c](https://github.com/leorge/qmisort/blob/master/pivot_hole.c)
 : Debugging statements are removed from quick_hole.c.  
 [quick_secure.c](https://github.com/leorge/qmisort/blob/master/quick_secure.c) : Secured quick_hole.c.  
-[quick_asymm.c](https://github.com/leorge/qmisort/blob/master/quick_asymm.c) : Simplest asymmetric QuickSort.  
+[quick_asymm.c](https://github.com/leorge/qmisort/blob/master/quick_asymm.c) : Simplest Asymmetric QuickSort.  
 [quick_random.c](https://github.com/leorge/qmisort/blob/master/quick_random.c) : Random pivoting.  
 [quck_pivot.c](https://github.com/leorge/qmisort/blob/master/quick_pivot.c) : Various pivoting.  
 [asymm_qsort.c](https://github.com/leorge/qmisort/blob/master/asymm_qsort.c) : Final entire asymmetric quicksort.  
