@@ -38,4 +38,4 @@ or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2
 [KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
 : A worst data for pseudomedian of nine in [QuickX.java](http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html).  
 [merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Wrost data for MergeSort.  
-
+[quick_hole.pl](https://github.com/leorge/qmisort/blob/master/quick_hole.pl) : Best data for quick_hole().
