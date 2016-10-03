@@ -1,6 +1,3 @@
-qmisort
-=======
-
 # Source Files
 [@main.c](https://github.com/leorge/qmisort/blob/master/%40main.c) : A test program.
 ### Conventional QuickSort using swaps
