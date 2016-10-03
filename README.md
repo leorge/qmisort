@@ -19,7 +19,7 @@
 [quick_random.c](https://github.com/leorge/qmisort/blob/master/quick_random.c) : Random pivoting.  
 [quck_pivot.c](https://github.com/leorge/qmisort/blob/master/quick_pivot.c) : Various pivoting.  
 [asymm_qsort.c](https://github.com/leorge/qmisort/blob/master/asymm_qsort.c) : Final entire Asymmetric QuickSort.  
-### Awk scripts to generate data sequence
+### Awk scripts to generate a data sequence
 [median3.awk](https://github.com/leorge/qmisort/blob/master/median3.awk) : Worst data sequence for the median-of-three.  
 [n111.awk](https://github.com/leorge/qmisort/blob/master/n111.awk) : n,1,1,1,...   
 [n11n.awk](https://github.com/leorge/qmisort/blob/master/n11n.awk) : n,1,1,1,...,1,1,n   
@@ -34,7 +34,7 @@
 [sorted.awk](https://github.com/leorge/qmisort/blob/master/sorted.awk) : 0,1,2,...,n-2,n-1  
 [valley.awk](https://github.com/leorge/qmisort/blob/master/valley.awk) : n-1,n-3,...,3,1,0,2,4,...,n-4,n-2
 or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2  
-### Perl scripts to generate data sequence
+### Perl scripts to generate a data sequence
 [KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
 : Worst data sequence for pseudomedian of nine in [QuickX.java](http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html).  
 [merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Wrost data sequence for MergeSort.  
