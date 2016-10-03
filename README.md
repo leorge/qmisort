@@ -45,3 +45,9 @@ or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2
 [nnn1.awk](https://github.com/leorge/qmisort/blob/master/nnn1.awk) : n,n,...,n,1  
 [nnnn.awk](https://github.com/leorge/qmisort/blob/master/nnn1.awk) : n,n,...,n  
 [merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Worst data sequence for MergeSort.  
+### Other scirpts
+[col.awk](https://github.com/leorge/qmisort/blob/master/col.awk) : Output a tablist for expand(1).  
+[esd.awk](https://github.com/leorge/qmisort/blob/master/esd.awk) : Calculate Estimated Standard Deviation.  
+[et.awk](https://github.com/leorge/qmisort/blob/master/et.awk) : Create a table of elapsed time.  
+[exp.awk](https://github.com/leorge/qmisort/blob/master/exp.awk)
+: Print an expression "=function(cell1, cell2, ...)" for Excel or Calc.
