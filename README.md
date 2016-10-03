@@ -34,7 +34,7 @@
 [sorted.awk](https://github.com/leorge/qmisort/blob/master/sorted.awk) : 0,1,2,...,n-2,n-1  
 [valley.awk](https://github.com/leorge/qmisort/blob/master/valley.awk) : n-1,n-3,...,3,1,0,2,4,...,n-4,n-2
 or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2  
-### Perl scripts to generate data sequences
+### Perl scripts to generate data sequence
 [KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
 : Worst data sequence for pseudomedian of nine in [QuickX.java](http://algs4.cs.princeton.edu/23quicksort/QuickX.java.html).  
 [merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Wrost data sequence for MergeSort.  
