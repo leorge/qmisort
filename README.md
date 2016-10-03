@@ -29,7 +29,7 @@
 : Worst data sequence when a pivot is the middle element in the conventional QuickSort.  
 [hole_middle.pl](https://github.com/leorge/qmisort/blob/master/hole_middle.pl)
 : Worst data sequence when a pivot is the middle element in the Asymmetric QuickSort.  
-[quick_hole.pl](https://github.com/leorge[quick_hole.pl)
+[quick_hole.pl](https://github.com/leorge/qmisort/blob/master/quick_hole.pl)
 : **Best** data sequence for quick_hole().   
 [median3.awk](https://github.com/leorge/qmisort/blob/master/median3.awk) : Worst data sequence for the median-of-three.  
 [valley.awk](https://github.com/leorge/qmisort/blob/master/valley.awk) : n-1,n-3,...,3,1,0,2,4,...,n-4,n-2
