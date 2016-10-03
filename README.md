@@ -21,7 +21,6 @@
 [asymm_qsort.c](https://github.com/leorge/qmisort/blob/master/asymm_qsort.c) : Final entire Asymmetric QuickSort.  
 ### Scripts to generate a data sequence
 [random.awk](https://github.com/leorge/qmisort/blob/master/random.awk) : Random data sequence.  
-[median3.awk](https://github.com/leorge/qmisort/blob/master/median3.awk) : Worst data sequence for the median-of-three.  
 [sorted.awk](https://github.com/leorge/qmisort/blob/master/sorted.awk)
 : Sorted data (0,1,2,...,n-2,n-1)  
 [reverse.awk](https://github.com/leorge/qmisort/blob/master/reverse.awk)
@@ -32,6 +31,7 @@
 : Worst data sequence when a pivot is the middle element in the Asymmetric QuickSort.  
 [quick_hole.pl](https://github.com/leorge[quick_hole.pl)
 : Best data sequence for quick_hole().   
+[median3.awk](https://github.com/leorge/qmisort/blob/master/median3.awk) : Worst data sequence for the median-of-three.  
 [valley.awk](https://github.com/leorge/qmisort/blob/master/valley.awk) : n-1,n-3,...,3,1,0,2,4,...,n-4,n-2
 or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2  
 [KillQuickX.pl](https://github.com/leorge/qmisort/blob/master/KillQuickX.pl)
