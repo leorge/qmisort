@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-#   Create best data for qsort_tail().
+#   Create best data for qsort_hole().
 #
 use strict;
 use warnings;
