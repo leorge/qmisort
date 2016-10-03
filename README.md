@@ -44,4 +44,4 @@ or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2
 [nn1n.awk](https://github.com/leorge/qmisort/blob/master/nn1n.awk) : n,n,...,n,1,n  
 [nnn1.awk](https://github.com/leorge/qmisort/blob/master/nnn1.awk) : n,n,...,n,1  
 [nnnn.awk](https://github.com/leorge/qmisort/blob/master/nnn1.awk) : n,n,...,n  
-[merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Wrost data sequence for MergeSort.  
+[merge.pl](https://github.com/leorge/qmisort/blob/master/merge.pl) : Worst data sequence for MergeSort.  
