@@ -18,4 +18,4 @@
 [quick_asymm.c](https://github.com/leorge/qmisort/blob/master/quick_asymm.c) : Simplest Asymmetric QuickSort.  
 [quick_random.c](https://github.com/leorge/qmisort/blob/master/quick_random.c) : Random pivoting.  
 [quck_pivot.c](https://github.com/leorge/qmisort/blob/master/quick_pivot.c) : Various pivoting.  
-[asymm_qsort.c](https://github.com/leorge/qmisort/blob/master/asymm_qsort.c) : Final entire asymmetric quicksort.  
+[asymm_qsort.c](https://github.com/leorge/qmisort/blob/master/asymm_qsort.c) : Final entire Asymmetric QuickSort.  
