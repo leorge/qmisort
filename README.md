@@ -7,7 +7,7 @@
 [qsort_med3.c](https://github.com/leorge/qmisort/blob/master/qsort_med3.c)
 : A pivot is the median of three elements (fist, middle, last).  
 [sort_3way.c](https://github.com/leorge/qmisort/blob/master/qsort_3way.c) : [Three way partitioning QuickSort](http://algs4.cs.princeton.edu/23quicksort/Quick3way.java.html).  
-[ual_pivot.c](https://github.com/leorge/qmisort/blob/master/dual_pivot.c)
+[dual_pivot.c](https://github.com/leorge/qmisort/blob/master/dual_pivot.c)
 : [Dual Pivot QuickSort](http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/util/DualPivotQuicksort.java).  
 ### New QuickSort
 [quick_hole.c](https://github.com/leorge/qmisort/blob/master/quick_hole.c)
