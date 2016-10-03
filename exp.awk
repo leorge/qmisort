@@ -1,6 +1,6 @@
 #!/usr/bin/awk -f
 #
-#  Print a expression "=fuction(cell1, cell2, .....)" for Calc or Excel.
+#  Print an expression "=fuction(cell1, cell2, .....)" for Calc or Excel.
 #  Default of fuction is "Average".
 #
 #  Usage   : $0  head_cell second_row count [fuction]
