@@ -1,6 +1,6 @@
 # Source Files
-[@main.c](https://github.com/leorge/qmisort/blob/master/%40main.c) : A test program.
-[sort.h](https://github.com/leorge/qmisort/blob/master/sort.h) : The header file.
+[@main.c](https://github.com/leorge/qmisort/blob/master/%40main.c) : A test program.  
+[sort.h](https://github.com/leorge/qmisort/blob/master/sort.h) : The header file.  
 ### Conventional QuickSort using swaps
 [qsort_first.c](https://github.com/leorge/qmisort/blob/master/qsort_first.c) : A pivot is the first element.  
 [qsort_kr.c](https://github.com/leorge/qmisort/blob/master/qsort_kr.c) : Kernighan & Ritchie style QuickSort  
