@@ -50,4 +50,6 @@ or n-1,n-3,...,4,2,0,1,3,...,n-4,n-2
 [esd.awk](https://github.com/leorge/qmisort/blob/master/esd.awk) : Calculate **E**stimated **S**tandard **D**eviation.  
 [et.awk](https://github.com/leorge/qmisort/blob/master/et.awk) : Create a table of **E**lapsed **T**ime.  
 [exp.awk](https://github.com/leorge/qmisort/blob/master/exp.awk)
-: Print an **exp**ression "=function(cell1, cell2, ...)" for Excel or Calc.
+: Print an **exp**ression "=function(cell1, cell2, ...)" for Excel or Calc.  
+[nmemb.awk](https://github.com/leorge/qmisort/blob/master/nmemb.awk)
+: Print a distribution of **N** in every partitions.  
