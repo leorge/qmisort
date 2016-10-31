@@ -29,7 +29,6 @@
 
 /****   Public  ****/
 Trace   trace_level = TRACE_NONE;   // to debug
-int     pivot_number = 5;           // for -v option
 size_t  single1 = 31;               // if N <= this then the middle element is a pivot.
 size_t  median3 = 127;              // if N <= this then median of 3 is a pivot
 size_t  median5 = 4095;             // if N <= this then median of 5 is a pivot
@@ -275,7 +274,7 @@ int main(int argc, char *argv[])
     size_t  i;
     memset(optstring, 0, sizeof(optstring));
     for (info = test, p = optstring, i = 0; i++ < sizeof(test) / sizeof(INFO); info++) *p++ = (char)info->option;
-    strcat(optstring, "?A:I:L:l:N:pP:R:T:V:v:Y:y:Z:");
+    strcat(optstring, "?A:I:L:l:N:pP:R:T:V:Y:y:Z:");
     /**** Analyze command arguments ****/
     char    *prg = strrchr(argv[0], '/') + 1;   // Program name without path
     char    *indirect_option = NULL;
@@ -425,9 +424,6 @@ int main(int argc, char *argv[])
             break;
         case 'V':   // ignored in Release
             trace_level = strtoul(optarg, NULL, 0);
-            break;
-        case 'v':
-            pivot_number = ((int)strtoul(optarg, NULL, 0) - 1) | 1; // decrease to odd number
             break;
         case 'Y':
             buffer_length = (int)strtoul(optarg, NULL, 0);

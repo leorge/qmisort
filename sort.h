@@ -46,7 +46,6 @@ extern size_t       threshold;          // main.c
 extern size_t       small_boundary;     // main.c
 extern size_t       single1, median3, median5, medianL; // main.c
 extern int          gap_count;          // main.c
-extern int          pivot_number;       // main.c
 extern bool         reuse_random;       // main.c
 
 extern long qsort_moved, qsort_comp_str, qsort_called, search_pivot;    // main.c
