@@ -7,23 +7,15 @@
 #	variable x - item name, for example "N" or "log(N)"
 #	file - output of Release/Sort program.
 #
-BEGIN {OFS="\t"}
+BEGIN {OFS="\t"; headline = x}
 NF == 1 {
-    split($1, a, ":");
-    if (a[1] > seq) {
-        seq = a[1];       # update
-        headline = x;     # clear
-    } 
-    k = a[2];
-    headline = headline OFS k;
+    split($1, a, ":"); seq = a[1]; column = a[2];
+    if (seq == 1) headline = headline OFS column;
     next;
 }
-! /^arguments/ {
-    name = $1;
-    time[name, seq, k] = $4  # overwritten if stddev is large.
-    if (! index(names OFS, OFS name OFS)) {  # new name
-        names = names OFS name;
-    } 
+$2 == "usec" {
+    time[name = $1, seq, column] = $4
+    if (! index(names OFS, OFS name OFS)) names = names OFS name;
 }
 END {
     X = split(headline, threshold, OFS);
