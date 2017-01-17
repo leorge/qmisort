@@ -2,10 +2,10 @@
 #
 #   Create a table of elapsed time.
 #
-#	usage : ./$0  -v  'x=name'  file
+#   usage : ./$0  -v  'x=name'  file
 #
-#	variable x - item name, for example "N" or "log(N)"
-#	file - output of Release/Sort program.
+#   variable x - item name, for example "N" or "log(N)"
+#   file - output of Release/Sort program.
 #
 BEGIN {OFS="\t"; headline = x}
 NF == 1 {
