@@ -6,7 +6,7 @@
  *  Created on: 2016/09/20
  *      Author: Takeuchi Leorge <qmisort@gmail.com>
  */
-#include    <stdlib.h>
+#include    <string.h>
 
 static int      (*comp)(const void *, const void *);
 static size_t   length;
