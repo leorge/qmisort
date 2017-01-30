@@ -16,8 +16,8 @@
  */
 #include    <ctype.h>
 #include    <math.h>
-#include    <sys/time.h>
 #include    <sys/resource.h>
+#include    <sys/time.h>
 #include    <time.h>
 #include    <unistd.h>
 #include    <limits.h>
@@ -91,41 +91,75 @@ typedef struct {
 
 // Estimate time in microseconds
 
-static struct timeval   start_time, core_time;  // time stamp
-//#define RUSAGE 1
-#ifdef  RUSAGE      // see above
-static long     time_from;  // to test getrusage()
-static long usertime() {
+static long     time_from;  // starting point
+static struct timeval start_time, core_time;  // starting time stamp
+#ifdef  CLOCK_PROCESS_CPUTIME_ID    // using real-time modules if _POSIX_C_SOURCE >= 199309L
+#define CLOCK_TYPE  CLOCK_PROCESS_CPUTIME_ID
+    static struct timespec start_clock, core_clock;
+#endif
+
+static long usertime() {    // in microseconds
     struct  rusage  usage;
     getrusage(RUSAGE_SELF, &usage);
-#ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP)
-        fprintf(OUT, "timestamp() %ld.06%ld\n", usage.ru_utime.tv_sec, usage.ru_utime.tv_usec);
-#endif
-    return  usage.ru_utime.tv_sec * 1000000 + usage.ru_utime.tv_usec; // micro sec.
+    return  usage.ru_utime.tv_sec * 1000000 + usage.ru_utime.tv_usec;
 }
-#endif
 
+#ifdef  CLOCK_TYPE
+static void cputime(struct timespec *process_now) {
+    clock_getres(CLOCK_TYPE, process_now);
+    clock_gettime(CLOCK_TYPE, process_now);
+}
+
+static void start_timer(struct timeval *from, struct timespec *process_from) {
+    assert(process_from!= NULL);
+    cputime(process_from);  // clock_gettime(2)
+#else
 static void start_timer(struct timeval *from) {
-    assert(from!= NULL);
-    gettimeofday(from, NULL);
-#ifdef  RUSAGE
-    time_from = usertime();
 #endif
+    time_from = usertime(); // getrusage(2)
+    assert(from!= NULL);
+    gettimeofday(from, NULL);   // slowest
 }
 
+#ifdef  CLOCK_TYPE
+static long stop_timer(struct timeval *from, struct timespec *clock_from) {
+#else
 static long stop_timer(struct timeval *from) {
+#endif
+    // get data
+    struct  timeval to; gettimeofday(&to, NULL);
+#ifdef  RUSAGE
+    long time_to = usertime();  // getrusage(3)
+#endif
+#ifdef  CLOCK_TYPE
+    struct  timespec cpu_to; cputime(&cpu_to);  // clock_gettime(2)
+#endif
+    // output
+    long rtn;
     assert(from != NULL);
-    struct timeval to;
+    long elapsedtime = (to.tv_sec - from->tv_sec) * 1000000. + to.tv_usec - from->tv_usec;  // gettimeofday(3)
 #ifdef  RUSAGE
-    long time_to = usertime();
+    long utime = (rtn = time_to - time_from);
+#else
+    rtn = elapsedtime;
 #endif
-    gettimeofday(&to, NULL);
+#ifdef  CLOCK_TYPE
+    assert(clock_from != NULL);
+    long process_time = (cpu_to.tv_sec - clock_from->tv_sec) * 1000000 + (cpu_to.tv_nsec - clock_from->tv_nsec) / 1000;
+    rtn = process_time;
+#endif
+
 #ifdef  RUSAGE
-    fprintf(stderr, "getrusage() : %ld - %ld = %ld\n", time_to, time_from, time_to - time_from);
+    if (trace_level >= TRACE_DUMP) {
+        fprintf(stderr, "gettimeofday()  --> %ld\n", elapsedtime);
+        fprintf(stderr, "getrusage()     --> %ld\n", utime);
+#   ifdef   CLOCK_TYPE
+        fprintf(stderr, "clock_gettime() --> %ld\n", process_time);
+#   endif
+        fprintf(stderr, "\n");
+    }
 #endif
-    long rtn = (to.tv_sec - from->tv_sec) * 1000000. + to.tv_usec - from->tv_usec;
-    return  rtn;
+    return  rtn;    // in microseconds
 }
 
 static long show_result(const char *comment, long *usec, int size, int skip, double index_time) {
@@ -225,8 +259,8 @@ int main(int argc, char *argv[])
 #endif
             {'m', MERGE_ARRAY, "merge_sort()", merge_sort,
                 "Merge sort."},
-			{'i', QM_SORT, "QM_sort()", QM_sort,
-				"QMsort    : Quicksort, indirect Mergesort."},
+            {'i', QM_SORT, "QM_sort()", QM_sort,
+                "QMsort    : Quicksort, indirect Mergesort."},
             {'Q', QMI_SORT, "QMI_sort()", QMI_sort,
                 "QMIsort   : Quicksort, indirect Mergesort and linear Insertion sort."},
             {'q', QUICK_SORT, "asymm_qsort()", asymm_qsort,
@@ -538,27 +572,37 @@ int main(int argc, char *argv[])
     gap_count = 1;
     if (small_boundary > nmemb) small_boundary = nmemb;
     while ((fib = f1 + f2) < small_boundary) {
+#ifdef DEBUG
         if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, fib);
+#endif
         f1 = f2; f2 = fib;
         gap_count++;
     }
+#ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "fibonacci[ %d ] = %ld", gap_count, fib);
+#endif
     size_t G[gap_count]; gaplist = G;   // gap_count is not huge.
     for (i = 0; i < gap_count; i++) {
         f1 = fib - f2;
         G[i] = fib = f2;
         f2 = f1;
+#ifdef DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, " %ld", fib);
+#endif
     }
+#ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT, "\n");
+#endif
 
     /* Dump other parameters except N */
 
+#ifdef DEBUG
     if (trace_level >= TRACE_DUMP) {    // !!!!
         fprintf(OUT, "Threshold for pivoting = %ld %ld %ld %ld\n", single1, median3, median5, medianL);
         fprintf(OUT, "Threshold to change Asymmetric Quicksort to another = %ld\n", threshold);
 //      fprintf(OUT, "\n");
     }
+#endif
 
 //#define   BUFCYCLE    2
     char    **workarea = (char **)malloc(sizeof(char *) * buffer_length);
@@ -602,9 +646,17 @@ QSORT:
             workbuff = NextBuffer;
             memcpy(workbuff, srcbuf, memsize);      // memory copy : sorted_array <-- srcbuf
             qsort_comp_str = qsort_called = qsort_moved = 0;    // reset all of counters
+#ifdef  CLOCK_TYPE
+            start_timer(&start_time, &start_clock);
+#else
             start_timer(&start_time);
+#endif
             qsort(workbuff, nmemb, size, cmpstring);
+#ifdef  CLOCK_TYPE
+            usec[i] = stop_timer(&start_time, &start_clock);
+#else
             usec[i] = stop_timer(&start_time);
+#endif
         }
         if (show_result(description, usec, repeat_count, skip, 0) > limit) goto QSORT;
     }
@@ -642,12 +694,20 @@ REDO:
                 qsort_comp_str = qsort_called = qsort_moved = search_pivot = 0;    // reset all of counters
                 workbuff = NextBuffer;
                 memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
+#ifdef  CLOCK_TYPE
+                start_timer(&start_time, &start_clock);
+#else
                 start_timer(&start_time);
+#endif
                 (*info->sort_function)(workbuff, nmemb, size, cmpstring);
 #ifdef  DEBUG
                 if (trace_level >= TRACE_DUMP) dump_array("sorted.", workbuff, nmemb, 0, 0, size);
 #endif
+#ifdef  CLOCK_TYPE
+                sorting_time = stop_timer(&start_time, &start_clock);
+#else
                 sorting_time = stop_timer(&start_time);
+#endif
 #ifdef  DEBUG
                 usec[0] = sorting_time;
                 if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
@@ -689,14 +749,30 @@ REDO_P:
                         workbuff = NextBuffer;
                         memcpy(workbuff, srcbuf, memsize);  // memory copy : workbuff <-- srcbuf
 
+#ifdef  CLOCK_TYPE
+                        start_timer(&start_time, &start_clock);
+#else
                         start_timer(&start_time);
+#endif
                         void **idxtbl = make_index(workbuff, nmemb, size); // make an index table from srcbuf
                         if (idxtbl == NULL) return EXIT_FAILURE;
+#ifdef  CLOCK_TYPE
+                        start_timer(&core_time, &core_clock);
+#else
                         start_timer(&core_time);
+#endif
                         (*info->sort_function)(idxtbl, nmemb, cmpstring);
+#ifdef  CLOCK_TYPE
+                        sorting_time = stop_timer(&core_time, &core_clock);
+#else
                         sorting_time = stop_timer(&core_time);
+#endif
                         unindex(workbuff, idxtbl, nmemb, size);     // restore index table to workbuff
+#ifdef  CLOCK_TYPE
+                        index_time = stop_timer(&start_time, &start_clock);
+#else
                         index_time = stop_timer(&start_time);
+#endif
 #ifdef  DEBUG
                         usec[0] = index_time;
                         if (trace_level != TRACE_NONE) fprintf(OUT, "%s", info->name);
