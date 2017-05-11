@@ -30,10 +30,11 @@
 /****   Public  ****/
 Trace   trace_level = TRACE_NONE;   // to debug
 size_t  single1 = 31;               // if N <= this then the middle element is a pivot.
-size_t  median3 = 127;              // if N <= this then median of 3 is a pivot
-size_t  median5 = 4095;             // if N <= this then median of 5 is a pivot
-size_t  medianL = 0;                // if N <= this then median of log2(N)-1|1 is a pivot else median of log2(N)-6|1
-size_t  random_number;              // variable type is same to nmemb
+size_t  median1 = 0;                // if N <= this then a random pivot
+size_t  median3 = 127;              // if N <= this then a pivot is the median of 3 elements
+size_t  median5 = 4095;             // if N <= this then a pivot is the median of 5 elements
+size_t  medianL = 0;                // if N <= this then a pivot is the median of log2(N)-1|1 elements
+									//				else a pivot is the median of log2(sqrt(N))|1
 
 size_t  threshold = 0;              //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
@@ -378,7 +379,6 @@ int main(int argc, char *argv[])
                 "\t       4 - and comparisons.\n"
                 "\t       5 - and Others.\n"
 #endif
-                "\t-v : number of elements to choose a pivot for -C v option (default is 5).\n"
                 "\t-Y : cYclic work buffer length.\n"
                 "\t-y : algorithm when N is small in hybrid merge sort.\n"
                 "\t       same to the value of -I option"
@@ -436,13 +436,17 @@ int main(int argc, char *argv[])
                     if(*p != '\0') single1 = strtoul(p, NULL, 0);
                     p = strtok(NULL, ",");
                     if (p != NULL) {
-                        if(*p != '\0') median3 = strtoul(p, NULL, 0);
+                        if(*p != '\0') median1 = strtoul(p, NULL, 0);
                         p = strtok(NULL, ",");
                         if (p != NULL) {
-                            if(*p != '\0') median5 = strtoul(p, NULL, 0);
+                            if(*p != '\0') median3 = strtoul(p, NULL, 0);
                             p = strtok(NULL, ",");
                             if (p != NULL) {
-                                if(*p != '\0') medianL = strtoul(p, NULL, 0);
+                                if(*p != '\0') median5 = strtoul(p, NULL, 0);
+                                p = strtok(NULL, ",");
+                                if (p != NULL) {
+                                    if(*p != '\0') medianL = strtoul(p, NULL, 0);
+                                }
                             }
                         }
                     }
