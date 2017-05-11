@@ -41,6 +41,13 @@ static void sort(void *base, size_t nmemb) {
                     dump_data(hole), (hole - first) / length);
 #endif
         }
+        else if (nmemb <= median1) {  // choose a random element
+            hole = first + (nmemb * rand() / RAND_BASE) * length;
+#ifdef  DEBUG
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at random %s [%ld]\n",
+                    dump_data(hole), (hole - first) / length);
+#endif
+        }
         else if (nmemb <= median3) {    // median of 3
             char *p1, *p2, *p3;
             p1 = first + (((nmemb >> 1) * rand()) / RAND_BASE) * length;  // in [0, N/2)

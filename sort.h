@@ -41,10 +41,9 @@ typedef int (*__compar_d_fn_t) (const void *, const void *, void *);
 
 extern size_t       *gaplist;           // main.c
 extern size_t       INS;                // main.c
-extern size_t       random_number;      // main.c
 extern size_t       threshold;          // main.c
 extern size_t       small_boundary;     // main.c
-extern size_t       single1, median3, median5, medianL; // main.c
+extern size_t       single1, median1, median3, median5, medianL;   // main.c
 extern int          gap_count;          // main.c
 extern bool         reuse_random;       // main.c
 
