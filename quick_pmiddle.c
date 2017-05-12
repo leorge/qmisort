@@ -28,7 +28,7 @@ static void sort(void **base, size_t nmemb) {
         char *pivot = *hole;        // save a pivot
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- %s [%s]\n"
-        	, dump_data(pivot), dump_size_t(hole - first));
+            , dump_data(pivot), dump_size_t(hole - first));
 #endif
         *hole = *last; hole = last; // move the last element to the middle position.
         void **lo = first, **hi = last - 1, **eq = NULL;
@@ -63,7 +63,7 @@ static void sort(void **base, size_t nmemb) {
         if (eq == NULL) eq = hole;
 #ifdef DEBUG
         else if (trace_level >= TRACE_DUMP)
-        	fprintf(OUT, "skip higher %s elements\n", dump_size_t(eq - hole));
+            fprintf(OUT, "skip higher %s elements\n", dump_size_t(eq - hole));
 #endif
         size_t  n_lo = hole - first; // number of element in lower partition
         size_t  n_hi = last - eq;

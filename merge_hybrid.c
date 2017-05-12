@@ -94,7 +94,7 @@ void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const vo
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
             "merge_hybrid(base=%p, nmemb=%s, size=%s, compare) start.\n"
-    		, base, dump_size_t(size), dump_size_t(nmemb));
+            , base, dump_size_t(size), dump_size_t(nmemb));
 #endif
     void **idxtbl = make_index(base, nmemb, size);
     if (idxtbl != NULL) {

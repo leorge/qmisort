@@ -34,12 +34,12 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
     POINTER_INDEX *tbl = calloc(nmemb, sizeof(POINTER_INDEX));
     if (tbl != NULL) {
         /*  store idxtbl to POINTER_INDEX[] */
-    	void **p = idxtbl;
+        void **p = idxtbl;
         POINTER_INDEX *t = tbl;
         for (size_t i = 0; i < nmemb; t++) {
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%s].data = %p %s\n"
-            	, dump_size_t(i), *p, (char *)*p);
+                , dump_size_t(i), *p, (char *)*p);
 #endif
             t->index = i++;
             t->data = *p++;  // may be gotten by malloc()
@@ -49,7 +49,7 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP)
             for (size_t i = 0; i < nmemb; t++)
-            	fprintf(OUT, "tbl[%s].data = %p %s\n", dump_size_t(i), *p, (char *)*p);
+                fprintf(OUT, "tbl[%s].data = %p %s\n", dump_size_t(i), *p, (char *)*p);
 #endif
         /*  sort to be stable and reoder idxtbl */
         POINTER_INDEX *start = tbl;
@@ -67,7 +67,7 @@ void stable_pointer(void **idxtbl, size_t nmemb, int (*compare)(const void *, co
         for (size_t i = 0; i < nmemb; i++) {
 #ifdef DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT, "tbl[%s] = %s, %p %s\n"
-            	, dump_size_t(i), dump_size_t(t->index), t->data, (char *)(t->data));
+                , dump_size_t(i), dump_size_t(t->index), t->data, (char *)(t->data));
 #endif
             *p++ = t++->data;
         }
@@ -91,8 +91,8 @@ void stable_array(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     if (nmemb <= 1) return;
     void **idxtbl = make_index(base, nmemb, size);
     if (idxtbl != NULL) {
-    	sort(idxtbl, nmemb, sizeof(void *), compare_string);
-    	void **start = idxtbl, **p = start;
+        sort(idxtbl, nmemb, sizeof(void *), compare_string);
+        void **start = idxtbl, **p = start;
         for (int i = 0; i < nmemb; i++) {
             if (compare(++p, *start)) {
                 sort(start, p - start, sizeof(void *), compare_adrs);

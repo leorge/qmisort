@@ -36,7 +36,7 @@ static void sort(void *base, size_t nmemb) {
             size_t distance = ((nmemb >> 3) + (nmemb >> 4)) * length;   // N/8 + N/16 = 3N/16
             p5 = (p4 = (p3 = (p2 = p1 + distance) + distance) + distance) + distance;   // [3N/16, N)
             // You can rewrite below with a plenty of ternary operators ?:.
-            if (comp(p2, p4) > 0) {tmp = p2; p2 = p4; p4 = tmp;}  	// p2 <--> P4 then *p2 < *p4
+            if (comp(p2, p4) > 0) {tmp = p2; p2 = p4; p4 = tmp;}    // p2 <--> P4 then *p2 < *p4
             if (comp(p3, p2) < 0) {tmp = p2; p2 = p3; p3 = tmp;}    // p3 <--> p2 then *p2 < *p3 < *p4
             else if (comp(p4, p3) < 0) {tmp = p4; p4 = p3; p3 = tmp;}   // p4 <--> p3 then *p2 < *p3 < *p4
             if (comp(p1, p5) > 0) {tmp = p1; p1 = p5; p5 = tmp;}    // p1 <--> p5 then *p1 < *p5

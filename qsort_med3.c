@@ -40,10 +40,10 @@ static void sort(void *base, size_t nmemb) {
                  (comp(middle, last ) < 0 ? last : (comp(middle, first) < 0 ? middle : first)));
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) {
-    	if (nmemb <= small_boundary)
-    		fprintf(OUT, "pivot is the middle element %s\n", dump_data(middle));
-    	else fprintf(OUT, "pivot = %s\tfrom (%s, %s, %s)\n"
-    	    , dump_data(pivot), dump_data(first), dump_data(middle), dump_data(last));
+        if (nmemb <= small_boundary)
+            fprintf(OUT, "pivot is the middle element %s\n", dump_data(middle));
+        else fprintf(OUT, "pivot = %s\tfrom (%s, %s, %s)\n"
+            , dump_data(pivot), dump_data(first), dump_data(middle), dump_data(last));
     }
 #endif
     swap(first, pivot);
