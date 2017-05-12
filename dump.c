@@ -7,9 +7,10 @@
 
 #include    "sort.h"
 
+static const char *fmt = sizeof(size_t)==sizeof(unsigned int)? "%d": "%ld";
+
 const char *dump_size_t(size_t val) {
     static char buf[32];
-    static const char *fmt = sizeof(size_t)==sizeof(unsigned int)? "%d": "%ld";
     sprintf(buf, fmt, val);
     return  buf;
 }
