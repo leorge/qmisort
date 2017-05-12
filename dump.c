@@ -8,10 +8,10 @@
 #include    "sort.h"
 
 const char *dump_size_t(size_t val) {
-	static char	buf[32];
-	static const char *fmt = sizeof(size_t)==sizeof(unsigned int)? "%d": "%ld";
-	sprintf(buf, fmt, val);
-	return	buf;
+    static char buf[32];
+    static const char *fmt = sizeof(size_t)==sizeof(unsigned int)? "%d": "%ld";
+    sprintf(buf, fmt, val);
+    return  buf;
 }
 
 // Dump an element.
@@ -66,6 +66,6 @@ void dump_pointer(char *msg, void *base[], size_t nmemb) {
 void    dump_rate(size_t n_lo, size_t n_hi) {
     if (trace_level >= TRACE_DUMP)
         fprintf(OUT, "sub partition ( %s , %s ) rate = %.3f\tdiff = %s\n"
-        	, dump_size_t(n_lo), dump_size_t(n_hi), (double)n_lo / (n_lo + n_hi)
+            , dump_size_t(n_lo), dump_size_t(n_hi), (double)n_lo / (n_lo + n_hi)
             , (n_lo > n_hi)? dump_size_t(n_lo - n_hi): dump_size_t(n_hi - n_lo));
 }
