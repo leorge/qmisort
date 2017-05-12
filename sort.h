@@ -107,6 +107,7 @@ void    unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size);
 
 // for debug
 const char  *dump_data(const void *data);
+const char  *dump_size_t(size_t val);
 void        dump_copy(void *dst, const void *src);
 void        dump_array(const char *msg, const void *head, size_t left, size_t middle, size_t right, size_t size);
 void        dump_pointer(char *msg, void *head[], size_t length);
