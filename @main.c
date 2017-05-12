@@ -584,7 +584,7 @@ int main(int argc, char *argv[])
         gap_count++;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "fibonacci[ %d ] = %ld", gap_count, fib);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "fibonacci[ %d ] = %s", gap_count, dump_size_t(fib));
 #endif
     size_t G[gap_count]; gaplist = G;   // gap_count is not huge.
     for (i = 0; i < gap_count; i++) {
