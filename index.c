@@ -63,7 +63,7 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
 #endif
     for (dest = array1d, ptr = idxtbl, i = 0; i < nmemb; dest += size, ptr++, i++) {    // cyclic permutation
 #ifdef DEBUG
-        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%d] = %p\t%s\n"
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%s] = %p\t%s\n"
             , dump_size_t(i), dest, dump_data(dest));
 #endif
         void    **p, *dst, *src;
