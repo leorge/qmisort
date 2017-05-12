@@ -37,15 +37,15 @@ static void sort(void *base, size_t nmemb) {
         if (nmemb <= single1) {  // middle element
             hole = first + (nmemb >> 1) * length;
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at middle %s [%ld]\n",
-                    dump_data(hole), (hole - first) / length);
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at middle %s [%s]\n",
+                    dump_data(hole), dump_size_t((hole - first) / length));
 #endif
         }
         else if (nmemb <= median1) {  // choose a random element
             hole = first + (nmemb * rand() / RAND_BASE) * length;
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at random %s [%ld]\n",
-                    dump_data(hole), (hole - first) / length);
+            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at random %s [%s]\n",
+                    dump_data(hole), dump_size_t((hole - first) / length));
 #endif
         }
         else if (nmemb <= median3) {    // median of 3
@@ -58,8 +58,8 @@ static void sort(void *base, size_t nmemb) {
                    (comp(p2, p3) < 0 ? p3: (comp(p2, p1) < 0 ? p2 : p1)));
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
-                "Median of 3 in %ld from %s %s %s --> %s\n",
-                nmemb, dump_data(p1), dump_data(p2), dump_data(p3), dump_data(hole));
+                "Median of 3 in %s from %s %s %s --> %s\n",
+                dump_size_t(nmemb), dump_data(p1), dump_data(p2), dump_data(p3), dump_data(hole));
             int LEFT = 0, RIGHT=0, CHK;
 #define SIDE(a) CHK = comp((a), hole); if (CHK < 0) LEFT++; else if (CHK > 0) RIGHT++;
             SIDE(p1); SIDE(p2); SIDE(p3);
@@ -78,8 +78,8 @@ static void sort(void *base, size_t nmemb) {
         assert(hole != NULL);
         char *last = first + (nmemb - 1) * length;  // point a last element
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%ld] <-- last = %s\n"
-                , dump_data(hole), (hole - first) / length ,dump_data(last));
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%s] <-- last = %s\n"
+                , dump_data(hole), dump_size_t((hole - first) / length), dump_data(last));
 #endif
         char pivot[length]; copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
         char *lo = first,  *hi = (hole = last) - length, *eq = NULL;
@@ -104,8 +104,8 @@ static void sort(void *base, size_t nmemb) {
             }
         }
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%ld]\n",
-                dump_data(pivot), dump_data(hole), (hole - first) / length);
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%s]\n",
+                dump_data(pivot), dump_data(hole), dump_size_t((hole - first) / length));
 #endif
         copy(hole, pivot);  // restore
         size_t  n_lo = (hole - first) / length; // the number of elements in lower partition

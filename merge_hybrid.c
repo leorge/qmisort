@@ -73,7 +73,7 @@ void merge_phybrid(void **base, size_t nmemb, int (*compare)(const void *, const
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "merge_phybrid(base=%p, nmemb=%ld, compare) start.\n", base, nmemb);
+            "merge_phybrid(base=%p, nmemb=%s, compare) start.\n", base, dump_size_t(nmemb));
 #endif
     void **idxtbl = calloc(nmemb, sizeof(void *));  // double buffer
     if (idxtbl == NULL) perror(NULL);
@@ -93,7 +93,8 @@ void merge_hybrid(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     if (nmemb <= 1) return;
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "merge_hybrid(base=%p, nmemb=%ld, size=%ld, compare) start.\n", base, size, nmemb);
+            "merge_hybrid(base=%p, nmemb=%s, size=%s, compare) start.\n"
+    		, base, dump_size_t(size), dump_size_t(nmemb));
 #endif
     void **idxtbl = make_index(base, nmemb, size);
     if (idxtbl != NULL) {

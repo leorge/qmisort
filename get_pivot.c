@@ -15,8 +15,8 @@ void *median_of_5(void *base, size_t nmemb, size_t size, int (*compare)(const vo
     size_t distance = ((nmemb >> 3) + (nmemb >> 4)) * size;  // N/8 + N/16 = 3N/16
     p5 = (p4 = (p3 = (p2 = p1 + distance) + distance) + distance) + distance;   // [3N/16, N)
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of 5 in %ld from %s %s %s %s %s",
-        nmemb, dump_data(p1), dump_data(p2), dump_data(p3), dump_data(p4), dump_data(p5));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of 5 in %s from %s %s %s %s %s",
+    		dump_size_t(nmemb), dump_data(p1), dump_data(p2), dump_data(p3), dump_data(p4), dump_data(p5));
 #endif
     // You can rewrite statements below with a plenty of ternary operators.
     if (compare(p2, p4) > 0) {char *tmp = p2; p2 = p4; p4 = tmp;}   // p2 <--> P4 then *p2 < *p4
@@ -107,7 +107,8 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
 {
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP) fprintf(OUT,
-            "pivot_array(base, nmemb = %ld, size = %ld, pickup = %ld, compare())\n", nmemb, size, pickup);
+            "pivot_array(base, nmemb = %s, size = %s, pickup = %s, compare())\n"
+    		, dump_size_t(nmemb), dump_size_t(size), dump_size_t(pickup));
     assert(base != NULL);
     assert(nmemb > 1);
     assert(size != 0);
@@ -117,7 +118,7 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
     void *rtn;
     size_t  distance = (size_t)(nmemb / pickup);      // distance of elements
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "distance = %ld\n", distance);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "distance = %s\n", dump_size_t(distance));
 #endif
     distance *= size;     // size in byte
 #define first   ((char *)base)
@@ -137,8 +138,8 @@ void *pivot_array(void *base, size_t nmemb, size_t size, size_t pickup, int (*co
     }
     rtn = search_median(index, pickup, compare);
 #ifdef  DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of %ld in %ld from%s --> %s\n"
-                                              , pickup, nmemb, buffer, dump_data(rtn));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Median of %s in %s from %s --> %s\n"
+    	, dump_size_t(pickup), dump_size_t(nmemb), buffer, dump_data(rtn));
 #endif
     return rtn;
 }

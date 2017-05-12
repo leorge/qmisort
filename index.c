@@ -14,12 +14,13 @@ static void copy(void *dst, const void *src, size_t n)
 #ifdef DEBUG
     //  qsort_moved += n;
     qsort_moved++;
-    if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %p, src = %p : %s , size = %ld)\n", dst, src, dump_data(src), n);
+    if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %p, src = %p : %s , size = %s)\n"
+        , dst, src, dump_data(src), dump_size_t(n));
 #endif
     if (dst != src) memcpy(dst, src, n); /* restore an elements  */
 #ifdef  DEBUG
     else {
-        fprintf(stderr, "Copy(dst == src : %p, size = %ld)\n", dst, n);
+        fprintf(stderr, "Copy(dst == src : %p, size = %s)\n", dst, dump_size_t(n));
         exit(-1);
     }
 #endif
@@ -62,7 +63,8 @@ void unindex(void *array1d, void *idxtbl[], size_t nmemb, size_t size)
 #endif
     for (dest = array1d, ptr = idxtbl, i = 0; i < nmemb; dest += size, ptr++, i++) {    // cyclic permutation
 #ifdef DEBUG
-        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%ld] = %p\t%s\n", i, dest, dump_data(dest));
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "array1d[%d] = %p\t%s\n"
+            , dump_size_t(i), dest, dump_data(dest));
 #endif
         void    **p, *dst, *src;
         if (*(p = ptr) != dest) {

@@ -56,13 +56,14 @@ static void sort(void *base, size_t nmemb) {
             }
         }
 #ifdef  DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%ld]\n",
-            dump_data(pivot), dump_data(hole), (hole - first) / length);
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%s]\n",
+            dump_data(pivot), dump_data(hole), dump_size_t((hole - first) / length));
 #endif
         copy(hole, pivot);  // restore
         if (eq == NULL) eq = hole;
 #ifdef DEBUG
-        else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %ld elements\n", (eq - hole) / length);
+        else if (trace_level >= TRACE_DUMP) fprintf(OUT,"skip higher %s elements\n"
+            , dump_size_t((eq - hole) / length));
 #endif
         // sort sub-arrays iterative and recursive.
         size_t  n_lo = (hole - first) / length; // number of element in lower partition

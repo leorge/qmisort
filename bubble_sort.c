@@ -87,7 +87,7 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
     char **first = (char **)base, **last = first + nmemb - 1;
     do {
 #ifdef DEBUG
-        dump_pointer("Search a greater rabbit.", first, last - first + 1);
+        dump_pointer("Search a greater rabbit.", (void **)first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         char **rabbit, *tmp;
@@ -120,7 +120,7 @@ void rabbit_sort(void **base, size_t nmemb, int (*compare)(const void *, const v
         else if (anchor == NULL) break; // no changed
         last = anchor - 1;
 #ifdef DEBUG
-        dump_pointer("Search a lesser  rabbit.", first, last - first + 1);
+        dump_pointer("Search a lesser  rabbit.", (void **)first, last - first + 1);
         qsort_called++; // corresponds to recursive calls
 #endif
         for (char **p = rabbit = last; p-- > first;) {
@@ -163,7 +163,7 @@ void comb_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
     size_t gap = nmemb * 10 / 13;
     while(TRUE) {
 #ifdef DEBUG
-        if (trace_level >= TRACE_MOVE) fprintf(OUT, "gap = %ld\n", gap);
+        if (trace_level >= TRACE_MOVE) fprintf(OUT, "gap = %s\n", dump_size_t(gap));
 #endif
         void **last = base + nmemb;
         bool exchanged;
@@ -208,7 +208,7 @@ void shell_sort(void **base, size_t nmemb, int (*compare)(const void *, const vo
     dump_pointer("shell_sort() start in " __FILE__, base, nmemb);
     if (trace_level >= TRACE_DUMP) {
         fprintf(OUT, "gaplist =");
-        for (int gap = 0; gap < gap_count; gap++) fprintf(OUT, " %ld", gaplist[gap]);
+        for (int gap = 0; gap < gap_count; gap++) fprintf(OUT, " %s", dump_size_t(gaplist[gap]));
         fprintf(OUT, "\n");
     }
 #endif
@@ -218,7 +218,7 @@ void shell_sort(void **base, size_t nmemb, int (*compare)(const void *, const vo
         size_t  gap = *gap_pointer++;
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
-            fprintf(OUT, "gap = %ld", gap);
+            fprintf(OUT, "gap = %s", dump_size_t(gap));
             dump_pointer("", base, nmemb);
         }
 #endif

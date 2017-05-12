@@ -34,7 +34,7 @@ size_t  median1 = 0;                // if N <= this then a random pivot
 size_t  median3 = 127;              // if N <= this then a pivot is the median of 3 elements
 size_t  median5 = 4095;             // if N <= this then a pivot is the median of 5 elements
 size_t  medianL = 0;                // if N <= this then a pivot is the median of log2(N)-1|1 elements
-									//				else a pivot is the median of log2(sqrt(N))|1
+                                    //              else a pivot is the median of log2(sqrt(N))|1
 
 size_t  threshold = 0;              //  nmemb to alternate to merge sort.
 void    (*medium_func)() = merge_hybrid;
@@ -525,7 +525,7 @@ int main(int argc, char *argv[])
         length_compare = size;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Size of an element = %ld\n", size);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Size of an element = %s\n", dump_size_t(size));
 #endif
 
     // allocate data area
@@ -565,19 +565,20 @@ int main(int argc, char *argv[])
     }
     if (threshold == 0) threshold = 1023;   // default
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "threshold = %ld\n", threshold);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "threshold = %s\n", dump_size_t(threshold));
 #endif
 
     // gap list
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "small_boundary = %ld\n", small_boundary);
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "small_boundary = %s\n", dump_size_t(small_boundary));
 #endif
     size_t  f1 = 1, f2 = 1, fib = 1;
     gap_count = 1;
     if (small_boundary > nmemb) small_boundary = nmemb;
     while ((fib = f1 + f2) < small_boundary) {
 #ifdef DEBUG
-        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %ld  f2 = %ld  fib = %ld\n", f1, f2, fib);
+        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %s  f2 = %s  fib = %s\n"
+                , dump_size_t(f1), dump_size_t(f2), dump_size_t(fib));
 #endif
         f1 = f2; f2 = fib;
         gap_count++;
@@ -591,7 +592,7 @@ int main(int argc, char *argv[])
         G[i] = fib = f2;
         f2 = f1;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, " %ld", fib);
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " %s", dump_size_t(fib));
 #endif
     }
 #ifdef DEBUG
@@ -602,8 +603,9 @@ int main(int argc, char *argv[])
 
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) {    // !!!!
-        fprintf(OUT, "Threshold for pivoting = %ld %ld %ld %ld\n", single1, median3, median5, medianL);
-        fprintf(OUT, "Threshold to change Asymmetric Quicksort to another = %ld\n", threshold);
+        fprintf(OUT, "Threshold for pivoting = %s %s %s %s\n"
+            , dump_size_t(single1), dump_size_t(median3), dump_size_t(median5), dump_size_t(medianL));
+        fprintf(OUT, "Threshold to change Asymmetric Quicksort to another = %s\n", dump_size_t(threshold));
 //      fprintf(OUT, "\n");
     }
 #endif
@@ -642,7 +644,7 @@ int main(int argc, char *argv[])
 QSORT:
         fprintf(OUT, "%s", name);
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %ld\n", nmemb);   // Don't delete for nmemb.awk
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %s\n", dump_size_t(nmemb));   // Don't delete for nmemb.awk
         for (int i = 0; i < 1; i++) {   // once
 #else
         for (int i = 0; i < repeat_count; i++) {
