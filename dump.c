@@ -68,5 +68,5 @@ void    dump_rate(size_t n_lo, size_t n_hi) {
     if (trace_level >= TRACE_DUMP)
         fprintf(OUT, "sub partition ( %s , %s ) rate = %.3f\tdiff = %s\n"
             , dump_size_t(n_lo), dump_size_t(n_hi), (double)n_lo / (n_lo + n_hi)
-            , (n_lo > n_hi)? dump_size_t(n_lo - n_hi): dump_size_t(n_hi - n_lo));
+            , dump_size_t(n_lo > n_hi? n_lo - n_hi: n_hi - n_lo));
 }
