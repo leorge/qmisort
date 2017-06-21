@@ -31,7 +31,7 @@ static void sort(void *base, size_t nmemb) {
         dump_array("sort() partition start.", base, nmemb, 0, 0, length);
 #endif
 #define first (char *)base
-        char *last = first + (nmemb - 1) * length;  // point a last element
+        char *last = first + (nmemb - 1) * length;  // point the last element
         char *hole = first + (nmemb * rand() / RAND_BASE) * length; // choose a random element
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%s] <-- last = %s\n"
