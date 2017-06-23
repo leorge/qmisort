@@ -35,7 +35,7 @@ static void sort(void *base, size_t nmemb) {
         char *hole = first + (nmemb * rand() / RAND_BASE) * length; // choose a random element
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%s] <-- last = %s\n"
-                , dump_data(hole), dump_size_t((hole - first) / length), dump_data(last));
+                , dump_data(hole), dump_size_t(NULL, (hole - first) / length), dump_data(last));
 #endif
         char pivot[length]; copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
         char *lo = first,  *hi = (hole = last) - length, *eq = NULL;
@@ -61,7 +61,7 @@ static void sort(void *base, size_t nmemb) {
         }
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%s]\n",
-                dump_data(pivot), dump_data(hole), dump_size_t((hole - first) / length));
+                dump_data(pivot), dump_data(hole), dump_size_t(NULL, (hole - first) / length));
 #endif
         copy(hole, pivot);  // restore
         size_t  n_lo = (hole - first) / length; // the number of elements in lower partition

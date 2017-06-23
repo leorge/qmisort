@@ -19,7 +19,7 @@ static void copy(void *dst, const void *src, size_t size)
 //  qsort_moved += size;
     qsort_moved++;
     if (trace_level >= TRACE_MOVE) fprintf(OUT, "copy(dst = %s, src = %s, size = %s)\n",
-            dump_data(dst), dump_data(src), dump_size_t(size));
+            dump_data(dst), dump_data(src), dump_size_t(NULL, size));
 #endif
     memcpy(dst, src, size * length); /* restore an elements  */
 }
@@ -71,7 +71,7 @@ static void asort(void *dst, void *src, size_t nmemb) {
 
 void merge_sort(void *base, size_t nmemb, size_t size, int (*compare)(const void *, const void *)) {
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_sort() nmemb = %s\n", dump_size_t(nmemb));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "merge_sort() nmemb = %s\n", dump_size_t(NULL, nmemb));
 #endif
     if (nmemb <= 1) return;
     void *dup = calloc(nmemb, size);

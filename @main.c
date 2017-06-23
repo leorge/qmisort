@@ -353,11 +353,12 @@ int main(int argc, char *argv[])
                 "\t       Else if % is added then value means depth in percent.\n"
                 "\t-N : Number of members (default is 31).\n"
                 "\t-p : print Out the last result.\n"
-                "\t-P l,m,n,o : threshold to change the choice of Pivot.\n"
+                "\t-P l,m,n,s,t : threshold to change the choice of Pivot.\n"
                 "\t       N <= l -- middle element.\n"
-                "\t       N <= m -- median of 3 elements.\n"
-                "\t       N <= n -- median of 5 elements.\n"
-                "\t       N <= o -- median of (log2(N)-1)|1 elements.\n"
+                "\t       N <= m -- random element.\n"
+                "\t       N <= n -- median of 3 elements.\n"
+                "\t       N <= s -- median of 5 elements.\n"
+                "\t       N <= t -- median of (log2(N)-1)|1 elements.\n"
                 "\t       else   -- median of (log2(N)/2)|1 elements.\n"
                 "\t-R : Repeat count "
 #ifndef DEBUG
@@ -525,7 +526,7 @@ int main(int argc, char *argv[])
         length_compare = size;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Size of an element = %s\n", dump_size_t(size));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "Size of an element = %s\n", dump_size_t(NULL, size));
 #endif
 
     // allocate data area
@@ -565,26 +566,29 @@ int main(int argc, char *argv[])
     }
     if (threshold == 0) threshold = 1023;   // default
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "threshold = %s\n", dump_size_t(threshold));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "threshold = %s\n", dump_size_t(NULL, threshold));
 #endif
 
     // gap list
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "small_boundary = %s\n", dump_size_t(small_boundary));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "small_boundary = %s\n", dump_size_t(NULL, small_boundary));
 #endif
     size_t  f1 = 1, f2 = 1, fib = 1;
     gap_count = 1;
     if (small_boundary > nmemb) small_boundary = nmemb;
     while ((fib = f1 + f2) < small_boundary) {
 #ifdef DEBUG
-        if (trace_level >= TRACE_DEBUG) fprintf(OUT, "f1 = %s  f2 = %s  fib = %s\n"
-                , dump_size_t(f1), dump_size_t(f2), dump_size_t(fib));
+        if (trace_level >= TRACE_DEBUG) {
+            char    tmp1[32], tmp2[32], tmp3[32];
+            fprintf(OUT, "f1 = %s  f2 = %s  fib = %s\n"
+                , dump_size_t(tmp1, f1), dump_size_t(tmp2, f2), dump_size_t(tmp3, fib));
+        }
 #endif
         f1 = f2; f2 = fib;
         gap_count++;
     }
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "fibonacci[ %d ] = %s", gap_count, dump_size_t(fib));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "fibonacci[ %d ] = %s", gap_count, dump_size_t(NULL, fib));
 #endif
     size_t G[gap_count]; gaplist = G;   // gap_count is not huge.
     for (i = 0; i < gap_count; i++) {
@@ -592,7 +596,7 @@ int main(int argc, char *argv[])
         G[i] = fib = f2;
         f2 = f1;
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, " %s", dump_size_t(fib));
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " %s", dump_size_t(NULL, fib));
 #endif
     }
 #ifdef DEBUG
@@ -603,9 +607,10 @@ int main(int argc, char *argv[])
 
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) {    // !!!!
+        char    tmp1[32], tmp2[32], tmp3[32], tmp4[32], tmp5[32];
         fprintf(OUT, "Threshold for pivoting = %s %s %s %s\n"
-            , dump_size_t(single1), dump_size_t(median3), dump_size_t(median5), dump_size_t(medianL));
-        fprintf(OUT, "Threshold to change Asymmetric Quicksort to another = %s\n", dump_size_t(threshold));
+            , dump_size_t(tmp1, single1), dump_size_t(tmp3, median3), dump_size_t(tmp3, median5), dump_size_t(tmp4, medianL));
+        fprintf(OUT, "Threshold to change Asymmetric Quicksort to another = %s\n", dump_size_t(tmp5, threshold));
 //      fprintf(OUT, "\n");
     }
 #endif
@@ -644,7 +649,7 @@ int main(int argc, char *argv[])
 QSORT:
         fprintf(OUT, "%s", name);
 #ifdef DEBUG
-        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %s\n", dump_size_t(nmemb));   // Don't delete for nmemb.awk
+        if (trace_level >= TRACE_DUMP) fprintf(OUT, " nmemb = %s\n", dump_size_t(NULL, nmemb));   // Don't delete for nmemb.awk
         for (int i = 0; i < 1; i++) {   // once
 #else
         for (int i = 0; i < repeat_count; i++) {

@@ -9,10 +9,11 @@
 
 static const char *fmt = sizeof(size_t)==sizeof(unsigned int)? "%d": "%ld";
 
-const char *dump_size_t(size_t val) {
-    static char buf[32];
-    sprintf(buf, fmt, val);
-    return  buf;
+const char *dump_size_t(char *buf, size_t val) {
+    static char tmp[32];
+    char *out = buf ? buf : tmp;
+    sprintf(out, fmt, val);
+    return  out;
 }
 
 // Dump an element.
@@ -31,7 +32,7 @@ void dump_array(const char *msg, const void *base, size_t left, size_t middle, s
     if (trace_level < TRACE_DUMP) return;
     size_t  i, nmemb = left + middle + right;
     const char  *p = base;
-    fprintf(OUT, "%s nmemb = %s :", msg, dump_size_t(nmemb));
+    fprintf(OUT, "%s nmemb = %s :", msg, dump_size_t(NULL, nmemb));
     if (nmemb <= 16) {
         if (left > 0) for (i = 0; i++ < left; p += size) fprintf(OUT, " %s", dump_data(p));
         if (middle > 0 || right > 0) {
@@ -53,7 +54,7 @@ void dump_array(const char *msg, const void *base, size_t left, size_t middle, s
 void dump_pointer(char *msg, void *base[], size_t nmemb) {
     if (trace_level < TRACE_DUMP) return;
     size_t  i;
-    fprintf(OUT, "%s nmemb = %s :", msg, dump_size_t(nmemb));
+    fprintf(OUT, "%s nmemb = %s :", msg, dump_size_t(NULL, nmemb));
     if (nmemb > 16) {
         for (i = 0; i < 8;) fprintf(OUT, " %s", dump_data((char *)base[i++]));
         fprintf(OUT, " ...");
@@ -65,8 +66,10 @@ void dump_pointer(char *msg, void *base[], size_t nmemb) {
 }
 
 void    dump_rate(size_t n_lo, size_t n_hi) {
-    if (trace_level >= TRACE_DUMP)
+    if (trace_level >= TRACE_DUMP) {
+        char tmp1[32], tmp2[32], tmp3[32];
         fprintf(OUT, "sub partition ( %s , %s ) rate = %.3f\tdiff = %s\n"
-            , dump_size_t(n_lo), dump_size_t(n_hi), (double)n_lo / (n_lo + n_hi)
-            , dump_size_t(n_lo > n_hi? n_lo - n_hi: n_hi - n_lo));
+            , dump_size_t(tmp1, n_lo), dump_size_t(tmp2, n_hi), (double)n_lo / (n_lo + n_hi)
+            , dump_size_t(tmp3, n_lo > n_hi? n_lo - n_hi: n_hi - n_lo));
+    }
 }

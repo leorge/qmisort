@@ -20,7 +20,7 @@ static void heap(size_t nmemb, size_t node)
 #endif
     void    **child, **start = root + node, **parent = start;
 #ifdef DEBUG
-    if (trace_level >= TRACE_DUMP) fprintf(OUT, "node = %s\tstart = %s\n", dump_size_t(node), dump_data(*start));
+    if (trace_level >= TRACE_DUMP) fprintf(OUT, "node = %s\tstart = %s\n", dump_size_t(NULL, node), dump_data(*start));
 #endif
     void    *key = *start;  // save
     size_t  leaf;
@@ -69,9 +69,12 @@ void heap_top(void **base, size_t nmemb, int (*compare)(const void *, const void
         size_t  parent = (child - 1) >> 1;
         while (compare(base[parent], base[child]) < 0) {
 #ifdef DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "swap : %s [%s] <--> %s [%s]\n"
-                , dump_data(base[parent]), dump_size_t(parent)
-                , dump_data(base[child]),  dump_size_t(child));
+            if (trace_level >= TRACE_DUMP) {
+                char tmp1[32], tmp2[32];
+                fprintf(OUT, "swap : %s [%s] <--> %s [%s]\n"
+                , dump_data(base[parent]), dump_size_t(tmp1, parent)
+                , dump_data(base[child]),  dump_size_t(tmp2, child));
+            }
 #endif
             void *tmp = base[parent]; base[parent] = base[child]; base[child] = tmp;
             if (! parent) break;    // root

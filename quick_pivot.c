@@ -3,6 +3,11 @@
  *
  *  Select the median of several random elements as a pivot.
  *
+ *  $ N=2048; random.awk $N | Debug/Sort -N $N -tP 63,127,255,511 -V 2 > a
+ *  $ grep "Median of " a | sort -nk 3 -nk 5
+ *  $ grep "random in " a | sort -nk 5
+ *  $ grep "middle of " a | sort -nk 7 | less
+ *
  *  Created on: 2013/05/10
  *      Author: Takeuchi Leorge <qmisort@gmail.com>
  */
@@ -37,15 +42,17 @@ static void sort(void *base, size_t nmemb) {
         if (nmemb <= single1) {  // middle element
             hole = first + (nmemb >> 1) * length;
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at middle %s [%s]\n",
-                    dump_data(hole), dump_size_t((hole - first) / length));
+            if (trace_level >= TRACE_DUMP)
+                fprintf(OUT, "Pivot is at the middle of %d elements : %s at %d\n",
+                        nmemb, dump_data(hole), (hole - first) / length);
 #endif
         }
         else if (nmemb <= median1) {  // choose a random element
             hole = first + (nmemb * rand() / RAND_BASE) * length;
 #ifdef  DEBUG
-            if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot is at random %s [%s]\n",
-                    dump_data(hole), dump_size_t((hole - first) / length));
+            if (trace_level >= TRACE_DUMP)
+                fprintf(OUT, "Pivot is random in %d elements : %s at %d\n",
+                        nmemb, dump_data(hole), (hole - first) / length);
 #endif
         }
         else if (nmemb <= median3) {    // median of 3
@@ -59,7 +66,7 @@ static void sort(void *base, size_t nmemb) {
 #ifdef  DEBUG
             if (trace_level >= TRACE_DUMP) fprintf(OUT,
                 "Median of 3 in %s from %s %s %s --> %s\n",
-                dump_size_t(nmemb), dump_data(p1), dump_data(p2), dump_data(p3), dump_data(hole));
+                dump_size_t(NULL, nmemb), dump_data(p1), dump_data(p2), dump_data(p3), dump_data(hole));
             int LEFT = 0, RIGHT=0, CHK;
 #define SIDE(a) CHK = comp((a), hole); if (CHK < 0) LEFT++; else if (CHK > 0) RIGHT++;
             SIDE(p1); SIDE(p2); SIDE(p3);
@@ -79,7 +86,7 @@ static void sort(void *base, size_t nmemb) {
         char *last = first + (nmemb - 1) * length;  // point a last element
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "pivot <-- hole = %s [%s] <-- last = %s\n"
-                , dump_data(hole), dump_size_t((hole - first) / length), dump_data(last));
+                , dump_data(hole), dump_size_t(NULL, (hole - first) / length), dump_data(last));
 #endif
         char pivot[length]; copy(pivot, hole); copy(hole, last);    // pivot <-- hole <-- last
         char *lo = first,  *hi = (hole = last) - length, *eq = NULL;
@@ -105,7 +112,7 @@ static void sort(void *base, size_t nmemb) {
         }
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) fprintf(OUT, "restore pivot %s to %s [%s]\n",
-                dump_data(pivot), dump_data(hole), dump_size_t((hole - first) / length));
+                dump_data(pivot), dump_data(hole), dump_size_t(NULL, (hole - first) / length));
 #endif
         copy(hole, pivot);  // restore
         size_t  n_lo = (hole - first) / length; // the number of elements in lower partition

@@ -41,7 +41,7 @@ static void sort(void *base, size_t nmemb) {
 #ifdef  DEBUG
     if (trace_level >= TRACE_DUMP && first != store)
         fprintf(OUT, "restore pivot %s to %s at [%s]\n",
-            dump_data(first), dump_data(store), dump_size_t((store - first) / length));
+            dump_data(first), dump_data(store), dump_size_t(NULL, (store - first) / length));
 #endif
     swap(first, store);
     size_t  n_lo = (store - first) / length;    // number of element in lower partition

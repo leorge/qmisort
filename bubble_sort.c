@@ -163,7 +163,7 @@ void comb_sort(void **base, size_t nmemb, int (*compare)(const void *, const voi
     size_t gap = nmemb * 10 / 13;
     while(TRUE) {
 #ifdef DEBUG
-        if (trace_level >= TRACE_MOVE) fprintf(OUT, "gap = %s\n", dump_size_t(gap));
+        if (trace_level >= TRACE_MOVE) fprintf(OUT, "gap = %s\n", dump_size_t(NULL, gap));
 #endif
         void **last = base + nmemb;
         bool exchanged;
@@ -208,7 +208,7 @@ void shell_sort(void **base, size_t nmemb, int (*compare)(const void *, const vo
     dump_pointer("shell_sort() start in " __FILE__, base, nmemb);
     if (trace_level >= TRACE_DUMP) {
         fprintf(OUT, "gaplist =");
-        for (int gap = 0; gap < gap_count; gap++) fprintf(OUT, " %s", dump_size_t(gaplist[gap]));
+        for (int gap = 0; gap < gap_count; gap++) fprintf(OUT, " %s", dump_size_t(NULL, gaplist[gap]));
         fprintf(OUT, "\n");
     }
 #endif
@@ -218,7 +218,7 @@ void shell_sort(void **base, size_t nmemb, int (*compare)(const void *, const vo
         size_t  gap = *gap_pointer++;
 #ifdef DEBUG
         if (trace_level >= TRACE_DUMP) {
-            fprintf(OUT, "gap = %s", dump_size_t(gap));
+            fprintf(OUT, "gap = %s", dump_size_t(NULL, gap));
             dump_pointer("", base, nmemb);
         }
 #endif
