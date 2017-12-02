@@ -125,7 +125,7 @@ static void sort(char *a, int left, int right) {
     // Use Quicksort on small arrays
 #ifdef DEBUG
     char *base = a;
-    qsort_called++;
+//    qsort_called++;
     int N = right - left + 1;
     if (N > 1 ) dump_array("sort() start in " __FILE__, a, N, 0, 0, length);
 #endif
@@ -227,7 +227,7 @@ static void sort(char *a, int left, int right) {
 static void qi_sort(char *a, int left, int right, bool leftmost) {
     int N = right - left + 1;
 #ifdef DEBUG
-    qsort_called++;
+//    qsort_called++;
     char *base = a, *head = a + left * length;
     if (N > 1) dump_array("qi_sort() start in " __FILE__, head, N, 0, 0, length);
 #endif
@@ -341,6 +341,9 @@ static void qi_sort(char *a, int left, int right, bool leftmost) {
     int great = right; // The index before the first element of right part
 
     if (comp(&a[e1 * length], &a[e2 * length]) && comp(&a[e2 * length], &a[e3 * length]) && comp(&a[e3 * length], &a[e4 * length]) && comp(&a[e4 * length], &a[e5 * length])) {
+
+        qsort_called++;
+
         /*
          * Use the second and fourth of the five sorted elements as pivots.
          * These values are inexpensive approximations of the first and
