@@ -54,26 +54,21 @@ static void sort(void *base, size_t nmemb) {
                 char *pivot = *phole;       // save the middle pointer
                 *phole = *right;    // move the last pointer to the middle of index
                 phole = right;      // dig a hole at the last of index
-                void **plo = left, **phi = right - 1, **peq = NULL;
+                void **plo = left, **phi = right - 1;
                 for (int chk; plo < phole; plo++) {
                     if ((chk = comp(*plo, pivot)) >= 0) {
-                        if (chk > 0) peq = NULL;    // discontinued
-                        else if (peq == NULL) peq = phole;
                         *phole = *plo; phole = plo;
                         for (; phi > phole; phi--) {
                             if ((chk = comp(*phi, pivot)) < 0) {
                                 *phole = *phi; phole = phi;
                             }
-                            else if (chk > 0) peq = NULL;
-                            else if (peq == NULL) peq = phi;
                         }
                     }
                 }
                 *phole = pivot;     //restore
-                if (peq == NULL) peq = phole;   // phole <= peq
                 if (middle < phole) right = phole - 1;
-                else if (peq < middle) left = peq + 1;
-                else break;                     // phole <= middle <= peq
+                else if (phole < middle) left = phole + 1;
+                else break;         // phole == middle
             }
             hole = *middle;     // hole is in the middle of index[]
         }

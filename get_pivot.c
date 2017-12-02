@@ -60,15 +60,13 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
                 , dump_data(pivot), dump_data(*hole));
 #endif
         hole = right;           // dig a hole at the last
-        void **lo = left, **hi = right - 1, **eq = NULL;
+        void **lo = left, **hi = right - 1;
         for (int chk; lo < hole; lo++) {
             if ((chk = compare(*lo, pivot))>= 0) {
 #ifdef  DEBUG
                 if (trace_level >= TRACE_MOVE) fprintf(OUT, "move %s --> %s\n"
                         , dump_data(*lo), dump_data(*hole));
 #endif
-                if (chk > 0) eq = NULL; // discontinued
-                else if (eq == NULL) eq = hole;
                 *hole = *lo; hole = lo;
                 for (; hi > hole; hi--) {
                     if ((chk = compare(*hi, pivot)) < 0) {
@@ -78,23 +76,19 @@ static void *search_median(void **base, size_t nmemb, int (*compare)(const void 
 #endif
                         *hole = *hi; hole = hi;
                     }
-                    else if (chk > 0) eq = NULL;
-                    else if (eq == NULL) eq = hi;   // first equal element
                 }
             }
         }
         *hole = pivot;  // restore
 #ifdef  DEBUG
         if (trace_level >= TRACE_DUMP) {
-            fprintf(OUT, "hole = %s\tmiddle = %s\teq = %s\n", dump_data(*hole),
-                    dump_data(*middle), eq ? dump_data(*eq) : "(null)");
+            fprintf(OUT, "hole = %s\tmiddle = %s\n", dump_data(*hole), dump_data(*middle));
             dump_pointer("", left, right - left + 1);
         }
 #endif
-        if (eq == NULL) eq = hole;  // phole <= peq
         if (middle < hole) right = hole - 1;
-        else if (eq < middle) left = eq + 1;
-        else break;                 // phole <= middle <= peq
+        else if (hole < middle) left = hole + 1;
+        else break;     // hole == middle
     }
 #ifdef DEBUG
     if (trace_level >= TRACE_DUMP) {
